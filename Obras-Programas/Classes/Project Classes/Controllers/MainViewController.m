@@ -19,7 +19,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    NSLog(@"Welcome to Main ViewController");
+
 }
 
 - (void)didReceiveMemoryWarning {
