@@ -1,10 +1,10 @@
-//
-//  Offline.m
-//  cintermex
-//
-//  Created by Juan Pablo Gonzalez Hermosillo Cires on 02/09/12.
-//
-//
+
+// Programador: Abdiel Soto, Pedro Contreras
+// Origen: Edicomex
+// Fecha inicio: Septiemnre 2014
+// Fecha ultima modificación: 23/08/2014
+// Descripción:
+// Dependencias:
 
 #import "Offline.h"
 #include <sys/xattr.h>

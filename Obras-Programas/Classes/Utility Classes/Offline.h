@@ -1,10 +1,10 @@
-//
-//  Offline.h
-//  cintermex
-//
-//  Created by Juan Pablo Gonzalez Hermosillo Cires on 02/09/12.
-//
-//
+
+// Programador: Abdiel Soto, Pedro Contreras
+// Origen: Edicomex
+// Fecha inicio: Septiemnre 2014
+// Fecha ultima modificación: 23/08/2014
+// Descripción:
+// Dependencias:
 
 #import <Foundation/Foundation.h>
 #import <sqlite3.h>

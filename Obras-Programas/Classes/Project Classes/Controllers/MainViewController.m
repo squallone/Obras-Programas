@@ -1,10 +1,10 @@
-//
-//  MainViewController.m
-//  Obras-Programas
-//
-//  Created by Abdiel on 9/12/14.
-//  Copyright (c) 2014 Edicomex. All rights reserved.
-//
+
+// Programador: Abdiel Soto, Pedro Contreras
+// Origen: Edicomex
+// Fecha inicio: Septiemnre 2014
+// Fecha ultima modificación: 23/08/2014
+// Descripción:
+// Dependencias:
 
 #import "MainViewController.h"
 @import MapKit.MKMapView;
