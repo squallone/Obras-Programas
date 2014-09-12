@@ -865,6 +865,7 @@
 				ABFCC47B19C2DB530074CA01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		ABFCC47C19C2DB530074CA01 /* Build configuration list for PBXNativeTarget "Obras-ProgramasTests" */ = {
 			isa = XCConfigurationList;
@@ -873,6 +874,7 @@
 				ABFCC47E19C2DB530074CA01 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
