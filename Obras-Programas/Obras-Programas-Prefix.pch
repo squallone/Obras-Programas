@@ -1,0 +1,50 @@
+//
+//  Obras-Programas-Prefix.pch
+//  Obras-Programas
+//
+//  Created by Abdiel on 9/12/14.
+//  Copyright (c) 2014 Edicomex. All rights reserved.
+//
+
+#ifndef Obras_Programas_Obras_Programas_Prefix_pch
+#define Obras_Programas_Obras_Programas_Prefix_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif
+
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#ifdef __OBJC__
+
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+#import "TSMessage.h"
+#import "SIAlertView.h"
+#import "AppDelegate.h"
+
+#endif
+
+// Movil
+/******************/
+
+#define kIs_iPhone (!IS_IPAD)
+#define kIs_iPad (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
+#define kIs_iPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
+
+// General
+/******************/
+#define kAppDelegate (AppDelegate*)[[UIApplication sharedApplication]delegate]
+
+//Debug
+/******************/
+
+#ifndef DEBUG
+#define NSLog(...);
+#endif
