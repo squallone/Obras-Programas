@@ -12,12 +12,29 @@
 @interface MainViewController ()
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
-@property (weak, nonatomic) IBOutlet UIButton *btnQuery;
-@property (weak, nonatomic) IBOutlet UIButton *btnSaveQuery;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 
+//Buttons
 
-@property (strong, nonatomic) UISearchBar *searchBar;
+@property (weak, nonatomic) IBOutlet UIButton *btnQuery;
+@property (weak, nonatomic) IBOutlet UIButton *btnSaveQuery;
+@property (weak, nonatomic) IBOutlet UIButton *btnDependence;
+
+@property (strong, nonatomic) UIBarButtonItem *menuBarBtn;
+
+@property (nonatomic, strong) PopupListTableViewController *popUpTableView;
+@property (nonatomic, strong) UIPopoverController *popOverView;
+
+//SearchBar
+@property (nonatomic, strong) UISearchBar *searchBar;
+
+//Data
+
+@property (nonatomic, strong) NSArray *menuData;
+
+//Animations
+
+@property (nonatomic, strong) CATransition *transition;
 
 @end
 
@@ -26,8 +43,13 @@
 #pragma mark - View Life cycle
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
-
+    
+    /*  Menu items */
+    
+    _menuData = @[@"Busquedas recientes", @"Favoritos", @"Acerca de"];
+    
     [self setupUI];
 }
 
@@ -38,14 +60,22 @@
 
 #pragma mark - Interface Customization
 
+/*  Setting the User Interface */
+
 -(void)setupUI{
     
+    /* Init animation */
+    
+    _transition = [CATransition animation];
+    _transition.duration = 0.3;
+    _transition.type = kCATransitionPush;
+    [_transition setTimingFunction:[CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseIn]];
     
     /* Corner nav buttons bar */
     
-    float cornerRadius      = 10.0f;
+    float cornerRadius      = 12.0f;
     float borderWidth       = 1.0f;
-    UIColor *borderColor    = [UIColor darkGrayColor];
+    UIColor *borderColor    = [UIColor clearColor];
     
     _btnQuery.layer.cornerRadius        = cornerRadius;
     _btnQuery.layer.borderWidth         = borderWidth;
@@ -76,11 +106,11 @@
     [menuButton addTarget:self action:@selector(showMenu) forControlEvents:UIControlEventTouchUpInside];
     menuButton.bounds = CGRectMake( 0, 0, menuImage.size.width, menuImage.size.height );
     [menuButton setImage:menuImage forState:UIControlStateNormal];
-    UIBarButtonItem *menuBarBtn = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
+    _menuBarBtn = [[UIBarButtonItem alloc] initWithCustomView:menuButton];
 
     /* Add Navigation bar buttom  */
 
-    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:menuBarBtn, searchBarBtn, nil];
+    self.navigationItem.leftBarButtonItems = [NSArray arrayWithObjects:_menuBarBtn, searchBarBtn, nil];
 
     /* Navigation bar buttom implementation */
 
@@ -94,9 +124,54 @@
 
 #pragma mark - Methods of action (Selectors - IBOulet)
 
+/* Display the menu items */
 
 -(void)showMenu{
     
+   // [self displayItemsOntheButton:_menuBarBtn withData:_menuData];
+  
+}
+
+- (IBAction)displayDependencies:(id)sender {
+    
+    [self displayItemsOntheButton:_btnDependence withData:_menuData];
+}
+
+/* Button that allows to sort a search */
+
+- (IBAction)sortSearch:(id)sender {
+    
+ 
+}
+
+- (IBAction)hideSearchList:(id)sender {
+    
+    if ([_tableView isHidden]) {
+        _tableView.hidden = NO;
+        _transition.subtype = kCATransitionFromLeft;
+
+    }else{
+        _tableView.hidden = YES;
+        _transition.subtype = kCATransitionFromRight;
+    }
+    
+    [_tableView.layer addAnimation:_transition forKey:nil];
+
+}
+
+-(void)displayItemsOntheButton:(id)sender withData:(NSArray *)data{
+    
+    _popUpTableView = [[PopupListTableViewController alloc]initWithData:data];
+    _popUpTableView.delegate = self;
+    
+    if (_popOverView == nil) {
+        _popOverView = [[UIPopoverController alloc]initWithContentViewController:_popUpTableView];
+        
+        [_popOverView presentPopoverFromBarButtonItem:(UIBarButtonItem *)sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+    }else{
+        [_popOverView dismissPopoverAnimated:YES];
+        _popOverView = nil;
+    }
 }
 
 #pragma mark - UITableView  DataSource
@@ -116,7 +191,7 @@
     static NSString *CellIdentifier = @"Cell";
     
     UITableViewCell *cell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    
+    cell.backgroundColor = [UIColor clearColor];
     return cell;
 
 }
@@ -146,5 +221,6 @@
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     
 }
+
 
 @end

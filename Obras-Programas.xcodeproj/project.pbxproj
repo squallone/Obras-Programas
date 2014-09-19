@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		AB9E738119CBCD5700C16E66 /* UIERealTimeBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9E737E19CBCD5700C16E66 /* UIERealTimeBlurView.m */; };
+		AB9E738219CBCD5700C16E66 /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9E738019CBCD5700C16E66 /* UIImage+BoxBlur.m */; };
+		AB9E738419CBDD4F00C16E66 /* logo_sct.png in Resources */ = {isa = PBXBuildFile; fileRef = AB9E738319CBDD4F00C16E66 /* logo_sct.png */; };
+		AB9E738719CBDFDA00C16E66 /* PopupListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9E738619CBDFDA00C16E66 /* PopupListTableViewController.m */; };
 		ABFCC45C19C2DB530074CA01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC45B19C2DB530074CA01 /* main.m */; };
 		ABFCC46519C2DB530074CA01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46319C2DB530074CA01 /* Main.storyboard */; };
 		ABFCC46719C2DB530074CA01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46619C2DB530074CA01 /* Images.xcassets */; };
@@ -75,6 +79,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		AB9E737D19CBCD5700C16E66 /* UIERealTimeBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = UIERealTimeBlurView.h; sourceTree = "<group>"; };
+		AB9E737E19CBCD5700C16E66 /* UIERealTimeBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UIERealTimeBlurView.m; sourceTree = "<group>"; };
+		AB9E737F19CBCD5700C16E66 /* UIImage+BoxBlur.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BoxBlur.h"; sourceTree = "<group>"; };
+		AB9E738019CBCD5700C16E66 /* UIImage+BoxBlur.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BoxBlur.m"; sourceTree = "<group>"; };
+		AB9E738319CBDD4F00C16E66 /* logo_sct.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_sct.png; sourceTree = "<group>"; };
+		AB9E738519CBDFDA00C16E66 /* PopupListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupListTableViewController.h; sourceTree = "<group>"; };
+		AB9E738619CBDFDA00C16E66 /* PopupListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupListTableViewController.m; sourceTree = "<group>"; };
 		ABFCC45619C2DB530074CA01 /* Obras-Programas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Obras-Programas.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABFCC45A19C2DB530074CA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABFCC45B19C2DB530074CA01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -189,6 +200,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		AB9E737C19CBCD5700C16E66 /* LiveBlur */ = {
+			isa = PBXGroup;
+			children = (
+				AB9E737D19CBCD5700C16E66 /* UIERealTimeBlurView.h */,
+				AB9E737E19CBCD5700C16E66 /* UIERealTimeBlurView.m */,
+				AB9E737F19CBCD5700C16E66 /* UIImage+BoxBlur.h */,
+				AB9E738019CBCD5700C16E66 /* UIImage+BoxBlur.m */,
+			);
+			path = LiveBlur;
+			sourceTree = "<group>";
+		};
 		ABFCC44D19C2DB530074CA01 = {
 			isa = PBXGroup;
 			children = (
@@ -271,6 +293,7 @@
 		ABFCC48619C2DDA10074CA01 /* External Classes */ = {
 			isa = PBXGroup;
 			children = (
+				AB9E737C19CBCD5700C16E66 /* LiveBlur */,
 				ABFCC48719C2DDA10074CA01 /* AFNetworking */,
 				ABFCC4AD19C2DDA10074CA01 /* SIAlertView */,
 				ABFCC4B319C2DDA10074CA01 /* TPKeyboardAvoiding */,
@@ -465,6 +488,8 @@
 		ABFCC4DF19C2DDA10074CA01 /* SubClasses */ = {
 			isa = PBXGroup;
 			children = (
+				AB9E738519CBDFDA00C16E66 /* PopupListTableViewController.h */,
+				AB9E738619CBDFDA00C16E66 /* PopupListTableViewController.m */,
 			);
 			path = SubClasses;
 			sourceTree = "<group>";
@@ -497,6 +522,7 @@
 		ABFCC4E319C2DDA10074CA01 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				AB9E738319CBDD4F00C16E66 /* logo_sct.png */,
 			);
 			path = Images;
 			sourceTree = "<group>";
@@ -609,6 +635,7 @@
 				ABFCC4FF19C2DDA10074CA01 /* NotificationBackgroundError.png in Resources */,
 				ABFCC50B19C2DDA10074CA01 /* NotificationBackgroundWarningIcon.png in Resources */,
 				ABFCC50519C2DDA10074CA01 /* NotificationBackgroundSuccess.png in Resources */,
+				AB9E738419CBDD4F00C16E66 /* logo_sct.png in Resources */,
 				ABFCC50919C2DDA10074CA01 /* NotificationBackgroundWarning.png in Resources */,
 				ABFCC50719C2DDA10074CA01 /* NotificationBackgroundSuccessIcon.png in Resources */,
 				ABFCC50419C2DDA10074CA01 /* NotificationBackgroundMessage@2x.png in Resources */,
@@ -647,6 +674,7 @@
 				ABFCC4FC19C2DDA10074CA01 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
 				ABFCC51019C2DDA10074CA01 /* TSBlurView.m in Sources */,
 				ABFCC4F919C2DDA10074CA01 /* TPKeyboardAvoidingCollectionView.m in Sources */,
+				AB9E738219CBCD5700C16E66 /* UIImage+BoxBlur.m in Sources */,
 				ABFCC4E519C2DDA10074CA01 /* AFHTTPRequestOperation.m in Sources */,
 				ABFCC4ED19C2DDA10074CA01 /* AFURLSessionManager.m in Sources */,
 				ABFCC4EC19C2DDA10074CA01 /* AFURLResponseSerialization.m in Sources */,
@@ -660,6 +688,8 @@
 				ABFCC4E619C2DDA10074CA01 /* AFHTTPRequestOperationManager.m in Sources */,
 				ABFCC4F219C2DDA10074CA01 /* UIImageView+AFNetworking.m in Sources */,
 				ABFCC4F119C2DDA10074CA01 /* UIButton+AFNetworking.m in Sources */,
+				AB9E738119CBCD5700C16E66 /* UIERealTimeBlurView.m in Sources */,
+				AB9E738719CBDFDA00C16E66 /* PopupListTableViewController.m in Sources */,
 				ABFCC4F419C2DDA10074CA01 /* UIRefreshControl+AFNetworking.m in Sources */,
 				ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */,
 				ABFCC4F519C2DDA10074CA01 /* UIWebView+AFNetworking.m in Sources */,
