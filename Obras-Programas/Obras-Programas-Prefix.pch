@@ -14,7 +14,6 @@
 
 #endif
 
-
 #import <Availability.h>
 
 #ifndef __IPHONE_5_0
@@ -23,28 +22,12 @@
 
 #ifdef __OBJC__
 
-#import <UIKit/UIKit.h>
-#import <Foundation/Foundation.h>
-#import "TSMessage.h"
-#import "SIAlertView.h"
-#import "AppDelegate.h"
+    #import <UIKit/UIKit.h>
+    #import <Foundation/Foundation.h>
+    #import "TSMessage.h"
+    #import "SIAlertView.h"
+    #import "AppDelegate.h"
+    #import "Constants.h"
 
 #endif
 
-// Movil
-/******************/
-
-#define kIs_iPhone (!IS_IPAD)
-#define kIs_iPad (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
-#define kIs_iPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
-
-// General
-/******************/
-#define kAppDelegate (AppDelegate*)[[UIApplication sharedApplication]delegate]
-
-//Debug
-/******************/
-
-#ifndef DEBUG
-#define NSLog(...);
-#endif

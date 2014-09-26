@@ -8,20 +8,29 @@
 #import <UIKit/UIKit.h>
 
 //Protocolo que nos permite identificar cuando un elemento de la lista se ha seleccionado
-@protocol PopupListTableViewControllerDelegate <NSObject>
-
--(void)selectedRow:(NSString *)string;
-
-@end
+@protocol PopupListTableViewControllerDelegate;
 
 @interface PopupListTableViewController : UITableViewController
 
 //Se almancenas los datos de la lista
-@property (nonatomic, strong) NSArray *data;
+@property (nonatomic, strong) NSArray *dataSource;
+@property (nonatomic, strong) NSMutableArray *dataSelected;
+@property (nonatomic, assign) MainSearchFields field;
+
+
+@property BOOL isMenu;
 //delegado
 @property (nonatomic, weak)id<PopupListTableViewControllerDelegate> delegate;
 
--(id)initWithData:(NSArray *)array;
+-(id)initWithData:(NSArray *)datasource isMenu:(BOOL)option markData:(NSArray *)loadData searchField:(MainSearchFields)field;
 
+@end
+
+@protocol PopupListTableViewControllerDelegate <NSObject>
+
+@optional
+
+-(void)popupListView:(PopupListTableViewController *)popupListTableView dataForSingleSelectedRow:(NSString *)string;
+-(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data;
 
 @end

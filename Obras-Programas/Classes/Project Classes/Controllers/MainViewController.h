@@ -8,13 +8,36 @@
 
 #import <UIKit/UIKit.h>
 #import "PopupListTableViewController.h"
+#import "JSONHTTPClient.h"
 
-@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate>
+@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate>
 
-- (IBAction)displayDependencies:(id)sender;
+/* Ordena la busqueda */
+
 - (IBAction)sortSearch:(id)sender;
+
+/* Esconde la vista donde se muestra el TableView */
+
 - (IBAction)hideSearchList:(id)sender;
 
+/* Muestra las obras concluidas, proyectadas, en proceso, y los programas totales*/
 
+- (IBAction)displayTypesOfProgramasWorks:(id)sender;
+
+/* Muestra las dependencias */
+
+- (IBAction)displayDependencies:(id)sender;
+
+/* Muestra los esyados */
+
+- (IBAction)displayStates:(id)sender;
+
+/* Muestra los municipios */
+
+- (IBAction)displayCities:(id)sender;
+
+/* Muestra los tipos de impacto */
+
+- (IBAction)displayTypeOfImpacts:(id)sender;
 
 @end

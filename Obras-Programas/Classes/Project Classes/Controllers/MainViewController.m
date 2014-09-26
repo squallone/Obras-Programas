@@ -11,30 +11,52 @@
 
 @interface MainViewController ()
 
+/* IBOutLets */
+
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (weak, nonatomic) IBOutlet UIView *buttonsView;
 
-//Buttons
 
 @property (weak, nonatomic) IBOutlet UIButton *btnQuery;
 @property (weak, nonatomic) IBOutlet UIButton *btnSaveQuery;
-@property (weak, nonatomic) IBOutlet UIButton *btnDependence;
+@property (weak, nonatomic) IBOutlet UIButton *btndependency;
+@property (weak, nonatomic) IBOutlet UIButton *btnStates;
+@property (weak, nonatomic) IBOutlet UIButton *btnCity;
+@property (weak, nonatomic) IBOutlet UIButton *btnImpact;
+@property (weak, nonatomic) IBOutlet UIButton *btnClasification;
+@property (weak, nonatomic) IBOutlet UIButton *btnInaugurated;
 
 @property (strong, nonatomic) UIBarButtonItem *menuBarBtn;
+
+/* PopUp List*/
 
 @property (nonatomic, strong) PopupListTableViewController *popUpTableView;
 @property (nonatomic, strong) UIPopoverController *popOverView;
 
-//SearchBar
+/* SearchBar */
+
 @property (nonatomic, strong) UISearchBar *searchBar;
 
-//Data
+/* Data */
 
 @property (nonatomic, strong) NSArray *menuData;
+@property (nonatomic, strong) NSArray *dependencyData;
+@property (nonatomic, strong) NSArray *statesData;
 
-//Animations
+/* Data Saved For Selecctions */
+
+@property (nonatomic, strong) NSArray *dependenciesSavedData;
+@property (nonatomic, strong) NSArray *statesSavedData;
+
+/* Animations */
 
 @property (nonatomic, strong) CATransition *transition;
+
+/* General  */
+
+@property (nonatomic, assign) MainSearchFields searchField;
+@property (nonatomic, strong) JSONHTTPClient *jsonClient;
 
 @end
 
@@ -46,18 +68,31 @@
     
     [super viewDidLoad];
     
+    [TSMessage setDefaultViewController:self];
     /*  Menu items */
     
-    _menuData = @[@"Busquedas recientes", @"Favoritos", @"Acerca de"];
+    _menuData       = @[@"Busquedas recientes", @"Favoritos", @"Acerca de"];
+    _dependencyData = @[@"SEGOB", @"SEP", @"PEMEX", @"SCT", @"CFE", @"SECTUR"];
     
+    /* Saved Selections */
+    
+    _dependenciesSavedData = [[NSUserDefaults standardUserDefaults]objectForKey:kKeyStoreDependencies];
+    
+    /* Request */
     [self setupUI];
+    [self requestToWebServices];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+-(void)requestToWebServices{
+    
+    _jsonClient = [JSONHTTPClient sharedJSONAPIClient];
+    _jsonClient.delegate = self;
+    
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletEstados];
+    //[_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletInauguradores];
 
+    
+}
 #pragma mark - Interface Customization
 
 /*  Setting the User Interface */
@@ -84,12 +119,6 @@
     _btnSaveQuery.layer.borderWidth     = borderWidth;
     _btnSaveQuery.layer.borderColor     = borderColor.CGColor;
     
-    /*  Create segmented control with items */
-    UISegmentedControl *segmentedControl = [[UISegmentedControl alloc] initWithItems:[NSArray arrayWithObjects:@"Obras", @"Programas", nil]];
-     segmentedControl.frame = CGRectMake(10, 50, 300, 30);
-    
-    //add segmented control bar button item to navigation bar
-    self.navigationItem.titleView = segmentedControl;
     /* Search bar implementation starts*/
     
     _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, 300, 40)];
@@ -118,8 +147,6 @@
     UIBarButtonItem *logoBar = [[UIBarButtonItem alloc]initWithCustomView:logoImageView];
     
     self.navigationItem.rightBarButtonItem = logoBar;
-    
-    
 }
 
 #pragma mark - Methods of action (Selectors - IBOulet)
@@ -128,13 +155,12 @@
 
 -(void)showMenu{
     
-   // [self displayItemsOntheButton:_menuBarBtn withData:_menuData];
-  
-}
-
-- (IBAction)displayDependencies:(id)sender {
-    
-    [self displayItemsOntheButton:_btnDependence withData:_menuData];
+    [self displayItemsOnButton:_menuBarBtn
+                   withDataSource:_menuData
+        withDataToShowCheckBox:nil
+                  isBarButtonItem:YES
+                           isMenu:YES
+                      searchField:_searchField];
 }
 
 /* Button that allows to sort a search */
@@ -144,34 +170,102 @@
  
 }
 
-- (IBAction)hideSearchList:(id)sender {
+- (IBAction)displayTypesOfProgramasWorks:(id)sender {
     
-    if ([_tableView isHidden]) {
-        _tableView.hidden = NO;
-        _transition.subtype = kCATransitionFromLeft;
+}
 
-    }else{
-        _tableView.hidden = YES;
-        _transition.subtype = kCATransitionFromRight;
-    }
+/* Muestra las dependencias */
+
+- (IBAction)displayDependencies:(id)sender {
     
-    [_tableView.layer addAnimation:_transition forKey:nil];
+    [self displayItemsOnButton:_btndependency
+                   withDataSource:_dependencyData
+         withDataToShowCheckBox:_dependenciesSavedData
+                  isBarButtonItem:NO
+                           isMenu:NO
+                      searchField:e_Dependencia];
+}
+
+/* Muestra los estados */
+
+- (IBAction)displayStates:(id)sender {
+    
+    [self displayItemsOnButton:_btnStates
+                withDataSource:_statesData
+        withDataToShowCheckBox:_statesSavedData
+               isBarButtonItem:NO
+                        isMenu:NO
+                   searchField:e_Estado];
 
 }
 
--(void)displayItemsOntheButton:(id)sender withData:(NSArray *)data{
+- (IBAction)displayCities:(id)sender {
+}
+
+- (IBAction)displayTypeOfImpacts:(id)sender {
+}
+
+
+#pragma mark Display Pop Up List
+
+-(void)displayItemsOnButton:(id)sender
+             withDataSource:(NSArray *)data
+     withDataToShowCheckBox:(NSArray *)loadData
+            isBarButtonItem:(BOOL)isBarButton
+                     isMenu:(BOOL)isMenu
+                searchField:(MainSearchFields)aSearchField{
     
-    _popUpTableView = [[PopupListTableViewController alloc]initWithData:data];
+    _popUpTableView = [[PopupListTableViewController alloc]initWithData:data
+                                                                 isMenu:isMenu
+                                                               markData:loadData
+                                                            searchField:aSearchField];
     _popUpTableView.delegate = self;
     
-    if (_popOverView == nil) {
+    if (!_popOverView.popoverVisible && _popOverView != nil) {
+        _popOverView = nil;
+    }
+    
+    if (_popOverView == nil ) {
         _popOverView = [[UIPopoverController alloc]initWithContentViewController:_popUpTableView];
         
-        [_popOverView presentPopoverFromBarButtonItem:(UIBarButtonItem *)sender permittedArrowDirections:UIPopoverArrowDirectionUp animated:YES];
+        if (isBarButton) {
+            [_popOverView presentPopoverFromBarButtonItem:(UIBarButtonItem *)sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        }else{
+            UIButton *button = (UIButton *)sender;
+            
+            [_popOverView presentPopoverFromRect:button.frame inView:_buttonsView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
+        }
+        
     }else{
         [_popOverView dismissPopoverAnimated:YES];
         _popOverView = nil;
     }
+}
+
+#pragma mark PopupListDelegate
+
+-(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data{
+    
+    if (popupListTableView.field == e_Dependencia) {
+        _dependenciesSavedData = data;
+        [[NSUserDefaults standardUserDefaults]setObject:data forKey:kKeyStoreDependencies];
+    }
+    
+}
+
+#pragma mark JSONHTTPClient Delegate
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToStates:(id)response{
+    
+    _statesData = response;
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToInaugurators:(id)response{
+    
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
+    
 }
 
 #pragma mark - UITableView  DataSource
@@ -195,7 +289,10 @@
     return cell;
 
 }
+
 #pragma mark - UITableView  Delegate
+
+
 
 
 #pragma mark - UISearchBar Delegate
@@ -220,6 +317,24 @@
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     
+}
+
+#pragma mark Hide Lists
+
+- (IBAction)hideSearchList:(id)sender {
+    
+    /* When de user press the button if the list is hidden the list is displayed */
+    
+    if ([_tableView isHidden]) {
+        _tableView.hidden = NO;
+        _transition.subtype = kCATransitionFromLeft;
+        
+    }else{
+        _tableView.hidden = YES;
+        _transition.subtype = kCATransitionFromRight;
+    }
+    /* Add animation */
+    [_tableView.layer addAnimation:_transition forKey:nil];
 }
 
 

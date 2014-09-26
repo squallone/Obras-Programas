@@ -25,10 +25,13 @@
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Lzg-KG-t4F">
                                         <rect key="frame" x="0.0" y="-4" width="169" height="44"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
-                                        <state key="normal" title="Tipo de obra">
+                                        <state key="normal" title="Tipo">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="displayTypesOfProgramasWorks:" destination="BYZ-38-t0r" eventType="touchUpInside" id="QBR-7B-0bs"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="WDK-xR-3vV">
                                         <rect key="frame" x="167" y="0.0" width="1" height="44"/>
@@ -54,6 +57,9 @@
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="displayStates:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YWv-gn-euj"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="TyV-v0-D0n">
                                         <rect key="frame" x="378" y="0.0" width="1" height="44"/>
@@ -65,6 +71,9 @@
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="displayCities:" destination="BYZ-38-t0r" eventType="touchUpInside" id="sjS-hc-3X4"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="U5n-Yh-u7F">
                                         <rect key="frame" x="517" y="0.0" width="1" height="44"/>
@@ -106,6 +115,9 @@
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="displayTypeOfImpacts:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8kq-hN-cHn"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="xAG-h6-tMn">
                                         <rect key="frame" x="309" y="28" width="1" height="44"/>
@@ -226,10 +238,6 @@
                                 <rect key="frame" x="764" y="136" width="260" height="632"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1Dy-8m-sgq" userLabel="Rigth View With Blur" customClass="UIERealTimeBlurView">
-                                <rect key="frame" x="764" y="136" width="260" height="632"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i4h-dO-Nvp" userLabel="Hide TableView Button">
                                 <rect key="frame" x="0.0" y="196" width="266" height="35"/>
                                 <color key="backgroundColor" white="0.921906502016129" alpha="1" colorSpace="calibratedWhite"/>
@@ -271,9 +279,15 @@
                     <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
-                        <outlet property="btnDependence" destination="f7k-oY-mWi" id="plM-OB-egR"/>
+                        <outlet property="btnCity" destination="5df-Kt-vek" id="cYR-qM-blQ"/>
+                        <outlet property="btnClasification" destination="AXt-2R-saO" id="gzN-6x-g6Q"/>
+                        <outlet property="btnImpact" destination="b2H-mw-bu5" id="vFR-m1-5SU"/>
+                        <outlet property="btnInaugurated" destination="03d-WZ-WM0" id="FsR-Fk-eY9"/>
                         <outlet property="btnQuery" destination="Hjl-r0-WKS" id="FFN-sE-6Xt"/>
                         <outlet property="btnSaveQuery" destination="tmg-VW-qO0" id="Uqt-bR-Wxr"/>
+                        <outlet property="btnStates" destination="MDx-ef-QoZ" id="Qfv-78-3O8"/>
+                        <outlet property="btndependency" destination="f7k-oY-mWi" id="uoH-kS-vFF"/>
+                        <outlet property="buttonsView" destination="14g-2F-FcP" id="aTT-Lh-szG"/>
                         <outlet property="mapView" destination="qmI-lD-eeX" id="ggw-KS-SYJ"/>
                         <outlet property="tableView" destination="1gE-Fe-sGf" id="6Uk-qo-cGT"/>
                     </connections>

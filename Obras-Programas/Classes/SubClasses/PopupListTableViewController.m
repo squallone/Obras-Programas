@@ -6,28 +6,52 @@
 // Descripción: Clase que muestra los elementos por de la lista en un TableView dentro de la clase UIPopover
 
 #import "PopupListTableViewController.h"
+#import "Estado.h"
+#import "Inaugurador.h"
+
+const NSInteger rowHeight = 45;
 
 @interface PopupListTableViewController ()
+
+@property (nonatomic, strong) NSArray *dataToMark;
 
 @end
 
 @implementation PopupListTableViewController
 
--(id)initWithData:(NSArray *)array{
+-(id)initWithData:(NSArray *)datasource isMenu:(BOOL)option markData:(NSArray *)loadData searchField:(MainSearchFields)field{
     
-    if (self = [super initWithStyle:UITableViewStylePlain]) {
-        self.data = array;
+    if ([super initWithStyle:UITableViewStylePlain] !=nil) {
+        
+        /* Initialize instance variables */
+        
+        self.dataSource     = datasource;
+        self.dataToMark     = loadData;
+        
+        self.dataToMark =   self.dataToMark == nil ? [NSArray new] : self.dataToMark;
+        
+        self.dataSelected   = [NSMutableArray arrayWithArray:self.dataToMark];
+        self.isMenu         = option;
+        _field              = field;
         
         self.clearsSelectionOnViewWillAppear = NO;
-        NSInteger rowsCount = [_data count];
-        NSInteger singleRowHeight = [self.tableView.delegate tableView:self.tableView heightForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]];
-        NSInteger totalRowsHeight = rowsCount *singleRowHeight;
+        self.tableView.allowsMultipleSelection = _isMenu ? NO : YES;
+        
+        NSInteger rowsCount = [self.dataSource count];
+        NSInteger totalRowsHeight = rowsCount * rowHeight + 5;
         
         //Calcula el ancho que debe tener la vista buscando que ancho de cada string se espera que sea
+        
         CGFloat largestLabelWidth = 0;
-        for (NSString *categoryName in _data) {
+        for (id objectModel in self.dataSource) {
+            
+            NSString *strValue = [self textToDisplay:objectModel];
             //Verifica el tamaño del texto usado la fuente del textLabel por defecto del UITableViewCell
-            CGSize labelSize = [categoryName sizeWithFont:[UIFont boldSystemFontOfSize:20.0f]];
+            
+            CGSize labelSize = [strValue sizeWithAttributes:
+                           @{NSFontAttributeName:
+                                 [UIFont systemFontOfSize:20.0f]}];
+            
             if (labelSize.width > largestLabelWidth) {
                 largestLabelWidth = labelSize.width;
             }
@@ -37,62 +61,125 @@
         CGFloat popoverWidth = largestLabelWidth + 100;
         
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
-        self.contentSizeForViewInPopover = CGSizeMake(700, totalRowsHeight);
-        
+        self.preferredContentSize = CGSizeMake(popoverWidth, totalRowsHeight);
     }
     
     return self;
-    
 }
+
+#pragma mark - View Lifecycle
+
 
 - (void)viewDidLoad {
+    
     [super viewDidLoad];
-    
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
-    
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+-(void)viewWillDisappear:(BOOL)animated{
+    
+    if ([_delegate respondsToSelector:@selector(popupListView:dataForMultipleSelectedRows:)]) {
+        [_delegate popupListView:self dataForMultipleSelectedRows:_dataSelected];
+    }
 }
 
 #pragma mark - Table view data source
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    // Return the number of sections.
-    return 0;
-}
-
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return self.data.count;
+    return self.dataSource.count;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    static NSString *CellIdentifier = @"ListCell";
+    id objecModel = [self.dataSource objectAtIndex:indexPath.row];
+    NSString *value = @"";
     
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+    static NSString *CellIdentifier = @"Cell";
+    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    cell.textLabel.text = self.data[indexPath.row];
+    if (cell == nil) {
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
+        
+        value = [self textToDisplay:objecModel];
+        
+        if (_isMenu) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            cell.imageView.image = [UIImage imageNamed:@"favoritos"];
+        }else{
+            for (NSString *valeToCheck in _dataToMark) {
+                
+                if ([valeToCheck isEqualToString:value]) {
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+
+                }
+            }
+        }
+        
+        cell.textLabel.text = value;
+    }
+    
     return cell;
 }
+
+
+-(NSString *)textToDisplay:(id)objectModel{
+    
+    NSString *value = @"";
+
+    if (_isMenu) {
+        
+        value = objectModel;
+        
+    }else if (_field == e_Estado) {
+        
+        Estado *state = (Estado *)objectModel;
+        value = state.nombreEstado;
+        
+    }else if (_field == e_Nombre_Inaugura){
+        
+        Inaugurador *inaugurator = (Inaugurador *)objectModel;
+        value = inaugurator.nombreCargoInaugura;
+    }
+    
+    return value;
+}
+
 
 #pragma mark - Table view delegate
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *dataForSelectedRow = [self.data objectAtIndex:indexPath.row];
+    if (!_isMenu) {
+        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
+        
+        NSString *dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
+        
+        if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
+            [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
+        }
+        [_dataSelected addObject:dataForSelectedRow];
+    }else{
+        
+    }
     
-    if (_delegate !=nil) {
-        //Se envia el elmento seleccionado
-        [_delegate selectedRow:dataForSelectedRow];
+    
+    NSLog(@"Insert %@", _dataSelected);
+
+}
+
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (!_isMenu) {
+        NSString *dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
+        
+        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
+        [_dataSelected removeObjectIdenticalTo:dataForSelectedRow];
+        
+        NSLog(@"Remove %@", _dataSelected);
     }
 }
+
 
 
 @end
