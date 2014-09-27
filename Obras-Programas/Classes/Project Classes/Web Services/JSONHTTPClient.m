@@ -9,6 +9,8 @@
 #import "JSONHTTPClient.h"
 #import "TSMessage.h"
 #import "Estado.h"
+#import "Impacto.h"
+#import "Inaugurador.h"
 
 //Parametro que usa el Servlet para saber si la peticion proviene del movil
 
@@ -47,7 +49,7 @@
     [self POST:servletName parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
         
         NSArray *JSONResponse = responseObject;
-        
+        //Estados
         if ([servletName isEqualToString:kServletEstados]) {
             
             NSArray *statesData = [self deserializeStatesFromJSON:JSONResponse];
@@ -56,13 +58,26 @@
                 
                 [self.delegate JSONHTTPClientDelegate:self didResponseToStates:statesData];
             }
-            
+        //Inauguradores
         }else if ([servletName isEqualToString:kServletInauguradores]){
+            
+            NSArray *inaugurators = [self deserializeInauguratorsFromJSON:JSONResponse];
+            
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToInaugurators:)]) {
                 
-                [self.delegate JSONHTTPClientDelegate:self didResponseToInaugurators:JSONResponse];
+                [self.delegate JSONHTTPClientDelegate:self didResponseToInaugurators:inaugurators];
+            }
+        //Impactos
+        }else if ([servletName isEqualToString:kServletImpactos]){
+            
+            NSArray *impacts = [self deserializeImpactsFromJSON:JSONResponse];
+
+            if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToImpacts:)]) {
+                
+                [self.delegate JSONHTTPClientDelegate:self didResponseToImpacts:impacts];
             }
         }
+
         
         //El servidor notifica si la respuesta es valida o no
 
@@ -85,25 +100,37 @@
 - (NSArray *)deserializeStatesFromJSON:(NSArray *)statesJSON
 {
     NSError *error;
-    NSArray *appInfos = [MTLJSONAdapter modelsOfClass:[Estado class] fromJSONArray:statesJSON error:&error];
+    NSArray *states = [MTLJSONAdapter modelsOfClass:[Estado class] fromJSONArray:statesJSON error:&error];
     if (error) {
-        NSLog(@"Couldn't convert app infos JSON to ChoosyAppInfo models: %@", error);
+        NSLog(@"Couldn't convert app infos JSON to Estado models: %@", error);
         return nil;
     }
     
-    return appInfos;
+    return states;
 }
 
 - (NSArray *)deserializeInauguratorsFromJSON:(NSArray *)inauguratorsJSON
 {
     NSError *error;
-    NSArray *appInfos = [MTLJSONAdapter modelsOfClass:[Estado class] fromJSONArray:inauguratorsJSON error:&error];
+    NSArray *inaugurators = [MTLJSONAdapter modelsOfClass:[Estado class] fromJSONArray:inauguratorsJSON error:&error];
     if (error) {
         NSLog(@"Couldn't convert inauguradores JSON to Inauguradores models: %@", error);
         return nil;
     }
     
-    return appInfos;
+    return inaugurators;
+}
+
+- (NSArray *)deserializeImpactsFromJSON:(NSArray *)impactsJSON
+{
+    NSError *error;
+    NSArray *impacts = [MTLJSONAdapter modelsOfClass:[Impacto class] fromJSONArray:impactsJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert inauguradores JSON to Imactp models: %@", error);
+        return nil;
+    }
+    
+    return impacts;
 }
 
 @end

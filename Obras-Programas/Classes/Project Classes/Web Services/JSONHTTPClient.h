@@ -30,6 +30,12 @@
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToStates:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToInaugurators:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToImpacts:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToDependencies:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTargetPopulations:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToClasifications:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTypesOfWorksAndPrograms:(id)response;
+
 
 
 @end

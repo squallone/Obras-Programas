@@ -8,6 +8,7 @@
 #import "PopupListTableViewController.h"
 #import "Estado.h"
 #import "Inaugurador.h"
+#import "Impacto.h"
 
 const NSInteger rowHeight = 45;
 
@@ -140,6 +141,11 @@ const NSInteger rowHeight = 45;
         
         Inaugurador *inaugurator = (Inaugurador *)objectModel;
         value = inaugurator.nombreCargoInaugura;
+        
+    }else if (_field == e_Impacto){
+        
+        Impacto *inaugurator = (Impacto *)objectModel;
+        value = inaugurator.nombreImpacto;
     }
     
     return value;

@@ -46,9 +46,11 @@ NSString * const kAppURL = kAppFullURL;
 //              Servlets
 /******************************************************/
 
-NSString * const kServletEstados        = @"consultarEstados";
-NSString * const kServletInauguradores  = @"consultarInauguradores";
-
+NSString * const kServletEstados                = @"consultarEstados";
+NSString * const kServletInauguradores          = @"consultarInauguradores";
+NSString * const kServletImpactos               = @"consultarImpactos";
+NSString * const kServletPoblacionesObjetivo    = @"consultarPoblacionesObjetivo";
+NSString * const kServletConsultarInversiones   = @"consultarInversiones";
 
 //              KEYS TO PERSIST DATA
 /******************************************************/
@@ -62,12 +64,21 @@ NSString * const kKeyStoreImpact                =  @"kimp";
 //              KEYS JSON
 /******************************************************/
 
-NSString * const kKeyDbIdEstado         =  @"idEstado";
-NSString * const kKeyDbNombreEstado     =  @"nombreEstado";
-NSString * const kKeyDbLatitud          =  @"latitud";
-NSString * const kKeyDbLongitud         =  @"longitud";
+//Estado
+
+NSString * const kKeyDbIdEstado                 =  @"idEstado";
+NSString * const kKeyDbNombreEstado             =  @"nombreEstado";
+NSString * const kKeyDbLatitud                  =  @"latitud";
+NSString * const kKeyDbLongitud                 =  @"longitud";
+
+//Inaugura
+NSString * const kKeyDbIdCargoInaugura          =  @"idCargoInaugura";
+NSString * const kKeyDbNombreCargoInaugura      =  @"nombreCargoInaugura";
 
 
+//Impacto
+NSString * const kKeyDbIdImpacto                =  @"idImpacto";
+NSString * const kKeyDbNombreImpacto            =  @"nombreImpacto";
 
 
 @end

@@ -23,6 +23,7 @@
 		AB36C63019D6074500B77B83 /* NSValueTransformer+MTLInversionAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C62019D6074500B77B83 /* NSValueTransformer+MTLInversionAdditions.m */; };
 		AB36C63119D6074500B77B83 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C62219D6074500B77B83 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */; };
 		AB36C63419D60BBB00B77B83 /* Inaugurador.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C63319D60BBB00B77B83 /* Inaugurador.m */; };
+		AB36C63A19D62BA200B77B83 /* Impacto.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C63919D62BA200B77B83 /* Impacto.m */; };
 		AB91254B19D4B68B00151A47 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = AB91254A19D4B68B00151A47 /* Constants.m */; };
 		AB91254E19D4CB1C00151A47 /* Obra.m in Sources */ = {isa = PBXBuildFile; fileRef = AB91254D19D4CB1C00151A47 /* Obra.m */; };
 		AB91255119D4CB2600151A47 /* Programa.m in Sources */ = {isa = PBXBuildFile; fileRef = AB91255019D4CB2600151A47 /* Programa.m */; };
@@ -136,6 +137,8 @@
 		AB36C62219D6074500B77B83 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSValueTransformer+MTLPredefinedTransformerAdditions.m"; sourceTree = "<group>"; };
 		AB36C63219D60BBB00B77B83 /* Inaugurador.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inaugurador.h; sourceTree = "<group>"; };
 		AB36C63319D60BBB00B77B83 /* Inaugurador.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inaugurador.m; sourceTree = "<group>"; };
+		AB36C63819D62BA200B77B83 /* Impacto.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Impacto.h; sourceTree = "<group>"; };
+		AB36C63919D62BA200B77B83 /* Impacto.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Impacto.m; sourceTree = "<group>"; };
 		AB91254919D4B68B00151A47 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		AB91254A19D4B68B00151A47 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		AB91254C19D4CB1C00151A47 /* Obra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obra.h; sourceTree = "<group>"; };
@@ -612,6 +615,8 @@
 				AB97C9F019D5D4F00049DD51 /* Estado.m */,
 				AB36C63219D60BBB00B77B83 /* Inaugurador.h */,
 				AB36C63319D60BBB00B77B83 /* Inaugurador.m */,
+				AB36C63819D62BA200B77B83 /* Impacto.h */,
+				AB36C63919D62BA200B77B83 /* Impacto.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -847,6 +852,7 @@
 				ABFCC4E619C2DDA10074CA01 /* AFHTTPRequestOperationManager.m in Sources */,
 				ABFCC4F219C2DDA10074CA01 /* UIImageView+AFNetworking.m in Sources */,
 				AB36C63019D6074500B77B83 /* NSValueTransformer+MTLInversionAdditions.m in Sources */,
+				AB36C63A19D62BA200B77B83 /* Impacto.m in Sources */,
 				ABFCC4F119C2DDA10074CA01 /* UIButton+AFNetworking.m in Sources */,
 				AB9E738119CBCD5700C16E66 /* UIERealTimeBlurView.m in Sources */,
 				AB9E738719CBDFDA00C16E66 /* PopupListTableViewController.m in Sources */,

@@ -29,18 +29,19 @@ typedef NS_OPTIONS(NSInteger, MainSearchFields)
 extern NSString * const kDbName;
 extern NSString * const kAppURL; //http://desarrollo.smartthinking.com.mx:8080/versailles_intranet/
 
-
 /////////////       Server
 /******************************************************/
 
 extern NSString * const kServletEstados;
 extern NSString * const kServletInauguradores;
+extern NSString * const kServletImpactos;
+extern NSString * const kServletPoblacionesObjetivo;
+extern NSString * const kServletSonsultarInversiones;
 
 /////////////       Options
 /******************************************************/
 
 extern MainSearchFields searchFields;
-
 
 /////////////       Keys
 /******************************************************/
@@ -59,4 +60,12 @@ extern NSString * const kKeyDbNombreEstado;
 extern NSString * const kKeyDbLatitud;
 extern NSString * const kKeyDbLongitud;
 
+extern NSString * const kKeyDbIdCargoInaugura;
+extern NSString * const kKeyDbNombreCargoInaugura;
+
+extern NSString * const kKeyDbIdInaugurador;
+extern NSString * const kKeyDbNombreCargoInaugura;
+
+extern NSString * const kKeyDbIdImpacto;
+extern NSString * const kKeyDbNombreImpacto;
 @end

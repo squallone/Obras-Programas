@@ -43,11 +43,16 @@
 @property (nonatomic, strong) NSArray *menuData;
 @property (nonatomic, strong) NSArray *dependencyData;
 @property (nonatomic, strong) NSArray *statesData;
+@property (nonatomic, strong) NSArray *impactsData;
+@property (nonatomic, strong) NSArray *inauguratorData;
+
 
 /* Data Saved For Selecctions */
 
 @property (nonatomic, strong) NSArray *dependenciesSavedData;
 @property (nonatomic, strong) NSArray *statesSavedData;
+@property (nonatomic, strong) NSArray *impactsSavedData;
+@property (nonatomic, strong) NSArray *inauguratorSavedData;
 
 /* Animations */
 
@@ -89,7 +94,8 @@
     _jsonClient.delegate = self;
     
     [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletEstados];
-    //[_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletInauguradores];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletInauguradores];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletImpactos];
 
     
 }
@@ -149,6 +155,31 @@
     self.navigationItem.rightBarButtonItem = logoBar;
 }
 
+
+#pragma mark JSONHTTPClient Delegate
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToStates:(id)response{
+    
+    _statesData = response;
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToInaugurators:(id)response{
+    
+    _inauguratorData = response;
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToImpacts:(id)response{
+    
+    _impactsData = response;
+    
+    
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
+    
+    NSLog(@"Error : %@", [error localizedDescription]);
+}
+
 #pragma mark - Methods of action (Selectors - IBOulet)
 
 /* Display the menu items */
@@ -199,10 +230,24 @@
 
 }
 
+/* Muestra los municpios */
+
+
 - (IBAction)displayCities:(id)sender {
+    
+    
 }
 
+/* Muestra los impactos */
+
 - (IBAction)displayTypeOfImpacts:(id)sender {
+    
+    [self displayItemsOnButton:_btnImpact
+                withDataSource:_impactsData
+        withDataToShowCheckBox:_impactsSavedData
+               isBarButtonItem:NO
+                        isMenu:NO
+                   searchField:e_Impacto];
 }
 
 
@@ -253,20 +298,6 @@
     
 }
 
-#pragma mark JSONHTTPClient Delegate
-
--(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToStates:(id)response{
-    
-    _statesData = response;
-}
-
--(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToInaugurators:(id)response{
-    
-}
-
--(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
-    
-}
 
 #pragma mark - UITableView  DataSource
 
