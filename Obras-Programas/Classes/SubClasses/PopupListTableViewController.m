@@ -9,6 +9,9 @@
 #import "Estado.h"
 #import "Inaugurador.h"
 #import "Impacto.h"
+#import "Clasificacion.h"
+#import "Dependencia.h"
+#import "TipoObraPrograma.h"
 
 const NSInteger rowHeight = 45;
 
@@ -26,14 +29,12 @@ const NSInteger rowHeight = 45;
         
         /* Initialize instance variables */
         
-        self.dataSource     = datasource;
-        self.dataToMark     = loadData;
-        
-        self.dataToMark =   self.dataToMark == nil ? [NSArray new] : self.dataToMark;
+        self.dataSource     = datasource;        
+        self.dataToMark =   self.dataToMark == nil ? [NSArray new] : loadData;
         
         self.dataSelected   = [NSMutableArray arrayWithArray:self.dataToMark];
         self.isMenu         = option;
-        _field              = field;
+        self.field          = field;
         
         self.clearsSelectionOnViewWillAppear = NO;
         self.tableView.allowsMultipleSelection = _isMenu ? NO : YES;
@@ -100,19 +101,21 @@ const NSInteger rowHeight = 45;
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
-        
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+
         value = [self textToDisplay:objecModel];
         
         if (_isMenu) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             cell.imageView.image = [UIImage imageNamed:@"favoritos"];
         }else{
-            for (NSString *valeToCheck in _dataToMark) {
+            for (id objectModel in _dataToMark) {
+                    NSString *valueToCheck = [self textToDisplay:objectModel];
                 
-                if ([valeToCheck isEqualToString:value]) {
+                if ([valueToCheck isEqualToString:value]) {
+                    
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                     [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
-
                 }
             }
         }
@@ -144,8 +147,17 @@ const NSInteger rowHeight = 45;
         
     }else if (_field == e_Impacto){
         
-        Impacto *inaugurator = (Impacto *)objectModel;
-        value = inaugurator.nombreImpacto;
+        Impacto *impact = (Impacto *)objectModel;
+        value = impact.nombreImpacto;
+    }else if (_field == e_Clasificacion){
+        
+        Clasificacion *clasification = (Clasificacion *)objectModel;
+        value = clasification.nombreTipoClasificacion;
+        
+    }else if (_field == e_Dependencia){
+        
+        Dependencia *dependency = (Dependencia *)objectModel;
+        value = dependency.nombreDependencia;
     }
     
     return value;

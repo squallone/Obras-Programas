@@ -40,4 +40,5 @@
 
 - (IBAction)displayTypeOfImpacts:(id)sender;
 
+- (IBAction)displayClasifications:(id)sender;
 @end

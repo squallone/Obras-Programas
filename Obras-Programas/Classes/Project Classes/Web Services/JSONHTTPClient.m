@@ -11,6 +11,8 @@
 #import "Estado.h"
 #import "Impacto.h"
 #import "Inaugurador.h"
+#import "Clasificacion.h"
+#import "Dependencia.h"
 
 //Parametro que usa el Servlet para saber si la peticion proviene del movil
 
@@ -76,11 +78,28 @@
                 
                 [self.delegate JSONHTTPClientDelegate:self didResponseToImpacts:impacts];
             }
+            
+        //Clasificación
+        }else if ([servletName isEqualToString:kServletConsultarClasificacion]){
+            
+            NSArray *clasifications = [self deserializeClasificationsFromJSON:JSONResponse];
+            
+            if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToClasifications:)]) {
+                
+                [self.delegate JSONHTTPClientDelegate:self didResponseToClasifications:clasifications];
+            }
+        // Dependencias
+        }else if ([servletName isEqualToString:kServletConsultarDependencias]){
+            
+            NSArray *dependencies = [self deserializeDependenciesFromJSON:JSONResponse];
+            
+            if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToDependencies:)]) {
+                
+                [self.delegate JSONHTTPClientDelegate:self didResponseToDependencies:dependencies];
+            }
         }
 
-        
         //El servidor notifica si la respuesta es valida o no
-
         
     } failure:^(NSURLSessionDataTask *task, NSError *error) {
             
@@ -126,11 +145,35 @@
     NSError *error;
     NSArray *impacts = [MTLJSONAdapter modelsOfClass:[Impacto class] fromJSONArray:impactsJSON error:&error];
     if (error) {
-        NSLog(@"Couldn't convert inauguradores JSON to Imactp models: %@", error);
+        NSLog(@"Couldn't convert inauguradores JSON to Impact models: %@", error);
         return nil;
     }
     
     return impacts;
+}
+
+- (NSArray *)deserializeClasificationsFromJSON:(NSArray *)impactsJSON
+{
+    NSError *error;
+    NSArray *clasifications = [MTLJSONAdapter modelsOfClass:[Clasificacion class] fromJSONArray:impactsJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert inauguradores JSON to Clasificacion models: %@", error);
+        return nil;
+    }
+    
+    return clasifications;
+}
+
+- (NSArray *)deserializeDependenciesFromJSON:(NSArray *)impactsJSON
+{
+    NSError *error;
+    NSArray *dependencies = [MTLJSONAdapter modelsOfClass:[Dependencia class] fromJSONArray:impactsJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert inauguradores JSON to Clasificacion models: %@", error);
+        return nil;
+    }
+    
+    return dependencies;
 }
 
 @end

@@ -7,6 +7,8 @@
 // Dependencias:
 
 #import "MainViewController.h"
+#import "NSUserDefaults+RMSaveCustomObject.h"
+
 @import MapKit.MKMapView;
 
 @interface MainViewController ()
@@ -45,6 +47,7 @@
 @property (nonatomic, strong) NSArray *statesData;
 @property (nonatomic, strong) NSArray *impactsData;
 @property (nonatomic, strong) NSArray *inauguratorData;
+@property (nonatomic, strong) NSArray *clasificationsData;
 
 
 /* Data Saved For Selecctions */
@@ -53,6 +56,7 @@
 @property (nonatomic, strong) NSArray *statesSavedData;
 @property (nonatomic, strong) NSArray *impactsSavedData;
 @property (nonatomic, strong) NSArray *inauguratorSavedData;
+@property (nonatomic, strong) NSArray *clasificationsSavedData;
 
 /* Animations */
 
@@ -73,6 +77,8 @@
     
     [super viewDidLoad];
     
+
+    
     [TSMessage setDefaultViewController:self];
     /*  Menu items */
     
@@ -88,6 +94,14 @@
     [self requestToWebServices];
 }
 
+-(void)viewDidAppear:(BOOL)animated{
+    
+    [(AppDelegate *)[[UIApplication sharedApplication] delegate] showActivityIndicator:M13ProgressViewActionNone whithMessage:@"Hola" delay:1.0];
+
+}
+
+#pragma mark Server Requests (JSON)
+
 -(void)requestToWebServices{
     
     _jsonClient = [JSONHTTPClient sharedJSONAPIClient];
@@ -96,6 +110,8 @@
     [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletEstados];
     [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletInauguradores];
     [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletImpactos];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarClasificacion];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarDependencias];
 
     
 }
@@ -171,13 +187,36 @@
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToImpacts:(id)response{
     
     _impactsData = response;
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToClasifications:(id)response{
     
+    _clasificationsData = response;
+}
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToDependencies:(id)response{
+    
+    _dependencyData = response;
     
 }
 
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
     
     NSLog(@"Error : %@", [error localizedDescription]);
+}
+
+#pragma mark - (Save Data) PopupListTableView Delegate
+
+-(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data{
+    
+    if (popupListTableView.field == e_Dependencia) {
+        _dependenciesSavedData = data;
+        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreDependencies];
+    }else if (popupListTableView.field == e_Impacto){
+        _impactsSavedData = data;
+        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreImpact];
+    }
+    
 }
 
 #pragma mark - Methods of action (Selectors - IBOulet)
@@ -250,6 +289,19 @@
                    searchField:e_Impacto];
 }
 
+/* Muestra las clasificaciones */
+
+- (IBAction)displayClasifications:(id)sender {
+    
+    
+    [self displayItemsOnButton:_btnClasification
+                withDataSource:_clasificationsData
+        withDataToShowCheckBox:_clasificationsSavedData
+               isBarButtonItem:NO
+                        isMenu:NO
+                   searchField:e_Clasificacion];
+}
+
 
 #pragma mark Display Pop Up List
 
@@ -286,18 +338,6 @@
         _popOverView = nil;
     }
 }
-
-#pragma mark PopupListDelegate
-
--(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data{
-    
-    if (popupListTableView.field == e_Dependencia) {
-        _dependenciesSavedData = data;
-        [[NSUserDefaults standardUserDefaults]setObject:data forKey:kKeyStoreDependencies];
-    }
-    
-}
-
 
 #pragma mark - UITableView  DataSource
 

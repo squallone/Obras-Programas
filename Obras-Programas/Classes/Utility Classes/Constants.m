@@ -16,7 +16,7 @@
 #define kAppBaseProtocol    @"http://"
 #define kAppBaseURL         @"54.69.71.115"
 #define kAppBasePort        @":8080/"
-#define kAppIntranetPath    @"ObrasProgramas/"
+#define kAppIntranetPath    @"ObrasYProgramas/"
 #define kAppFullURL         kAppBaseProtocol kAppBaseURL kAppBasePort kAppIntranetPath
 
 /////////////       GENERAL
@@ -25,32 +25,21 @@
 NSString * const kDbName = @"oyp";
 NSString * const kAppURL = kAppFullURL;
 
-// Devices
-/******************/
 
-#define kIs_iPhone (!IS_IPAD)
-#define kIs_iPad (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
-#define kIs_iPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
-
-// AppDelegate
-/******************/
-#define kAppDelegate (AppDelegate*)[[UIApplication sharedApplication]delegate]
-
-//Debug
-/******************/
-
-#ifndef DEBUG
-#define NSLog(...);
-#endif
 
 //              Servlets
 /******************************************************/
 
-NSString * const kServletEstados                = @"consultarEstados";
-NSString * const kServletInauguradores          = @"consultarInauguradores";
-NSString * const kServletImpactos               = @"consultarImpactos";
-NSString * const kServletPoblacionesObjetivo    = @"consultarPoblacionesObjetivo";
-NSString * const kServletConsultarInversiones   = @"consultarInversiones";
+NSString * const kServletBuscar                     = @"buscar";
+NSString * const kServletEstados                    = @"consultarEstados";
+NSString * const kServletInauguradores              = @"consultarInauguradores";
+NSString * const kServletImpactos                   = @"consultarImpactos";
+NSString * const kServletPoblacionesObjetivo        = @"consultarPoblacionesObjetivo";
+NSString * const kServletConsultarInversiones       = @"consultarInversiones";
+NSString * const kServletConsultarClasificacion     = @"consultarClasificaciones";
+NSString * const kServletConsultarTipoObraPrograma  = @"consultarTiposDeObraProgramas";
+NSString * const kServletConsultarDependencias      = @"consultarDependencias";
+
 
 //              KEYS TO PERSIST DATA
 /******************************************************/
@@ -80,5 +69,13 @@ NSString * const kKeyDbNombreCargoInaugura      =  @"nombreCargoInaugura";
 NSString * const kKeyDbIdImpacto                =  @"idImpacto";
 NSString * const kKeyDbNombreImpacto            =  @"nombreImpacto";
 
+//Clasificación
+NSString * const kKeyDbIdClasificacion          =  @"idTipoClasificacion";
+NSString * const kKeyDbNombreClasificacion      =  @"nombreTipoClasificacion";
+
+//Dependencia
+
+NSString * const kKeyDbIdDependencia            =  @"idDependencia";
+NSString * const kKeyDbNombreDependencia       =  @"nombreDependencia";
 
 @end

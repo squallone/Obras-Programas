@@ -31,3 +31,20 @@
 
 #endif
 
+// Devices
+/******************/
+
+#define kIs_iPhone (!IS_IPAD)
+#define kIs_iPad (UI_USER_INTERFACE_IDIOM() != UIUserInterfaceIdiomPhone)
+#define kIs_iPhone5  ([[UIScreen mainScreen] bounds].size.height == 568)?TRUE:FALSE
+
+// AppDelegate
+/******************/
+#define kAppDelegate (AppDelegate*)[[UIApplication sharedApplication]delegate]
+
+//Debug
+/******************/
+
+#ifndef DEBUG
+#define NSLog(...);
+#endif

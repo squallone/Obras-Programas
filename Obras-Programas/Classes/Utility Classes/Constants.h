@@ -32,11 +32,15 @@ extern NSString * const kAppURL; //http://desarrollo.smartthinking.com.mx:8080/v
 /////////////       Server
 /******************************************************/
 
+extern NSString * const kServletBuscar;
 extern NSString * const kServletEstados;
 extern NSString * const kServletInauguradores;
 extern NSString * const kServletImpactos;
 extern NSString * const kServletPoblacionesObjetivo;
-extern NSString * const kServletSonsultarInversiones;
+extern NSString * const kServletConsultarInversiones;
+extern NSString * const kServletConsultarClasificacion;
+extern NSString * const kServletConsultarTipoObraPrograma;
+extern NSString * const kServletConsultarDependencias;
 
 /////////////       Options
 /******************************************************/
@@ -68,4 +72,11 @@ extern NSString * const kKeyDbNombreCargoInaugura;
 
 extern NSString * const kKeyDbIdImpacto;
 extern NSString * const kKeyDbNombreImpacto;
+
+extern NSString * const kKeyDbIdClasificacion;
+extern NSString * const kKeyDbNombreClasificacion;
+
+extern NSString * const kKeyDbIdDependencia;
+extern NSString * const kKeyDbNombreDependencia;
+
 @end
