@@ -40,16 +40,17 @@
     self.HUD = [[M13ProgressHUD alloc] initWithProgressView:[[M13ProgressViewRing alloc] init]];
     self.HUD.progressViewSize = CGSizeMake(60.0, 60.0);
     //UIWindow *window = ((AppDelegate *)[UIApplication sharedApplication].delegate).window;
-    self.HUD.status = @"Cargando...";
-    //[self.HUD setStatusPosition:M13ProgressHUDStatusPositionBelowProgress];
-    //[self.HUD setMaskType:M13ProgressHUDMaskTypeGradient];
+    self.HUD.status = kHUDMsgLoading;
+
     self.HUD.shouldAutorotate = YES;
     [self.HUD setIndeterminate:YES];
     [self.window addSubview:self.HUD];
     
-    [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
-    
+    NSArray *versionArray = [[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."];
+    if ([[versionArray objectAtIndex:0] intValue] < 8.0) {
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+    }
 }
 
 #pragma mark Handle Activity Indicator
@@ -58,20 +59,34 @@
 
 -(void)showActivityIndicator:(M13ProgressViewAction)action whithMessage:(NSString *)message delay:(BOOL)option{
     
-    startMessage = message;
-    viewActionActivityIndicator= action;
-    [self.HUD setStatus:startMessage];
-    [self performSelectorInBackground:@selector(showAI) withObject:startMessage];
+    UIApplication *app = [UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible = YES;
     
-}
--(void)showAI{
-    
+    [self.HUD setStatus:message];
     [self.HUD show:YES];
-    [self.HUD performAction:viewActionActivityIndicator animated:NO];
-    [self.HUD setStatus:@"Cargando..."];
+    /*
+     // Create a Grand Central Dispatch (GCD) queue to process data in a background thread.
+     dispatch_queue_t myprocess_queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_BACKGROUND, 0);
+     
+     // Start the thread
+     
+     dispatch_async(myprocess_queue, ^{
+     // place your calculation code here that you want run in the background thread.
+     
+     // all the UI work is done in the main thread, so if you need to update the UI, you will need to create another dispatch_async, this time on the main queue.
+     dispatch_async(dispatch_get_main_queue(), ^{
+     
+     // Any UI update code goes here like progress bars
+     
+     });  // end of main queue code block
+     }); // end of your big process.
+     // finally close the dispatch queue
+     */
 }
 
 -(void)notShowActivityIndicator:(M13ProgressViewAction)action whithMessage:(NSString *)message delay:(int)seconds{
+    UIApplication *app = [UIApplication sharedApplication];
+    app.networkActivityIndicatorVisible = NO;
     
     self.HUD.status = message;
     [self.HUD performAction:action animated:NO];
@@ -87,10 +102,8 @@
     
     [self.HUD hide:YES];
     [self.HUD performAction:M13ProgressViewActionNone animated:NO];
-    self.HUD.status = @"Cargando";
-    
+    self.HUD.status = kHUDMsgLoading;
 }
-
 #pragma mark Set Up Orientation to Activity Indicator
 
 -(void)detectOrientation{
@@ -109,16 +122,12 @@
             
         }
     }
-    if ([[UIDevice currentDevice] orientation]==UIDeviceOrientationPortrait) {
-        self.HUD.transform = CGAffineTransformMakeRotation(0.0); // 270 degrees
-        
-    }
 }
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
     [self.HUD setIndeterminate:YES];
-    self.HUD.status = @"Cargando...";
+    self.HUD.status = kHUDMsgLoading;
     
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
@@ -127,7 +136,7 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [self.HUD setIndeterminate:YES];
-    self.HUD.status = @"Cargando...";
+    self.HUD.status = kHUDMsgLoading;
     
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
 }
@@ -135,7 +144,7 @@
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     [self.HUD setIndeterminate:YES];
-    self.HUD.status = @"Cargando...";
+    self.HUD.status = kHUDMsgLoading;
     
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
 }

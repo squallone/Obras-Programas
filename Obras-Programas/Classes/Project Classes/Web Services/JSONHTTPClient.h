@@ -17,7 +17,7 @@
 + (JSONHTTPClient *)sharedJSONAPIClient;
 
 - (instancetype)initWithBaseURL:(NSURL *)url;
-- (void)performPOSTRequestWithParameters:(NSDictionary *)parameters toServlet:(NSString *)servletName;
+- (void)performPOSTRequestWithParameters:(NSDictionary *)parameters toServlet:(NSString *)servletName withOptions:(NSString *)option;
 
 @end
 
@@ -32,10 +32,9 @@
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToInaugurators:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToImpacts:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToDependencies:(id)response;
--(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTargetPopulations:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToClasifications:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTypesOfWorksAndPrograms:(id)response;
-
-
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTypesOfInvesments:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseSearchWorks:(id)response;
 
 @end

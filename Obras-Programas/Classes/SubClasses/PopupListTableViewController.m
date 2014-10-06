@@ -12,6 +12,7 @@
 #import "Clasificacion.h"
 #import "Dependencia.h"
 #import "TipoObraPrograma.h"
+#import "Inversion.h"
 
 const NSInteger rowHeight = 45;
 
@@ -30,7 +31,7 @@ const NSInteger rowHeight = 45;
         /* Initialize instance variables */
         
         self.dataSource     = datasource;        
-        self.dataToMark =   self.dataToMark == nil ? [NSArray new] : loadData;
+        self.dataToMark     = [loadData count] > 0 ? loadData : [NSArray new];
         
         self.dataSelected   = [NSMutableArray arrayWithArray:self.dataToMark];
         self.isMenu         = option;
@@ -158,6 +159,14 @@ const NSInteger rowHeight = 45;
         
         Dependencia *dependency = (Dependencia *)objectModel;
         value = dependency.nombreDependencia;
+    }else if (_field == e_Tipo_Inversion){
+        
+        Inversion *invesment = (Inversion *)objectModel;
+        value = invesment.nombre;
+    }else if (_field == e_Tipo){
+        
+        TipoObraPrograma *tipo = (TipoObraPrograma *)objectModel;
+        value = tipo.nombreTipoObra;
     }
     
     return value;
@@ -168,6 +177,7 @@ const NSInteger rowHeight = 45;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
     if (!_isMenu) {
         [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
         
@@ -177,10 +187,7 @@ const NSInteger rowHeight = 45;
             [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
         }
         [_dataSelected addObject:dataForSelectedRow];
-    }else{
-        
     }
-    
     
     NSLog(@"Insert %@", _dataSelected);
 
@@ -193,9 +200,9 @@ const NSInteger rowHeight = 45;
         
         [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
         [_dataSelected removeObjectIdenticalTo:dataForSelectedRow];
-        
-        NSLog(@"Remove %@", _dataSelected);
     }
+    NSLog(@"Insert %@", _dataSelected);
+
 }
 
 

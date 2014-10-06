@@ -29,6 +29,7 @@
 		AB36C64319D663E700B77B83 /* NSUserDefaults+RMSaveCustomObject.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C64119D663E700B77B83 /* NSUserDefaults+RMSaveCustomObject.m */; };
 		AB36C64719D6671600B77B83 /* RMMapper.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C64619D6671600B77B83 /* RMMapper.m */; };
 		AB36C64A19D667C800B77B83 /* TipoObraPrograma.m in Sources */ = {isa = PBXBuildFile; fileRef = AB36C64919D667C800B77B83 /* TipoObraPrograma.m */; };
+		AB5004A819E20C7F003392E8 /* ObraProgramaCell.m in Sources */ = {isa = PBXBuildFile; fileRef = AB5004A719E20C7F003392E8 /* ObraProgramaCell.m */; };
 		AB91254B19D4B68B00151A47 /* Constants.m in Sources */ = {isa = PBXBuildFile; fileRef = AB91254A19D4B68B00151A47 /* Constants.m */; };
 		AB91254E19D4CB1C00151A47 /* Obra.m in Sources */ = {isa = PBXBuildFile; fileRef = AB91254D19D4CB1C00151A47 /* Obra.m */; };
 		AB91255119D4CB2600151A47 /* Programa.m in Sources */ = {isa = PBXBuildFile; fileRef = AB91255019D4CB2600151A47 /* Programa.m */; };
@@ -39,11 +40,26 @@
 		AB9E738219CBCD5700C16E66 /* UIImage+BoxBlur.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9E738019CBCD5700C16E66 /* UIImage+BoxBlur.m */; };
 		AB9E738419CBDD4F00C16E66 /* logo_sct.png in Resources */ = {isa = PBXBuildFile; fileRef = AB9E738319CBDD4F00C16E66 /* logo_sct.png */; };
 		AB9E738719CBDFDA00C16E66 /* PopupListTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = AB9E738619CBDFDA00C16E66 /* PopupListTableViewController.m */; };
+		ABBE071519E123A200F1BFFC /* Inversion.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE071419E123A200F1BFFC /* Inversion.m */; };
 		ABCFFFEF19D93C15002124B5 /* Dependencia.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCFFFEE19D93C15002124B5 /* Dependencia.m */; };
 		ABCFFFF919D9474D002124B5 /* M13ProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCFFFF219D9474D002124B5 /* M13ProgressHUD.m */; };
 		ABCFFFFA19D9474D002124B5 /* M13ProgressView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCFFFF419D9474D002124B5 /* M13ProgressView.m */; };
 		ABCFFFFB19D9474D002124B5 /* M13ProgressViewRing.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCFFFF619D9474D002124B5 /* M13ProgressViewRing.m */; };
 		ABCFFFFC19D9474D002124B5 /* UIImage+ImageEffects.m in Sources */ = {isa = PBXBuildFile; fileRef = ABCFFFF819D9474D002124B5 /* UIImage+ImageEffects.m */; };
+		ABE1582619E075C90004F691 /* UIColor+Colores.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1582519E075C90004F691 /* UIColor+Colores.m */; };
+		ABE1584419E104C80004F691 /* NSDate+Helpers.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1582B19E104C80004F691 /* NSDate+Helpers.m */; };
+		ABE1584519E104C80004F691 /* PMCalendarBackgroundView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1582D19E104C80004F691 /* PMCalendarBackgroundView.m */; };
+		ABE1584619E104C80004F691 /* PMCalendarController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583019E104C80004F691 /* PMCalendarController.m */; };
+		ABE1584719E104C80004F691 /* PMCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583319E104C80004F691 /* PMCalendarView.m */; };
+		ABE1584819E104C80004F691 /* PMDimmingView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583519E104C80004F691 /* PMDimmingView.m */; };
+		ABE1584919E104C80004F691 /* PMPeriod.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583719E104C80004F691 /* PMPeriod.m */; };
+		ABE1584A19E104C80004F691 /* PMSelectionView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583919E104C80004F691 /* PMSelectionView.m */; };
+		ABE1584B19E104C80004F691 /* PMThemeEngine.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583C19E104C80004F691 /* PMThemeEngine.m */; };
+		ABE1584C19E104C80004F691 /* PMThemeShadow.m in Sources */ = {isa = PBXBuildFile; fileRef = ABE1583E19E104C80004F691 /* PMThemeShadow.m */; };
+		ABE1584D19E104C80004F691 /* apple calendar.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABE1584019E104C80004F691 /* apple calendar.plist */; };
+		ABE1584E19E104C80004F691 /* background.png in Resources */ = {isa = PBXBuildFile; fileRef = ABE1584119E104C80004F691 /* background.png */; };
+		ABE1584F19E104C80004F691 /* background@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ABE1584219E104C80004F691 /* background@2x.png */; };
+		ABE1585019E104C80004F691 /* default.plist in Resources */ = {isa = PBXBuildFile; fileRef = ABE1584319E104C80004F691 /* default.plist */; };
 		ABFCC45C19C2DB530074CA01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC45B19C2DB530074CA01 /* main.m */; };
 		ABFCC46519C2DB530074CA01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46319C2DB530074CA01 /* Main.storyboard */; };
 		ABFCC46719C2DB530074CA01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46619C2DB530074CA01 /* Images.xcassets */; };
@@ -159,6 +175,8 @@
 		AB36C64619D6671600B77B83 /* RMMapper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RMMapper.m; sourceTree = "<group>"; };
 		AB36C64819D667C800B77B83 /* TipoObraPrograma.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipoObraPrograma.h; sourceTree = "<group>"; };
 		AB36C64919D667C800B77B83 /* TipoObraPrograma.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipoObraPrograma.m; sourceTree = "<group>"; };
+		AB5004A619E20C7F003392E8 /* ObraProgramaCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObraProgramaCell.h; sourceTree = "<group>"; };
+		AB5004A719E20C7F003392E8 /* ObraProgramaCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ObraProgramaCell.m; sourceTree = "<group>"; };
 		AB91254919D4B68B00151A47 /* Constants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Constants.h; sourceTree = "<group>"; };
 		AB91254A19D4B68B00151A47 /* Constants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Constants.m; sourceTree = "<group>"; };
 		AB91254C19D4CB1C00151A47 /* Obra.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Obra.h; sourceTree = "<group>"; };
@@ -178,6 +196,8 @@
 		AB9E738319CBDD4F00C16E66 /* logo_sct.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = logo_sct.png; sourceTree = "<group>"; };
 		AB9E738519CBDFDA00C16E66 /* PopupListTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PopupListTableViewController.h; sourceTree = "<group>"; };
 		AB9E738619CBDFDA00C16E66 /* PopupListTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PopupListTableViewController.m; sourceTree = "<group>"; };
+		ABBE071319E123A200F1BFFC /* Inversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inversion.h; sourceTree = "<group>"; };
+		ABBE071419E123A200F1BFFC /* Inversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inversion.m; sourceTree = "<group>"; };
 		ABCFFFED19D93C15002124B5 /* Dependencia.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Dependencia.h; sourceTree = "<group>"; };
 		ABCFFFEE19D93C15002124B5 /* Dependencia.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Dependencia.m; sourceTree = "<group>"; };
 		ABCFFFF119D9474D002124B5 /* M13ProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = M13ProgressHUD.h; sourceTree = "<group>"; };
@@ -188,6 +208,34 @@
 		ABCFFFF619D9474D002124B5 /* M13ProgressViewRing.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = M13ProgressViewRing.m; sourceTree = "<group>"; };
 		ABCFFFF719D9474D002124B5 /* UIImage+ImageEffects.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+ImageEffects.h"; sourceTree = "<group>"; };
 		ABCFFFF819D9474D002124B5 /* UIImage+ImageEffects.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+ImageEffects.m"; sourceTree = "<group>"; };
+		ABE1582419E075C90004F691 /* UIColor+Colores.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Colores.h"; sourceTree = "<group>"; };
+		ABE1582519E075C90004F691 /* UIColor+Colores.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Colores.m"; sourceTree = "<group>"; };
+		ABE1582819E104C80004F691 /* PMCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMCalendar.h; sourceTree = "<group>"; };
+		ABE1582A19E104C80004F691 /* NSDate+Helpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSDate+Helpers.h"; sourceTree = "<group>"; };
+		ABE1582B19E104C80004F691 /* NSDate+Helpers.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSDate+Helpers.m"; sourceTree = "<group>"; };
+		ABE1582C19E104C80004F691 /* PMCalendarBackgroundView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMCalendarBackgroundView.h; sourceTree = "<group>"; };
+		ABE1582D19E104C80004F691 /* PMCalendarBackgroundView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMCalendarBackgroundView.m; sourceTree = "<group>"; };
+		ABE1582E19E104C80004F691 /* PMCalendarConstants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMCalendarConstants.h; sourceTree = "<group>"; };
+		ABE1582F19E104C80004F691 /* PMCalendarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMCalendarController.h; sourceTree = "<group>"; };
+		ABE1583019E104C80004F691 /* PMCalendarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMCalendarController.m; sourceTree = "<group>"; };
+		ABE1583119E104C80004F691 /* PMCalendarHelpers.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMCalendarHelpers.h; sourceTree = "<group>"; };
+		ABE1583219E104C80004F691 /* PMCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMCalendarView.h; sourceTree = "<group>"; };
+		ABE1583319E104C80004F691 /* PMCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMCalendarView.m; sourceTree = "<group>"; };
+		ABE1583419E104C80004F691 /* PMDimmingView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMDimmingView.h; sourceTree = "<group>"; };
+		ABE1583519E104C80004F691 /* PMDimmingView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMDimmingView.m; sourceTree = "<group>"; };
+		ABE1583619E104C80004F691 /* PMPeriod.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMPeriod.h; sourceTree = "<group>"; };
+		ABE1583719E104C80004F691 /* PMPeriod.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMPeriod.m; sourceTree = "<group>"; };
+		ABE1583819E104C80004F691 /* PMSelectionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMSelectionView.h; sourceTree = "<group>"; };
+		ABE1583919E104C80004F691 /* PMSelectionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMSelectionView.m; sourceTree = "<group>"; };
+		ABE1583A19E104C80004F691 /* PMTheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMTheme.h; sourceTree = "<group>"; };
+		ABE1583B19E104C80004F691 /* PMThemeEngine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMThemeEngine.h; sourceTree = "<group>"; };
+		ABE1583C19E104C80004F691 /* PMThemeEngine.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMThemeEngine.m; sourceTree = "<group>"; };
+		ABE1583D19E104C80004F691 /* PMThemeShadow.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PMThemeShadow.h; sourceTree = "<group>"; };
+		ABE1583E19E104C80004F691 /* PMThemeShadow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PMThemeShadow.m; sourceTree = "<group>"; };
+		ABE1584019E104C80004F691 /* apple calendar.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "apple calendar.plist"; sourceTree = "<group>"; };
+		ABE1584119E104C80004F691 /* background.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = background.png; sourceTree = "<group>"; };
+		ABE1584219E104C80004F691 /* background@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "background@2x.png"; sourceTree = "<group>"; };
+		ABE1584319E104C80004F691 /* default.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = default.plist; sourceTree = "<group>"; };
 		ABFCC45619C2DB530074CA01 /* Obras-Programas.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Obras-Programas.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABFCC45A19C2DB530074CA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABFCC45B19C2DB530074CA01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
@@ -359,6 +407,15 @@
 			path = RMMapper;
 			sourceTree = "<group>";
 		};
+		AB5004A919E20C85003392E8 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				AB5004A619E20C7F003392E8 /* ObraProgramaCell.h */,
+				AB5004A719E20C7F003392E8 /* ObraProgramaCell.m */,
+			);
+			name = Cells;
+			sourceTree = "<group>";
+		};
 		AB97C9E819D549520049DD51 /* Web Services */ = {
 			isa = PBXGroup;
 			children = (
@@ -392,6 +449,55 @@
 				ABCFFFF819D9474D002124B5 /* UIImage+ImageEffects.m */,
 			);
 			path = M13ProgressSuite;
+			sourceTree = "<group>";
+		};
+		ABE1582719E104C80004F691 /* PMCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				ABE1582819E104C80004F691 /* PMCalendar.h */,
+				ABE1582919E104C80004F691 /* src */,
+				ABE1583F19E104C80004F691 /* Theme */,
+			);
+			path = PMCalendar;
+			sourceTree = "<group>";
+		};
+		ABE1582919E104C80004F691 /* src */ = {
+			isa = PBXGroup;
+			children = (
+				ABE1582A19E104C80004F691 /* NSDate+Helpers.h */,
+				ABE1582B19E104C80004F691 /* NSDate+Helpers.m */,
+				ABE1582C19E104C80004F691 /* PMCalendarBackgroundView.h */,
+				ABE1582D19E104C80004F691 /* PMCalendarBackgroundView.m */,
+				ABE1582E19E104C80004F691 /* PMCalendarConstants.h */,
+				ABE1582F19E104C80004F691 /* PMCalendarController.h */,
+				ABE1583019E104C80004F691 /* PMCalendarController.m */,
+				ABE1583119E104C80004F691 /* PMCalendarHelpers.h */,
+				ABE1583219E104C80004F691 /* PMCalendarView.h */,
+				ABE1583319E104C80004F691 /* PMCalendarView.m */,
+				ABE1583419E104C80004F691 /* PMDimmingView.h */,
+				ABE1583519E104C80004F691 /* PMDimmingView.m */,
+				ABE1583619E104C80004F691 /* PMPeriod.h */,
+				ABE1583719E104C80004F691 /* PMPeriod.m */,
+				ABE1583819E104C80004F691 /* PMSelectionView.h */,
+				ABE1583919E104C80004F691 /* PMSelectionView.m */,
+				ABE1583A19E104C80004F691 /* PMTheme.h */,
+				ABE1583B19E104C80004F691 /* PMThemeEngine.h */,
+				ABE1583C19E104C80004F691 /* PMThemeEngine.m */,
+				ABE1583D19E104C80004F691 /* PMThemeShadow.h */,
+				ABE1583E19E104C80004F691 /* PMThemeShadow.m */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		ABE1583F19E104C80004F691 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				ABE1584019E104C80004F691 /* apple calendar.plist */,
+				ABE1584119E104C80004F691 /* background.png */,
+				ABE1584219E104C80004F691 /* background@2x.png */,
+				ABE1584319E104C80004F691 /* default.plist */,
+			);
+			path = Theme;
 			sourceTree = "<group>";
 		};
 		ABFCC44D19C2DB530074CA01 = {
@@ -469,6 +575,8 @@
 		ABFCC48519C2DDA10074CA01 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				ABE1582419E075C90004F691 /* UIColor+Colores.h */,
+				ABE1582519E075C90004F691 /* UIColor+Colores.m */,
 				AB36C63E19D663E700B77B83 /* NSObject+RMArchivable.h */,
 				AB36C63F19D663E700B77B83 /* NSObject+RMArchivable.m */,
 				AB36C64019D663E700B77B83 /* NSUserDefaults+RMSaveCustomObject.h */,
@@ -480,6 +588,7 @@
 		ABFCC48619C2DDA10074CA01 /* External Classes */ = {
 			isa = PBXGroup;
 			children = (
+				ABE1582719E104C80004F691 /* PMCalendar */,
 				ABCFFFF019D9474D002124B5 /* M13ProgressSuite */,
 				AB36C64419D6671600B77B83 /* RMMapper */,
 				AB36C60019D6074500B77B83 /* Mantle */,
@@ -658,6 +767,7 @@
 			children = (
 				ABFCC54C19C2E43F0074CA01 /* MainViewController.h */,
 				ABFCC54D19C2E43F0074CA01 /* MainViewController.m */,
+				AB5004A919E20C85003392E8 /* Cells */,
 			);
 			path = Controllers;
 			sourceTree = "<group>";
@@ -665,24 +775,26 @@
 		ABFCC4DD19C2DDA10074CA01 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				AB36C63B19D635F200B77B83 /* Clasificacion.h */,
+				AB36C63C19D635F200B77B83 /* Clasificacion.m */,
+				AB91255219D4CCBA00151A47 /* Consulta.h */,
+				AB91255319D4CCBA00151A47 /* Consulta.m */,
+				ABCFFFED19D93C15002124B5 /* Dependencia.h */,
+				ABCFFFEE19D93C15002124B5 /* Dependencia.m */,
+				AB97C9EF19D5D4F00049DD51 /* Estado.h */,
+				AB97C9F019D5D4F00049DD51 /* Estado.m */,
+				AB36C63819D62BA200B77B83 /* Impacto.h */,
+				AB36C63919D62BA200B77B83 /* Impacto.m */,
+				AB36C63219D60BBB00B77B83 /* Inaugurador.h */,
+				AB36C63319D60BBB00B77B83 /* Inaugurador.m */,
+				ABBE071319E123A200F1BFFC /* Inversion.h */,
+				ABBE071419E123A200F1BFFC /* Inversion.m */,
 				AB91254C19D4CB1C00151A47 /* Obra.h */,
 				AB91254D19D4CB1C00151A47 /* Obra.m */,
 				AB91254F19D4CB2600151A47 /* Programa.h */,
 				AB91255019D4CB2600151A47 /* Programa.m */,
-				AB91255219D4CCBA00151A47 /* Consulta.h */,
-				AB91255319D4CCBA00151A47 /* Consulta.m */,
-				AB97C9EF19D5D4F00049DD51 /* Estado.h */,
-				AB97C9F019D5D4F00049DD51 /* Estado.m */,
-				AB36C63219D60BBB00B77B83 /* Inaugurador.h */,
-				AB36C63319D60BBB00B77B83 /* Inaugurador.m */,
-				AB36C63819D62BA200B77B83 /* Impacto.h */,
-				AB36C63919D62BA200B77B83 /* Impacto.m */,
-				AB36C63B19D635F200B77B83 /* Clasificacion.h */,
-				AB36C63C19D635F200B77B83 /* Clasificacion.m */,
 				AB36C64819D667C800B77B83 /* TipoObraPrograma.h */,
 				AB36C64919D667C800B77B83 /* TipoObraPrograma.m */,
-				ABCFFFED19D93C15002124B5 /* Dependencia.h */,
-				ABCFFFEE19D93C15002124B5 /* Dependencia.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -843,10 +955,14 @@
 				ABFCC50D19C2DDA10074CA01 /* NotificationButtonBackground.png in Resources */,
 				ABFCC50819C2DDA10074CA01 /* NotificationBackgroundSuccessIcon@2x.png in Resources */,
 				ABFCC50C19C2DDA10074CA01 /* NotificationBackgroundWarningIcon@2x.png in Resources */,
+				ABE1584F19E104C80004F691 /* background@2x.png in Resources */,
+				ABE1584E19E104C80004F691 /* background.png in Resources */,
+				ABE1585019E104C80004F691 /* default.plist in Resources */,
 				ABFCC4FF19C2DDA10074CA01 /* NotificationBackgroundError.png in Resources */,
 				ABFCC50B19C2DDA10074CA01 /* NotificationBackgroundWarningIcon.png in Resources */,
 				ABFCC50519C2DDA10074CA01 /* NotificationBackgroundSuccess.png in Resources */,
 				AB9E738419CBDD4F00C16E66 /* logo_sct.png in Resources */,
+				ABE1584D19E104C80004F691 /* apple calendar.plist in Resources */,
 				ABFCC50919C2DDA10074CA01 /* NotificationBackgroundWarning.png in Resources */,
 				ABFCC50719C2DDA10074CA01 /* NotificationBackgroundSuccessIcon.png in Resources */,
 				ABFCC50419C2DDA10074CA01 /* NotificationBackgroundMessage@2x.png in Resources */,
@@ -881,15 +997,21 @@
 				AB91254E19D4CB1C00151A47 /* Obra.m in Sources */,
 				ABFCC4EB19C2DDA10074CA01 /* AFURLRequestSerialization.m in Sources */,
 				AB36C62D19D6074500B77B83 /* NSDictionary+MTLManipulationAdditions.m in Sources */,
+				ABE1582619E075C90004F691 /* UIColor+Colores.m in Sources */,
 				ABFCC4EA19C2DDA10074CA01 /* AFURLConnectionOperation.m in Sources */,
+				AB5004A819E20C7F003392E8 /* ObraProgramaCell.m in Sources */,
 				ABFCC4F019C2DDA10074CA01 /* UIAlertView+AFNetworking.m in Sources */,
 				AB36C62619D6074500B77B83 /* MTLJSONAdapter.m in Sources */,
 				ABFCC4E919C2DDA10074CA01 /* AFSecurityPolicy.m in Sources */,
 				AB36C63119D6074500B77B83 /* NSValueTransformer+MTLPredefinedTransformerAdditions.m in Sources */,
+				ABE1584619E104C80004F691 /* PMCalendarController.m in Sources */,
 				AB91254B19D4B68B00151A47 /* Constants.m in Sources */,
+				ABBE071519E123A200F1BFFC /* Inversion.m in Sources */,
 				AB36C62319D6074500B77B83 /* EXTRuntimeExtensions.m in Sources */,
 				ABFCC51119C2DDA10074CA01 /* TSMessageView.m in Sources */,
+				ABE1584919E104C80004F691 /* PMPeriod.m in Sources */,
 				ABFCC4FC19C2DDA10074CA01 /* UIScrollView+TPKeyboardAvoidingAdditions.m in Sources */,
+				ABE1584819E104C80004F691 /* PMDimmingView.m in Sources */,
 				ABCFFFFA19D9474D002124B5 /* M13ProgressView.m in Sources */,
 				ABFCC51019C2DDA10074CA01 /* TSBlurView.m in Sources */,
 				AB36C62819D6074500B77B83 /* MTLModel+NSCoding.m in Sources */,
@@ -901,6 +1023,8 @@
 				ABFCC4E419C2DDA10074CA01 /* AppDelegate.m in Sources */,
 				AB36C62919D6074500B77B83 /* MTLModel.m in Sources */,
 				AB36C62719D6074500B77B83 /* MTLManagedObjectAdapter.m in Sources */,
+				ABE1584C19E104C80004F691 /* PMThemeShadow.m in Sources */,
+				ABE1584A19E104C80004F691 /* PMSelectionView.m in Sources */,
 				AB36C62E19D6074500B77B83 /* NSError+MTLModelException.m in Sources */,
 				ABFCC4FB19C2DDA10074CA01 /* TPKeyboardAvoidingTableView.m in Sources */,
 				ABCFFFFC19D9474D002124B5 /* UIImage+ImageEffects.m in Sources */,
@@ -916,6 +1040,7 @@
 				AB36C62B19D6074500B77B83 /* MTLValueTransformer.m in Sources */,
 				AB36C62419D6074500B77B83 /* EXTScope.m in Sources */,
 				ABFCC4F719C2DDA10074CA01 /* SIAlertView.m in Sources */,
+				ABE1584419E104C80004F691 /* NSDate+Helpers.m in Sources */,
 				AB36C62F19D6074500B77B83 /* NSObject+MTLComparisonAdditions.m in Sources */,
 				AB36C64719D6671600B77B83 /* RMMapper.m in Sources */,
 				AB91255119D4CB2600151A47 /* Programa.m in Sources */,
@@ -925,7 +1050,9 @@
 				ABFCC4F219C2DDA10074CA01 /* UIImageView+AFNetworking.m in Sources */,
 				AB36C63019D6074500B77B83 /* NSValueTransformer+MTLInversionAdditions.m in Sources */,
 				AB36C63A19D62BA200B77B83 /* Impacto.m in Sources */,
+				ABE1584719E104C80004F691 /* PMCalendarView.m in Sources */,
 				ABFCC4F119C2DDA10074CA01 /* UIButton+AFNetworking.m in Sources */,
+				ABE1584B19E104C80004F691 /* PMThemeEngine.m in Sources */,
 				AB9E738119CBCD5700C16E66 /* UIERealTimeBlurView.m in Sources */,
 				AB9E738719CBDFDA00C16E66 /* PopupListTableViewController.m in Sources */,
 				AB36C63D19D635F200B77B83 /* Clasificacion.m in Sources */,
@@ -933,6 +1060,7 @@
 				ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */,
 				AB36C64319D663E700B77B83 /* NSUserDefaults+RMSaveCustomObject.m in Sources */,
 				ABCFFFF919D9474D002124B5 /* M13ProgressHUD.m in Sources */,
+				ABE1584519E104C80004F691 /* PMCalendarBackgroundView.m in Sources */,
 				AB36C62C19D6074500B77B83 /* NSArray+MTLManipulationAdditions.m in Sources */,
 				ABFCC4F519C2DDA10074CA01 /* UIWebView+AFNetworking.m in Sources */,
 				ABFCC4F819C2DDA10074CA01 /* UIWindow+SIUtils.m in Sources */,

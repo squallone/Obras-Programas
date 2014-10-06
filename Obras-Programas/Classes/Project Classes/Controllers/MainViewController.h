@@ -9,8 +9,14 @@
 #import <UIKit/UIKit.h>
 #import "PopupListTableViewController.h"
 #import "JSONHTTPClient.h"
+#import "PMCalendar.h"
 
-@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate>
+@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate>
+
+- (IBAction)perfomQuery:(id)sender;
+
+- (IBAction)performSaveQuery:(id)sender;
+
 
 /* Ordena la busqueda */
 
@@ -19,10 +25,6 @@
 /* Esconde la vista donde se muestra el TableView */
 
 - (IBAction)hideSearchList:(id)sender;
-
-/* Muestra las obras concluidas, proyectadas, en proceso, y los programas totales*/
-
-- (IBAction)displayTypesOfProgramasWorks:(id)sender;
 
 /* Muestra las dependencias */
 
@@ -40,5 +42,18 @@
 
 - (IBAction)displayTypeOfImpacts:(id)sender;
 
+/* Muestra los tipos de clasificaciones */
+
 - (IBAction)displayClasifications:(id)sender;
+
+/* Muestra los tipos de inversiones */
+
+- (IBAction)displayTypeOfInvesments:(id)sender;
+
+/* Muestra calendario */
+
+- (IBAction)showIniCalendar:(id)sender;
+- (IBAction)showFinCalendar:(id)sender;
+
+
 @end

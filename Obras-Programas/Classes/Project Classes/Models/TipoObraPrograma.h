@@ -7,7 +7,12 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "MTLModel.h"
+#import "MTLJSONAdapter.h"
 
-@interface TipoObraPrograma : NSObject
+@interface TipoObraPrograma : MTLModel <MTLJSONSerializing>
+
+@property (nonatomic, strong) NSString *nombreTipoObra;
+@property (nonatomic, strong) NSString *idTipoObra;
 
 @end

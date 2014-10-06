@@ -13,6 +13,9 @@
 #import "Inaugurador.h"
 #import "Clasificacion.h"
 #import "Dependencia.h"
+#import "Inversion.h"
+#import "TipoObraPrograma.h"
+#import "Obra.h"
 
 //Parametro que usa el Servlet para saber si la peticion proviene del movil
 
@@ -44,7 +47,7 @@
 
 //Realiza la petición POST al servidor para traer la información del usuario
 
--(void)performPOSTRequestWithParameters:(NSDictionary *)parameters toServlet:(NSString *)servletName{
+-(void)performPOSTRequestWithParameters:(NSDictionary *)parameters toServlet:(NSString *)servletName withOptions:(NSString *)option{
     
     //Ejectuta la petición al servidor
     
@@ -97,6 +100,42 @@
                 
                 [self.delegate JSONHTTPClientDelegate:self didResponseToDependencies:dependencies];
             }
+        //Inversiones
+            
+        }else if ([servletName isEqualToString:kServletConsultarInversiones]){
+            
+            NSArray *invesments = [self deserializeInvesmentsFromJSON:JSONResponse];
+            
+            if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToTypesOfInvesments:)]) {
+                
+                [self.delegate JSONHTTPClientDelegate:self didResponseToTypesOfInvesments:invesments];
+            }
+        //Tipo Obras Programas
+        }else if ([servletName isEqualToString:kServletConsultarTipoObraPrograma]){
+            
+            NSArray *worksProgramas = [self deserializeWorksProgramsFromJSON:JSONResponse];
+            
+            if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToTypesOfWorksAndPrograms:)]) {
+                
+                [self.delegate JSONHTTPClientDelegate:self didResponseToTypesOfWorksAndPrograms:worksProgramas];
+            }
+            
+        //Buscar
+        }else if ([servletName isEqualToString:kServletBuscar]){
+            
+            NSDictionary *JSONResponseDic = responseObject;
+            
+            if ([option isEqualToString:@"obras"]) {
+                
+                NSArray *JSONObras = JSONResponseDic[@"listaObras"];
+                
+                JSONObras = [self deserializeWorksFromJSON:JSONObras];
+                
+                if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseSearchWorks:)]) {
+                    
+                    [self.delegate JSONHTTPClientDelegate:self didResponseSearchWorks:JSONObras];
+                }
+            }
         }
 
         //El servidor notifica si la respuesta es valida o no
@@ -109,12 +148,28 @@
             [self.delegate JSONHTTPClientDelegate:self didFailResponseWithError:error];
         }
         
-        [TSMessage showNotificationWithTitle:@"Error"
+        [TSMessage showNotificationWithTitle:@"Se perdio la conexión con el servidor"
                                     subtitle:[NSString stringWithFormat:@"%@\n%@", @"Mensaje", errorStr]
-                                        type:TSMessageNotificationTypeWarning];        
+                                        type:TSMessageNotificationTypeWarning];
+        if ([servletName isEqualToString:kServletBuscar]) {
+            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionFailure whithMessage:@"Se perdio\nla conexión" delay:2.0];
+        }
         
     }];
 }
+
+- (NSArray *)deserializeWorksFromJSON:(NSArray *)worksJSON
+{
+    NSError *error;
+    NSArray *works = [MTLJSONAdapter modelsOfClass:[Obra class] fromJSONArray:worksJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Obras JSON to Obra models: %@", error);
+        return nil;
+    }
+    
+    return works;
+}
+
 
 - (NSArray *)deserializeStatesFromJSON:(NSArray *)statesJSON
 {
@@ -145,10 +200,9 @@
     NSError *error;
     NSArray *impacts = [MTLJSONAdapter modelsOfClass:[Impacto class] fromJSONArray:impactsJSON error:&error];
     if (error) {
-        NSLog(@"Couldn't convert inauguradores JSON to Impact models: %@", error);
+        NSLog(@"Couldn't convert impactos JSON to Impact models: %@", error);
         return nil;
     }
-    
     return impacts;
 }
 
@@ -157,7 +211,7 @@
     NSError *error;
     NSArray *clasifications = [MTLJSONAdapter modelsOfClass:[Clasificacion class] fromJSONArray:impactsJSON error:&error];
     if (error) {
-        NSLog(@"Couldn't convert inauguradores JSON to Clasificacion models: %@", error);
+        NSLog(@"Couldn't convert clasificaciones JSON to Clasificacion models: %@", error);
         return nil;
     }
     
@@ -169,11 +223,35 @@
     NSError *error;
     NSArray *dependencies = [MTLJSONAdapter modelsOfClass:[Dependencia class] fromJSONArray:impactsJSON error:&error];
     if (error) {
-        NSLog(@"Couldn't convert inauguradores JSON to Clasificacion models: %@", error);
+        NSLog(@"Couldn't convert dependencias JSON to Clasificacion models: %@", error);
         return nil;
     }
     
     return dependencies;
+}
+
+- (NSArray *)deserializeInvesmentsFromJSON:(NSArray *)invesmentsJSON
+{
+    NSError *error;
+    NSArray *dependencies = [MTLJSONAdapter modelsOfClass:[Inversion class] fromJSONArray:invesmentsJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Inversiones JSON to Inversión models: %@", error);
+        return nil;
+    }
+    
+    return dependencies;
+}
+
+- (NSArray *)deserializeWorksProgramsFromJSON:(NSArray *)typeWorkProgramJSON
+{
+    NSError *error;
+    NSArray *programasObras = [MTLJSONAdapter modelsOfClass:[TipoObraPrograma class] fromJSONArray:typeWorkProgramJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Programas Obras JSON to Programas Obras models: %@", error);
+        return nil;
+    }
+    
+    return programasObras;
 }
 
 @end

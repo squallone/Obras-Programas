@@ -10,4 +10,13 @@
 
 @implementation TipoObraPrograma
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey
+{
+    // model_property_name : json_field_name
+    return @{
+             @"idTipoObra"      :kKeyDbIdTipoObra,
+             @"nombreTipoObra"  :kKeyDbNombreTipoObra,
+             };
+}
+
 @end

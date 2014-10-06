@@ -25,8 +25,6 @@
 NSString * const kDbName = @"oyp";
 NSString * const kAppURL = kAppFullURL;
 
-
-
 //              Servlets
 /******************************************************/
 
@@ -49,6 +47,9 @@ NSString * const kKeyStoreTypeWorkOrProgram     =  @"ktp";
 NSString * const kKeyStoreStates                =  @"kedo";
 NSString * const kKeyStoreCity                  =  @"kmun";
 NSString * const kKeyStoreImpact                =  @"kimp";
+NSString * const kKeyStoreClasification         =  @"kcs";
+NSString * const kKeyStoreInvesments            =  @"kinv";
+
 
 //              KEYS JSON
 /******************************************************/
@@ -76,6 +77,53 @@ NSString * const kKeyDbNombreClasificacion      =  @"nombreTipoClasificacion";
 //Dependencia
 
 NSString * const kKeyDbIdDependencia            =  @"idDependencia";
-NSString * const kKeyDbNombreDependencia       =  @"nombreDependencia";
+NSString * const kKeyDbNombreDependencia        =  @"nombreDependencia";
+
+//Inversion
+
+NSString * const kKeyDbIdTipoInversion          =  @"idTipoInversion";
+NSString * const kKeyDbNombreTipoInversion      =  @"nombreTipoInversion";
+
+//Tipo Obra Programa
+
+NSString * const kKeyDbIdTipoObra               =  @"idTipoObra";
+NSString * const kKeyDbNombreTipoObra           =  @"nombreTipoObra";
+
+//Obras
+
+NSString * const kKeyDbIdObra                   = @"idObra";
+NSString * const kKeyDbDenominacion             = @"denominacion";
+NSString * const kKeyDbTipoObra                 = @"tipoObra";
+NSString * const kKeyDbDependencia              = @"dependencia";
+NSString * const kKeyDbEstado                   = @"estado";
+NSString * const kKeyDbImpacto                  = @"impacto";
+NSString * const kKeyDbTipoInversion            = @"tipoInversion";
+NSString * const kKeyDbClasificacion            = @"clasificacion";
+NSString * const kKeyDbInaugurador              = @"inaugurador";
+NSString * const kKeyDbDescripcion              = @"descripcion";
+NSString * const kKeyDbObservaciones            = @"observaciones";
+NSString * const kKeyDbFechaInicio              = @"fechaInicio";
+NSString * const kKeyDbFechaTermino             = @"fechaTermino";
+NSString * const kKeyDbInversionTotal           = @"inversionTotal";
+NSString * const kKeyDbSenalizacion             = @"senalizacion";
+NSString * const kKeyDbSusceptibleInauguracion  = @"susceptibleInauguracion";
+NSString * const kKeyDbPorcentajeAvance         = @"porcentajeAvance";
+NSString * const kKeyDbFotoAntes                = @"fotoAntes";
+NSString * const kKeyDbFotoDurante              = @"fotoDurante";
+NSString * const kKeyDbFotoDespues              = @"fotoDespues";
+NSString * const kKeyDbFechaModificacion        = @"fechaModificacion";
+NSString * const kKeyDbTotalBeneficiarios       = @"totalBeneficiarios";
+NSString * const kKeyDbTipoMoneda               = @"tipoMoneda";
+NSString * const kKeyDbInaugurada               = @"inaugurada";
+NSString * const kKeyDbPoblacionObjetivo        = @"poblacionObjetivo";
+NSString * const kKeyDbMunicipio                = @"municipio";
+
+
+//              Alerts Messages and HUD Messages
+/******************************************************/
+
+//Dependencia
+
+NSString * const kHUDMsgLoading          =  @"Cargando...";
 
 @end

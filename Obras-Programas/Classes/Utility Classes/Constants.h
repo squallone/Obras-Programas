@@ -55,6 +55,8 @@ extern NSString * const kKeyStoreTypeWorkOrProgram;
 extern NSString * const kKeyStoreStates;
 extern NSString * const kKeyStoreCity;
 extern NSString * const kKeyStoreImpact;
+extern NSString * const kKeyStoreClasification;
+extern NSString * const kKeyStoreInvesments;
 
 /////////////       Keys JSON
 /******************************************************/
@@ -78,5 +80,47 @@ extern NSString * const kKeyDbNombreClasificacion;
 
 extern NSString * const kKeyDbIdDependencia;
 extern NSString * const kKeyDbNombreDependencia;
+
+extern NSString * const kKeyDbIdTipoInversion;
+extern NSString * const kKeyDbNombreTipoInversion;
+
+extern NSString * const kKeyDbIdTipoObra;
+extern NSString * const kKeyDbNombreTipoObra;
+
+//Obras
+
+extern NSString * const kKeyDbIdObra;
+extern NSString * const kKeyDbDenominacion;
+extern NSString * const kKeyDbTipoObra;
+extern NSString * const kKeyDbDependencia;
+extern NSString * const kKeyDbEstado;
+extern NSString * const kKeyDbImpacto;
+extern NSString * const kKeyDbTipoInversion;
+extern NSString * const kKeyDbClasificacion;
+extern NSString * const kKeyDbInaugurador;
+extern NSString * const kKeyDbDescripcion;
+extern NSString * const kKeyDbObservaciones;
+extern NSString * const kKeyDbFechaInicio;
+extern NSString * const kKeyDbFechaTermino;
+extern NSString * const kKeyDbInversionTotal;
+extern NSString * const kKeyDbSenalizacion;
+extern NSString * const kKeyDbSusceptibleInauguracion;
+extern NSString * const kKeyDbPorcentajeAvance;
+extern NSString * const kKeyDbFotoAntes;
+extern NSString * const kKeyDbFotoDurante;
+extern NSString * const kKeyDbFotoDespues;
+extern NSString * const kKeyDbFechaModificacion;
+extern NSString * const kKeyDbTotalBeneficiarios;
+extern NSString * const kKeyDbTipoMoneda;
+extern NSString * const kKeyDbInaugurada;
+extern NSString * const kKeyDbPoblacionObjetivo;
+extern NSString * const kKeyDbMunicipio;
+
+//              Alerts Messages and HUD Messages
+/******************************************************/
+
+//Dependencia
+
+extern NSString * const kHUDMsgLoading;
 
 @end
