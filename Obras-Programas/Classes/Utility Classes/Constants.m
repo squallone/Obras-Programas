@@ -119,11 +119,28 @@ NSString * const kKeyDbPoblacionObjetivo        = @"poblacionObjetivo";
 NSString * const kKeyDbMunicipio                = @"municipio";
 
 
+//              Parameters Servlet Buscar
+/******************************************************/
+
+NSString * const kParamTipoDeObra       = @"tipoDeObra";
+NSString * const kParamDependencia      = @"dependencia";
+NSString * const kParamEstado           = @"estado";
+NSString * const kParamInversionMinima  = @"inversionMinima";
+NSString * const kParamImversionMaxima  = @"inversionMaxima";
+NSString * const kParamTipoDeInversion  = @"tipoDeInversion";
+NSString * const kParamFechaInicio      = @"fechaInicio";
+NSString * const kParamFechaFin         = @"fechaFin";
+NSString * const kParamImpacto          = @"impacto";
+NSString * const kParamClasificacion    = @"clasificacion";
+NSString * const kParamInaugurador      = @"inaugurador";
+NSString * const kParamSusceptible      = @"susceptible";
+NSString * const kParamInaugurada       = @"inaugurada";
+
 //              Alerts Messages and HUD Messages
 /******************************************************/
 
 //Dependencia
 
-NSString * const kHUDMsgLoading          =  @"Cargando...";
+NSString * const kHUDMsgLoading          =  @"Buscando...";
 
 @end

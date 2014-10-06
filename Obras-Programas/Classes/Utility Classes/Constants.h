@@ -116,6 +116,23 @@ extern NSString * const kKeyDbInaugurada;
 extern NSString * const kKeyDbPoblacionObjetivo;
 extern NSString * const kKeyDbMunicipio;
 
+//              Parameters Servlet Buscar
+/******************************************************/
+
+extern NSString * const kParamTipoDeObra;
+extern NSString * const kParamDependencia;
+extern NSString * const kParamEstado;
+extern NSString * const kParamInversionMinima;
+extern NSString * const kParamImversionMaxima;
+extern NSString * const kParamTipoDeInversion;
+extern NSString * const kParamFechaInicio;
+extern NSString * const kParamFechaFin;
+extern NSString * const kParamImpacto;
+extern NSString * const kParamClasificacion;
+extern NSString * const kParamInaugurador;
+extern NSString * const kParamSusceptible;
+extern NSString * const kParamInaugurada;
+
 //              Alerts Messages and HUD Messages
 /******************************************************/
 

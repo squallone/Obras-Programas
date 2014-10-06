@@ -10,8 +10,9 @@
 #import "PopupListTableViewController.h"
 #import "JSONHTTPClient.h"
 #import "PMCalendar.h"
+#import <MapKit/MapKit.h>
 
-@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate>
+@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate>
 
 - (IBAction)perfomQuery:(id)sender;
 
@@ -22,9 +23,12 @@
 
 - (IBAction)sortSearch:(id)sender;
 
+
 /* Esconde la vista donde se muestra el TableView */
 
 - (IBAction)hideSearchList:(id)sender;
+
+- (IBAction)hideReporteView:(id)sender;
 
 /* Muestra las dependencias */
 
@@ -52,8 +56,7 @@
 
 /* Muestra calendario */
 
-- (IBAction)showIniCalendar:(id)sender;
-- (IBAction)showFinCalendar:(id)sender;
+- (IBAction)displayCalendar:(id)sender;
 
 
 @end

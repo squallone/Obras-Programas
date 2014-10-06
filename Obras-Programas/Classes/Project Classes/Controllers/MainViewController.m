@@ -10,17 +10,28 @@
 #import "NSUserDefaults+RMSaveCustomObject.h"
 #import "UIColor+Colores.h"
 #import "ObraProgramaCell.h"
+#import "Estado.h"
+#import "Impacto.h"
+#import "Inaugurador.h"
+#import "Clasificacion.h"
+#import "Dependencia.h"
+#import "Inversion.h"
+#import "TipoObraPrograma.h"
 #import "Obra.h"
+#import "MDSpreadView.h"
 
-@import MapKit.MKMapView;
+#define METERS_PER_MILE 1609.344
 
-@interface MainViewController ()
+@interface MainViewController () <MDSpreadViewDataSource, MDSpreadViewDelegate>
 
-/* IBOutLets */
+#pragma mark - IBOutLets
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
+@property (weak, nonatomic) IBOutlet MDSpreadView *spreadView;
+@property (weak, nonatomic) IBOutlet UIView *reportView;
+
 
 @property (weak, nonatomic) IBOutlet UIButton *btnQuery;
 @property (weak, nonatomic) IBOutlet UIButton *btnSaveQuery;
@@ -30,30 +41,37 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnClasification;
 @property (weak, nonatomic) IBOutlet UIButton *btnInaugurated;
 @property (weak, nonatomic) IBOutlet UIButton *btnTypeInvestment;
+@property (weak, nonatomic) IBOutlet UIButton *btnStartDate;
+@property (weak, nonatomic) IBOutlet UIButton *btnEndDate;
 
-@property (weak, nonatomic) IBOutlet UIButton *btnIni_ini;
-@property (weak, nonatomic) IBOutlet UIButton *btnIni_fin;
-@property (weak, nonatomic) IBOutlet UIButton *btnFin_ini;
-@property (weak, nonatomic) IBOutlet UIButton *btnFin_fin;
+@property (weak, nonatomic) IBOutlet UILabel *lblStartDate;
+@property (weak, nonatomic) IBOutlet UILabel *lblEndDate;
+
 
 @property (strong, nonatomic) UIBarButtonItem *menuBarBtn;
 @property (strong, nonatomic) UIButton *btnWorksPrograms;
 
-/* Calendar */
+#pragma mark - Reporte 
+
+@property (nonatomic, strong) NSArray *titleFields;
+
+#pragma mark - Calendar
 
 @property (nonatomic, strong) PMCalendarController *pmCC;
+@property (nonatomic, strong) NSDateFormatter *dateFormatterGeneral;
+@property (nonatomic, strong) NSDateFormatter *dateFormatterShort;
+@property BOOL isStartDate;
 
-
-/* PopUp List*/
+#pragma mark - PopUp Lis
 
 @property (nonatomic, strong) PopupListTableViewController *popUpTableView;
 @property (nonatomic, strong) UIPopoverController *popOverView;
 
-/* SearchBar */
+#pragma mark - SearchBar
 
 @property (nonatomic, strong) UISearchBar *searchBar;
 
-/* Data */
+#pragma mark - Data
 
 @property (nonatomic, strong) NSArray *menuData;
 @property (nonatomic, strong) NSArray *dependencyData;
@@ -69,7 +87,7 @@
 
 @property (nonatomic, strong) NSArray *tableViewData;
 
-/* Data Saved For Selections */
+#pragma mark - Data Saved For Selections
 
 @property (nonatomic, strong) NSArray *dependenciesSavedData;
 @property (nonatomic, strong) NSArray *statesSavedData;
@@ -79,16 +97,15 @@
 @property (nonatomic, strong) NSArray *invesmentsSavedData;
 @property (nonatomic, strong) NSArray *worksProgramsSavedData;
 
-
-
-/* Animations */
+#pragma mark - Animations
 
 @property (nonatomic, strong) CATransition *transition;
 
-/* General  */
+#pragma mark - General
 
 @property (nonatomic, assign) MainSearchFields searchField;
 @property (nonatomic, strong) JSONHTTPClient *jsonClient;
+
 
 @end
 
@@ -101,12 +118,23 @@
     [super viewDidLoad];
     
     [TSMessage setDefaultViewController:self];
+    _mapView.delegate = self;
+
+    /* Date Formatters */
+    
+    _dateFormatterShort = [[NSDateFormatter alloc]init];
+    [_dateFormatterShort setDateFormat:@"dd/MM/yy"];
+
+    /* Setting up Views */
     [self setupUI];
+    /* Hide TableView */
     [self hideSearchList:nil];
+    [self hideReporteView:nil];
 
     /*  Menu items */
     
     _menuData       = @[@"Busquedas recientes", @"Favoritos", @"Acerca de"];
+    _titleFields    = @[@"Nombre", @"Obras", @"Inversión"];
     
     /* Load Saved Selections */
     
@@ -124,15 +152,11 @@
     [self changeBackgroundColorForNumberOfSelections:_impactsSavedData andTypeOfFieldButton:e_Impacto];
     [self changeBackgroundColorForNumberOfSelections:_clasificationsSavedData andTypeOfFieldButton:e_Clasificacion];
     [self changeBackgroundColorForNumberOfSelections:_invesmentsSavedData andTypeOfFieldButton:e_Tipo_Inversion];
-
-   
-    /* Request */
-    [self requestToWebServices];
 }
 
 -(void)viewDidAppear:(BOOL)animated{
-    
-
+    /* Request */
+    [self requestToWebServices];
 }
 
 #pragma mark Server Requests (JSON)
@@ -271,22 +295,6 @@
     _invesmentsData = response;
 }
 
--(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseSearchWorks:(id)response{
-    
-    _tableViewData = response;
-    [self.tableView reloadData];
-    
-    if (_tableView.isHidden) {
-        _tableView.hidden = NO;
-        _transition.subtype = kCATransitionFromLeft;
-        [_tableView.layer addAnimation:_transition forKey:nil];
-
-    }
-    
-    [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:kHUDMsgLoading delay:1.0];
-}
-
-
 /* JSON Error */
 
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
@@ -295,23 +303,78 @@
 }
 
 
+#pragma mark - Resultado Busquedas
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseSearchWorks:(id)response{
+    
+    _tableViewData = response;
+    
+    [self.tableView reloadData];
+    
+    /* Animaciones para el TableView */
+    if (_tableView.isHidden) {
+        _tableView.hidden = NO;
+        _transition.subtype = kCATransitionFromLeft;
+        [_tableView.layer addAnimation:_transition forKey:nil];
+    }
+    
+    /* Animaciones para el Report View */
+
+    if (_reportView.isHidden) {
+        _reportView.hidden = NO;
+        _transition.subtype = kCATransitionFromRight;
+        [_reportView.layer addAnimation:_transition forKey:nil];
+    }
+
+    /* Muestra los pines en el mapa */
+    [self displayPinsMapView];
+    
+    _spreadView.delegate = self;
+    _spreadView.dataSource = self;
+    [_spreadView reloadData];
+    
+    [kAppDelegate notShowActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:1.0];
+}
+
+
+
+#pragma mark - MKMapDelegate
+
+//-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
+//    
+//    MKAnnotationView *mypin = (MKAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier: [annotation title]];
+//    if (mypin == nil) {
+//        mypin = [[MKAnnotationView alloc]  initWithAnnotation: annotation reuseIdentifier: [annotation title]];
+//    } else {
+//        mypin.annotation = annotation;
+//        //pin = [[[MKPinAnnotationView alloc]  initWithAnnotation: annotation reuseIdentifier: [annotation title]] autorelease];
+//        
+//    }
+//    
+//    mypin.tintColor = [UIColor greenColor];
+//    mypin.backgroundColor = [UIColor redColor];
+//    //UIButton *goToDetail = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+//    //mypin.rightCalloutAccessoryView = myBtn;
+//    mypin.draggable = NO;
+//    mypin.highlighted = YES;
+//    //mypin.animatesDrop = TRUE;
+//    mypin.canShowCallout = YES;
+//    return mypin;
+//}
+//
+//
+//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
+//calloutAccessoryControlTapped:(UIControl *)control
+//{
+//    
+//    NSLog(@"%@",view.annotation.title);
+//    NSLog(@"%@",view.annotation.subtitle);}
+//
+//- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+//    NSLog(@"Entro 1");
+//}
+
 #pragma mark - Methods of action (Selectors - IBOulet)
-
-/* Realizar consulta */
-
-- (IBAction)perfomQuery:(id)sender {
-    [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
-    
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletBuscar withOptions:@"obras"];
-}
-
-/* Guardar Consulta */
-
-- (IBAction)performSaveQuery:(id)sender {
-    
-}
-
-
 
 /* Display the menu items */
 
@@ -412,7 +475,10 @@
 }
 
 
-- (IBAction)showIniCalendar:(id)sender {
+- (IBAction)displayCalendar:(id)sender{
+    
+    UIButton *button = (UIButton *)sender;
+    _isStartDate = button.tag == 0 ? YES : NO;
     
     if ([self.pmCC isCalendarVisible])  [self.pmCC dismissCalendarAnimated:NO];
 
@@ -425,8 +491,6 @@
     
 }
 
-- (IBAction)showFinCalendar:(id)sender {
-}
 
 -(void)initializeCalendar{
     
@@ -436,6 +500,151 @@
     self.pmCC.period = [PMPeriod oneDayPeriodWithDate:[NSDate date]];
     [self calendarController:self.pmCC didChangePeriod:self.pmCC.period];
 
+}
+
+
+#pragma mark - Realizar consulta
+
+
+/* Realizar consulta */
+
+- (IBAction)perfomQuery:(id)sender {
+    
+    NSDictionary *parameters = [self buildServletParameters];
+    NSLog(@"%@", parameters);
+    [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
+    
+    [_jsonClient performPOSTRequestWithParameters:parameters toServlet:kServletBuscar withOptions:@"obras"];
+    
+    
+}
+
+#pragma mark - Guardar Consulta
+
+/* Guardar Consulta */
+
+- (IBAction)performSaveQuery:(id)sender {
+    
+    [[[UIAlertView alloc]initWithTitle:@"Guardar consulta" message:@"¿Deseas guardar la consulta?" delegate:nil cancelButtonTitle:@"Aceptar" otherButtonTitles:@"Cancelar", nil]show];
+}
+
+#pragma mark - Servlet Parameters
+
+-(NSDictionary *)buildServletParameters{
+    
+    NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
+    NSString *parameterValue = @"";
+    
+    /* Depedencias */
+    
+    if (_dependenciesSavedData.count > 0) {
+        
+        for (int i=0; i<[_dependenciesSavedData count]; i++) {
+            Dependencia *dependencia = _dependenciesSavedData[i];
+            parameterValue = [parameterValue stringByAppendingString:dependencia.idDependencia];
+            if (i!=_dependenciesSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamDependencia];
+    }
+    
+    /* Estados */
+    
+    parameterValue = @"";
+    
+    if (_statesSavedData.count > 0) {
+        
+        for (int i=0; i<[_statesSavedData count]; i++) {
+            Estado *estado = _statesSavedData[i];
+            parameterValue = [parameterValue stringByAppendingString:estado.idEstado];
+            if (i!=_statesSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamEstado];
+    }
+    
+    /* Tipo de inversión */
+    
+    parameterValue = @"";
+    
+    if (_invesmentsSavedData.count > 0) {
+        
+        for (int i=0; i<[_invesmentsSavedData count]; i++) {
+            Inversion *inversion = _invesmentsSavedData[i];
+            parameterValue = [parameterValue stringByAppendingString:inversion.idTipoInversion];
+            if (i!=_invesmentsSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamTipoDeInversion];
+    }
+    
+    /* Impacto */
+    
+    parameterValue = @"";
+    
+    if (_impactsSavedData.count > 0) {
+        
+        for (int i=0; i<[_impactsSavedData count]; i++) {
+            Impacto *impacto = _impactsSavedData[i];
+            parameterValue = [parameterValue stringByAppendingString:impacto.idImpacto];
+            if (i!=_impactsSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamImpacto];
+    }
+    
+    /* Clasificaciones */
+    
+    parameterValue = @"";
+    
+    if (_clasificationsSavedData.count > 0) {
+        
+        for (int i=0; i<[_clasificationsSavedData count]; i++) {
+            Clasificacion *clasificacion = _clasificationsSavedData[i];
+            parameterValue = [parameterValue stringByAppendingString:clasificacion.idTipoClasificacion];
+            if (i!=_clasificationsSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamClasificacion];
+    }
+    
+    
+    
+    return parameters;
+}
+
+#pragma mark - displayPinsOnMap
+
+-(void)displayPinsMapView{
+    
+    [self.mapView removeAnnotations:self.mapView.annotations];
+    
+    for (Obra *obra in _tableViewData) {
+        
+        CLLocationCoordinate2D annotationCoord;
+        
+        annotationCoord.latitude = [obra.estado.latitud doubleValue];
+        annotationCoord.longitude = [obra.estado.longitud doubleValue];
+        
+        MKPointAnnotation *annotationPoint = [[MKPointAnnotation alloc] init];
+        annotationPoint.coordinate = annotationCoord;
+        annotationPoint.title = obra.denominacion;
+        annotationPoint.subtitle = obra.estado.nombreEstado;
+        [_mapView addAnnotation:annotationPoint];
+    }
+    
+    CLLocationCoordinate2D annotationCoord;
+    annotationCoord.latitude = 23.123548;
+    annotationCoord.longitude = - 102.293513;
+    
+    MKCoordinateRegion viewRegion = MKCoordinateRegionMakeWithDistance(annotationCoord, 1000.0*METERS_PER_MILE, 1000.0*METERS_PER_MILE);
+    [_mapView setRegion:viewRegion animated:YES];
+    
 }
 
 #pragma mark Display Pop Up List
@@ -479,7 +688,7 @@
 }
 
 
-#pragma mark - (Save Data) PopupListTableView Delegate
+#pragma mark - PopupListTableView Delegate -Save Data
 
 //Cuando el PopUp desaparece el delegado envia los datos seleccionados, posteriomente almacenamos los datos.
 
@@ -565,7 +774,7 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     Obra *obra = _tableViewData[indexPath.row];
-    
+    [self performSegueWithIdentifier:@"ObraProgramaDetail" sender:self];
     NSLog(@"%@", obra);
 }
 
@@ -573,8 +782,78 @@
 
 - (void)calendarController:(PMCalendarController *)calendarController didChangePeriod:(PMPeriod *)newPeriod
 {
-    NSLog(@"%@ - %@", newPeriod.startDate, newPeriod.endDate);
+    NSString *startDate = [_dateFormatterShort stringFromDate:newPeriod.startDate];
+    NSString *endDate   = [_dateFormatterShort stringFromDate:newPeriod.endDate];
+    NSString *dateTitle = [NSString stringWithFormat:@"%@ - %@", startDate, endDate];
+    UILabel *label    = _isStartDate ? _lblStartDate : _lblEndDate;
+    label.text = dateTitle;
+    
 }
+
+#pragma mark - Spread View Datasource
+
+- (NSInteger)numberOfColumnSectionsInSpreadView:(MDSpreadView *)aSpreadView{
+    return 1;
+}
+
+- (NSInteger)numberOfRowSectionsInSpreadView:(MDSpreadView *)aSpreadView{
+    
+    return 1;
+}
+
+- (NSInteger)spreadView:(MDSpreadView *)aSpreadView numberOfColumnsInSection:(NSInteger)section{
+    
+    return _titleFields.count;
+    
+}
+
+- (NSInteger)spreadView:(MDSpreadView *)aSpreadView numberOfRowsInSection:(NSInteger)section{
+    
+    return 6;
+}
+
+#pragma mark --- Heights
+
+- (CGFloat)spreadView:(MDSpreadView *)aSpreadView heightForRowAtIndexPath:(MDIndexPath *)indexPath{
+    return 31;
+}
+
+- (CGFloat)spreadView:(MDSpreadView *)aSpreadView heightForRowHeaderInSection:(NSInteger)rowSection{
+    //    if (rowSection == 2) return 0; // uncomment to hide this header!
+    return 45;
+}
+
+- (CGFloat)spreadView:(MDSpreadView *)aSpreadView widthForColumnAtIndexPath:(MDIndexPath *)indexPath{
+    
+    return 88;
+}
+
+- (CGFloat)spreadView:(MDSpreadView *)aSpreadView widthForColumnHeaderInSection:(NSInteger)columnSection{
+    //    if (columnSection == 2) return 0; // uncomment to hide this header!
+    return 0;
+}
+
+#pragma - Cells
+
+- (MDSpreadViewCell *)spreadView:(MDSpreadView *)aSpreadView cellForRowAtIndexPath:(MDIndexPath *)rowPath forColumnAtIndexPath:(MDIndexPath *)columnPath{
+    
+    static NSString *cellIdentifier = @"Cell";
+    MDSpreadViewCell *cell = [aSpreadView dequeueReusableCellWithIdentifier:cellIdentifier];
+        
+    if (cell == nil) {
+        cell = [[MDSpreadViewCell alloc] initWithStyle:MDSpreadViewCellStyleDefault reuseIdentifier:cellIdentifier];
+    }
+    
+    cell.textLabel.text = @"Texto";
+    return cell;
+}
+
+- (id)spreadView:(MDSpreadView *)aSpreadView titleForHeaderInRowSection:(NSInteger)section forColumnAtIndexPath:(MDIndexPath *)columnPath
+{
+
+    return _titleFields[columnPath.row];
+}
+
 #pragma mark - UISearchBar Delegate
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
@@ -615,6 +894,22 @@
     }
     /* Add animation */
     [_tableView.layer addAnimation:_transition forKey:nil];
+}
+
+- (IBAction)hideReporteView:(id)sender {
+    
+    /* When de user press the button if the list is hidden the list is displayed */
+    
+    if ([_reportView isHidden]) {
+        _reportView.hidden = NO;
+        _transition.subtype = kCATransitionFromRight;
+        
+    }else{
+        _reportView.hidden = YES;
+        _transition.subtype = kCATransitionFromLeft;
+    }
+    /* Add animation */
+    [_reportView.layer addAnimation:_transition forKey:nil];
 }
 
 - (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation

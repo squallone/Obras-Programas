@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2m6-oD-mLd">
     <dependencies>
+        <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
@@ -20,7 +21,7 @@
                                 <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i4h-dO-Nvp" userLabel="Hide TableView Button">
-                                <rect key="frame" x="0.0" y="196" width="266" height="35"/>
+                                <rect key="frame" x="0.0" y="224" width="266" height="35"/>
                                 <color key="backgroundColor" white="0.921906502016129" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
                                 <state key="normal">
@@ -36,13 +37,25 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ocultar lista" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Nqx-sO-YjO">
-                                <rect key="frame" x="152" y="202" width="92" height="21"/>
+                                <rect key="frame" x="152" y="231" width="92" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWn-Hs-zqZ">
+                                <rect key="frame" x="16" y="228" width="79" height="27"/>
+                                <color key="backgroundColor" red="0.5250093227" green="0.73361073369999996" blue="0.14888699380000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <state key="normal" title="Ordenar">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="sortSearch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0HD-WZ-mmD"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="right" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jOa-ZP-Eva" userLabel="Hide TableView Button">
-                                <rect key="frame" x="758" y="196" width="266" height="35"/>
+                                <rect key="frame" x="758" y="224" width="266" height="35"/>
                                 <color key="backgroundColor" white="0.92190650200000002" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="13"/>
                                 <state key="normal">
@@ -54,29 +67,17 @@
                                     <color key="titleShadowColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="hideSearchList:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dsR-VO-OpO"/>
+                                    <action selector="hideReporteView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="g5H-FQ-5VQ"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ocultar lista" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mev-DQ-T0b">
-                                <rect key="frame" x="759" y="204" width="92" height="21"/>
+                                <rect key="frame" x="759" y="232" width="92" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWn-Hs-zqZ">
-                                <rect key="frame" x="16" y="200" width="79" height="27"/>
-                                <color key="backgroundColor" red="0.5250093227" green="0.73361073369999996" blue="0.14888699380000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                <state key="normal" title="Ordenar">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <connections>
-                                    <action selector="sortSearch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0HD-WZ-mmD"/>
-                                </connections>
-                            </button>
                             <tableView clipsSubviews="YES" alpha="0.84999999999999987" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1gE-Fe-sGf">
-                                <rect key="frame" x="0.0" y="231" width="266" height="537"/>
+                                <rect key="frame" x="0.0" y="259" width="266" height="509"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell contentMode="scaleToFill" selectionStyle="default" accessoryType="disclosureIndicator" indentationWidth="10" reuseIdentifier="Cell" rowHeight="80" id="6vg-Tf-Sei" customClass="ObraProgramaCell">
@@ -123,7 +124,7 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2V9-7B-bro" userLabel="Buttons Consultar - Guardar">
-                                <rect key="frame" x="0.0" y="136" width="265" height="60"/>
+                                <rect key="frame" x="0.0" y="164" width="265" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjl-r0-WKS">
                                         <rect key="frame" x="18" y="15" width="129" height="30"/>
@@ -145,12 +146,15 @@
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
+                                        <connections>
+                                            <action selector="performSaveQuery:" destination="BYZ-38-t0r" eventType="touchUpInside" id="7dB-TS-Pcz"/>
+                                        </connections>
                                     </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.86328125" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9h2-V2-b41" userLabel="Buttons Consultar - Guardar">
-                                <rect key="frame" x="759" y="136" width="265" height="60"/>
+                                <rect key="frame" x="759" y="164" width="265" height="60"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jlA-BC-DUf">
                                         <rect key="frame" x="95" y="15" width="162" height="30"/>
@@ -164,32 +168,22 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.86328125" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view alpha="0.69999999999999973" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JO1-Cj-x9c" userLabel="Rigth View">
-                                <rect key="frame" x="759" y="231" width="265" height="537"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                            </view>
                             <view alpha="0.89999999999999991" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14g-2F-FcP" userLabel="HeaderView 1">
-                                <rect key="frame" x="0.0" y="64" width="1024" height="72"/>
+                                <rect key="frame" x="0.0" y="64" width="1024" height="100"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="    Nombre" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7wG-Qi-5TA">
-                                        <rect key="frame" x="0.0" y="0.0" width="170" height="36"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nombre dependencia" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7wG-Qi-5TA">
+                                        <rect key="frame" x="8" y="0.0" width="162" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="WDK-xR-3vV">
-                                        <rect key="frame" x="169" y="0.0" width="1" height="31"/>
-                                    </imageView>
-                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="    ID Obra/Programa" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LDH-1W-GmG">
-                                        <rect key="frame" x="171" y="0.0" width="171" height="36"/>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="ID Obra/Programa" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LDH-1W-GmG">
+                                        <rect key="frame" x="185" y="0.0" width="157" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="SNG-ME-d5d">
-                                        <rect key="frame" x="341" y="0.0" width="1" height="31"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7k-oY-mWi">
-                                        <rect key="frame" x="342" y="2" width="130" height="36"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="342" y="0.0" width="146" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Dependencia">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -198,12 +192,9 @@
                                             <action selector="displayDependencies:" destination="BYZ-38-t0r" eventType="touchUpInside" id="kd1-1r-enQ"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="TyV-v0-D0n">
-                                        <rect key="frame" x="487" y="0.0" width="1" height="31"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDx-ef-QoZ">
-                                        <rect key="frame" x="487" y="0.0" width="138" height="36"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="487" y="0.0" width="138" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Estado">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -212,14 +203,8 @@
                                             <action selector="displayStates:" destination="BYZ-38-t0r" eventType="touchUpInside" id="YWv-gn-euj"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="U5n-Yh-u7F">
-                                        <rect key="frame" x="624" y="0.0" width="1" height="31"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="xhw-9e-KY5">
-                                        <rect key="frame" x="891" y="0.0" width="1" height="31"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e0h-ty-EC2">
-                                        <rect key="frame" x="897" y="0.0" width="125" height="36"/>
+                                        <rect key="frame" x="891" y="0.0" width="133" height="36"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <state key="normal" title="Tipo de inversión">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -229,12 +214,9 @@
                                             <action selector="displayTypeOfInvesments:" destination="BYZ-38-t0r" eventType="touchUpInside" id="iZZ-1J-noi"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="QWb-kg-6mL">
-                                        <rect key="frame" x="286" y="41" width="1" height="31"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-mw-bu5">
-                                        <rect key="frame" x="295" y="36" width="89" height="36"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="329" y="50" width="121" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Impacto">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -243,12 +225,9 @@
                                             <action selector="displayTypeOfImpacts:" destination="BYZ-38-t0r" eventType="touchUpInside" id="8kq-hN-cHn"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="xAG-h6-tMn">
-                                        <rect key="frame" x="397" y="41" width="1" height="31"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AXt-2R-saO">
-                                        <rect key="frame" x="416" y="36" width="92" height="36"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="449" y="50" width="115" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Clasificación">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -257,61 +236,101 @@
                                             <action selector="displayClasifications:" destination="BYZ-38-t0r" eventType="touchUpInside" id="M9D-ej-x7S"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="5Tg-Tu-dOB">
-                                        <rect key="frame" x="521" y="41" width="1" height="31"/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="pcn-Kc-Els">
-                                        <rect key="frame" x="873" y="27" width="1" height="44"/>
-                                    </imageView>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="03d-WZ-WM0">
-                                        <rect key="frame" x="530" y="36" width="53" height="36"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="572" y="50" width="53" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Inaug">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Vte-m4-h6U">
-                                        <rect key="frame" x="873" y="26" width="98" height="44"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <rect key="frame" x="873" y="50" width="98" height="50"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="17"/>
                                         <state key="normal" title="Susceptibles">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Ty-eW-7Me">
-                                        <rect key="frame" x="624" y="0.0" width="268" height="36"/>
-                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="12"/>
-                                        <state key="normal" title="   Rango de inversión">
-                                            <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="WDK-xR-3vV">
+                                        <rect key="frame" x="169" y="0.0" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="SNG-ME-d5d">
+                                        <rect key="frame" x="341" y="0.0" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="TyV-v0-D0n">
+                                        <rect key="frame" x="487" y="0.0" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="U5n-Yh-u7F">
+                                        <rect key="frame" x="624" y="0.0" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="xhw-9e-KY5">
+                                        <rect key="frame" x="891" y="0.0" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="QWb-kg-6mL">
+                                        <rect key="frame" x="329" y="50" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="xAG-h6-tMn">
+                                        <rect key="frame" x="449" y="50" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="5Tg-Tu-dOB">
+                                        <rect key="frame" x="563" y="50" width="1" height="50"/>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="pcn-Kc-Els">
+                                        <rect key="frame" x="873" y="50" width="1" height="50"/>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="A1B-M4-Rf7" userLabel="Fecha Inicial">
+                                        <rect key="frame" x="6" y="76" width="145" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LuG-dy-Gk5" userLabel="Fecha final">
+                                        <rect key="frame" x="180" y="76" width="140" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Rango de inversión" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yfE-vx-F5Z">
+                                        <rect key="frame" x="624" y="4" width="268" height="21"/>
+                                        <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
+                                        <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             </view>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="wAp-5Y-o4t">
-                                <rect key="frame" x="0.0" y="100" width="160" height="36"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="n3s-NB-6be">
+                                <rect key="frame" x="16" y="114" width="140" height="50"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Fecha inicio">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="showIniCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="3Q8-v1-4oJ"/>
+                                    <action selector="displayCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="4mg-MV-mKz"/>
                                 </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XYo-Pi-QfV">
-                                <rect key="frame" x="159" y="100" width="125" height="36"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
+                            <button opaque="NO" tag="1" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="top" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sEq-O9-ziC">
+                                <rect key="frame" x="169" y="114" width="140" height="50"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                 <state key="normal" title="Fecha Fin">
                                     <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                     <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
-                                    <action selector="showFinCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="mqE-Fz-q31"/>
+                                    <action selector="displayCalendar:" destination="BYZ-38-t0r" eventType="touchUpInside" id="c7V-r1-Ad8"/>
                                 </connections>
                             </button>
+                            <view alpha="0.69999999999999973" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JO1-Cj-x9c" userLabel="Rigth View">
+                                <rect key="frame" x="758" y="259" width="265" height="509"/>
+                                <subviews>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c2p-4c-u5R" customClass="MDSpreadView">
+                                        <rect key="frame" x="0.0" y="2" width="265" height="400"/>
+                                    </view>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -320,23 +339,53 @@
                     <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
                     <connections>
                         <outlet property="btnClasification" destination="AXt-2R-saO" id="gzN-6x-g6Q"/>
-                        <outlet property="btnFin_fin" destination="XYo-Pi-QfV" id="I5x-U8-9FG"/>
+                        <outlet property="btnEndDate" destination="sEq-O9-ziC" id="e8j-OS-FYI"/>
                         <outlet property="btnImpact" destination="b2H-mw-bu5" id="vFR-m1-5SU"/>
                         <outlet property="btnInaugurated" destination="03d-WZ-WM0" id="FsR-Fk-eY9"/>
-                        <outlet property="btnIni_ini" destination="wAp-5Y-o4t" id="QZM-X7-OkM"/>
                         <outlet property="btnQuery" destination="Hjl-r0-WKS" id="FFN-sE-6Xt"/>
                         <outlet property="btnSaveQuery" destination="tmg-VW-qO0" id="Uqt-bR-Wxr"/>
+                        <outlet property="btnStartDate" destination="n3s-NB-6be" id="9iW-yR-GdJ"/>
                         <outlet property="btnStates" destination="MDx-ef-QoZ" id="Qfv-78-3O8"/>
                         <outlet property="btnTypeInvestment" destination="e0h-ty-EC2" id="1ho-Yf-De4"/>
                         <outlet property="btndependency" destination="f7k-oY-mWi" id="uoH-kS-vFF"/>
                         <outlet property="buttonsView" destination="14g-2F-FcP" id="aTT-Lh-szG"/>
+                        <outlet property="lblEndDate" destination="LuG-dy-Gk5" id="Xig-Fu-nyY"/>
+                        <outlet property="lblStartDate" destination="A1B-M4-Rf7" id="Guq-7v-dQW"/>
                         <outlet property="mapView" destination="qmI-lD-eeX" id="ggw-KS-SYJ"/>
+                        <outlet property="reportView" destination="JO1-Cj-x9c" id="53V-0a-dpF"/>
+                        <outlet property="spreadView" destination="c2p-4c-u5R" id="dzc-aI-1LU"/>
                         <outlet property="tableView" destination="1gE-Fe-sGf" id="6Uk-qo-cGT"/>
+                        <segue destination="cQt-MK-P80" kind="show" identifier="ObraProgramaDetail" id="Nil-De-LGm"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1036" y="94"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="zXv-QE-zuP">
+            <objects>
+                <viewController id="cQt-MK-P80" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="b23-GU-nGY"/>
+                        <viewControllerLayoutGuide type="bottom" id="8UH-NX-PzQ"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="9HG-em-gYh">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="fichaTenicaHeader" translatesAutoresizingMaskIntoConstraints="NO" id="mCk-4y-xbE">
+                                <rect key="frame" x="0.0" y="64" width="1024" height="66"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <simulatedScreenMetrics key="simulatedDestinationMetrics" type="iPad"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Woi-8A-wJf" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2234" y="108"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="uMP-xx-HuH">
@@ -360,6 +409,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="fichaTenicaHeader" width="825" height="66"/>
         <image name="linea_barragris" width="1" height="21"/>
         <image name="logo_sct.png" width="233" height="140"/>
     </resources>
