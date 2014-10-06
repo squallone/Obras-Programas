@@ -106,7 +106,6 @@
 		ABFCC45C19C2DB530074CA01 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC45B19C2DB530074CA01 /* main.m */; };
 		ABFCC46519C2DB530074CA01 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46319C2DB530074CA01 /* Main.storyboard */; };
 		ABFCC46719C2DB530074CA01 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46619C2DB530074CA01 /* Images.xcassets */; };
-		ABFCC46A19C2DB530074CA01 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = ABFCC46819C2DB530074CA01 /* LaunchScreen.xib */; };
 		ABFCC47619C2DB530074CA01 /* Obras_ProgramasTests.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC47519C2DB530074CA01 /* Obras_ProgramasTests.m */; };
 		ABFCC4E419C2DDA10074CA01 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC48419C2DDA10074CA01 /* AppDelegate.m */; };
 		ABFCC4E519C2DDA10074CA01 /* AFHTTPRequestOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC48919C2DDA10074CA01 /* AFHTTPRequestOperation.m */; };
@@ -335,7 +334,6 @@
 		ABFCC45B19C2DB530074CA01 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		ABFCC46419C2DB530074CA01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		ABFCC46619C2DB530074CA01 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
-		ABFCC46919C2DB530074CA01 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		ABFCC46F19C2DB530074CA01 /* Obras-ProgramasTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Obras-ProgramasTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		ABFCC47419C2DB530074CA01 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		ABFCC47519C2DB530074CA01 /* Obras_ProgramasTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Obras_ProgramasTests.m; sourceTree = "<group>"; };
@@ -1022,7 +1020,6 @@
 		ABFCC51219C2DDBE0074CA01 /* StoryBoard */ = {
 			isa = PBXGroup;
 			children = (
-				ABFCC46819C2DB530074CA01 /* LaunchScreen.xib */,
 				ABFCC46319C2DB530074CA01 /* Main.storyboard */,
 			);
 			name = StoryBoard;
@@ -1154,7 +1151,6 @@
 				ABAC4F1E19E25F48002B15B5 /* MDSpreadViewColumnHeaderLeft@2x.png in Resources */,
 				ABFCC50719C2DDA10074CA01 /* NotificationBackgroundSuccessIcon.png in Resources */,
 				ABFCC50419C2DDA10074CA01 /* NotificationBackgroundMessage@2x.png in Resources */,
-				ABFCC46A19C2DB530074CA01 /* LaunchScreen.xib in Resources */,
 				ABAC4F1919E25F48002B15B5 /* MDSpreadViewCell.png in Resources */,
 				ABAC4F1C19E25F48002B15B5 /* MDSpreadViewCellSelected@2x.png in Resources */,
 				ABAC4F3919E25F48002B15B5 /* MDSpreadViewRowHeaderTop.png in Resources */,
@@ -1314,15 +1310,6 @@
 			path = "Obras-Programas";
 			sourceTree = "<group>";
 		};
-		ABFCC46819C2DB530074CA01 /* LaunchScreen.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				ABFCC46919C2DB530074CA01 /* Base */,
-			);
-			name = LaunchScreen.xib;
-			path = "Obras-Programas";
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -1411,6 +1398,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
 				INFOPLIST_FILE = "Obras-Programas/Info.plist";
@@ -1423,6 +1411,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
 				INFOPLIST_FILE = "Obras-Programas/Info.plist";

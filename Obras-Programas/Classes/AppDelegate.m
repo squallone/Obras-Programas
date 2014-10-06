@@ -48,6 +48,7 @@
     
     NSArray *versionArray = [[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."];
     if ([[versionArray objectAtIndex:0] intValue] < 8.0) {
+        
         [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
         [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
     }
@@ -114,15 +115,11 @@
             self.HUD.transform = CGAffineTransformMakeRotation(M_PI_2); // 90 degress
         }
         if ([[UIDevice currentDevice] orientation]==UIDeviceOrientationLandscapeRight) {
-            self.HUD.transform = CGAffineTransformMakeRotation(0.0); // 270 degrees
+            self.HUD.transform = CGAffineTransformMakeRotation(M_PI + M_PI_2); // 270 degrees
             
         }
-        if ([[UIDevice currentDevice] orientation]==UIDeviceOrientationPortraitUpsideDown) {
-            self.HUD.transform = CGAffineTransformMakeRotation(M_PI); // 270 degrees
-            
-        }
-    }
-}
+        
+    }}
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
