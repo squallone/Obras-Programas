@@ -139,6 +139,7 @@
     /* Load Saved Selections */
     
     _dependenciesSavedData      = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreDependencies];
+    
     _statesSavedData            = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreStates];
     _impactsSavedData           = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreImpact];
     _clasificationsSavedData    = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreClasification];
@@ -499,12 +500,9 @@
     self.pmCC.mondayFirstDayOfWeek = NO;
     self.pmCC.period = [PMPeriod oneDayPeriodWithDate:[NSDate date]];
     [self calendarController:self.pmCC didChangePeriod:self.pmCC.period];
-
 }
 
-
 #pragma mark - Realizar consulta
-
 
 /* Realizar consulta */
 
@@ -515,8 +513,6 @@
     [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
     
     [_jsonClient performPOSTRequestWithParameters:parameters toServlet:kServletBuscar withOptions:@"obras"];
-    
-    
 }
 
 #pragma mark - Guardar Consulta

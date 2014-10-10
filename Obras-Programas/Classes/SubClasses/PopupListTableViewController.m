@@ -114,7 +114,6 @@ const NSInteger rowHeight = 45;
                     NSString *valueToCheck = [self textToDisplay:objectModel];
                 
                 if ([valueToCheck isEqualToString:value]) {
-                    
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                     [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                 }
@@ -127,6 +126,37 @@ const NSInteger rowHeight = 45;
     return cell;
 }
 
+#pragma mark - Table view delegate
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
+    if (!_isMenu) {
+        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
+        
+       id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
+        
+        if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
+            [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
+        }
+        [_dataSelected addObject:dataForSelectedRow];
+    }
+    
+    NSLog(@"Insert %@", _dataSelected);
+    
+}
+
+-(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    
+    if (!_isMenu) {
+       id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
+        
+        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
+        [_dataSelected removeObjectIdenticalTo:dataForSelectedRow];
+    }
+    NSLog(@"Insert %@", _dataSelected);
+    
+}
 
 -(NSString *)textToDisplay:(id)objectModel{
     
@@ -171,40 +201,5 @@ const NSInteger rowHeight = 45;
     
     return value;
 }
-
-
-#pragma mark - Table view delegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
-    if (!_isMenu) {
-        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
-        
-        NSString *dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
-        
-        if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
-            [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
-        }
-        [_dataSelected addObject:dataForSelectedRow];
-    }
-    
-    NSLog(@"Insert %@", _dataSelected);
-
-}
-
--(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (!_isMenu) {
-        NSString *dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
-        
-        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
-        [_dataSelected removeObjectIdenticalTo:dataForSelectedRow];
-    }
-    NSLog(@"Insert %@", _dataSelected);
-
-}
-
-
 
 @end
