@@ -234,10 +234,6 @@
     [self requestToWebServices];
 }
 
--(void)viewWillAppear:(BOOL)animated{
-    [_popOverView dismissPopoverAnimated:YES];
-}
-
 #pragma mark Server Requests (JSON)
 
 -(void)requestToWebServices{
@@ -1247,7 +1243,8 @@ const NSInteger numberOfResults = 50;
 }
 
 -(void)showFichaTecnica:(NSNotification *)notification{
-    
+    [_popOverView dismissPopoverAnimated:YES];
+
     Obra *obra = [notification object];
     [self performSegueWithIdentifier:@"showFichaTecnica" sender:obra];
 }
