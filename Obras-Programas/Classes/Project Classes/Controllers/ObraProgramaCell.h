@@ -7,8 +7,10 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "SWTableViewCell.h"
 
-@interface ObraProgramaCell : UITableViewCell
+@interface ObraProgramaCell : SWTableViewCell
+
 @property (weak, nonatomic) IBOutlet UILabel *lblDenominacion;
 @property (weak, nonatomic) IBOutlet UILabel *lblIdObraPrograma;
 @property (weak, nonatomic) IBOutlet UILabel *lblEstado;

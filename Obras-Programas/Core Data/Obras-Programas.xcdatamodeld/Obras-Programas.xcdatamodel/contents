@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model userDefinedModelVersionIdentifier="" type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="6244" systemVersion="13E28" minimumToolsVersion="Xcode 4.3" macOSVersion="Automatic" iOSVersion="Automatic">
+    <entity name="BmConsultas" representedClassName="BmConsultas" syncable="YES">
+        <attribute name="consultaData" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="BmObras" representedClassName="BmObras" syncable="YES">
+        <attribute name="obraData" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <entity name="BmProgramas" syncable="YES">
+        <attribute name="idBmPrograma" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="programaData" optional="YES" attributeType="Transformable" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="BmConsultas" positionX="-36" positionY="18" width="128" height="58"/>
+        <element name="BmObras" positionX="-63" positionY="-18" width="128" height="58"/>
+        <element name="BmProgramas" positionX="-54" positionY="9" width="128" height="73"/>
+    </elements>
+</model>

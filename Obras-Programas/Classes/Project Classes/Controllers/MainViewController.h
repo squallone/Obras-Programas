@@ -7,12 +7,13 @@
 // Dependencias:
 
 #import <UIKit/UIKit.h>
+#import <MapKit/MapKit.h>
 #import "PopupListTableViewController.h"
 #import "JSONHTTPClient.h"
 #import "PMCalendar.h"
-#import <MapKit/MapKit.h>
+#import "SWTableViewCell.h"
 
-@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate>
+@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate, SWTableViewCellDelegate>
 
 - (IBAction)perfomQuery:(id)sender;
 
@@ -58,5 +59,6 @@
 
 - (IBAction)displayCalendar:(id)sender;
 
+- (IBAction)displayInaugurators:(id)sender;
 
 @end

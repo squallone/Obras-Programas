@@ -16,7 +16,7 @@
 #define kAppBaseProtocol    @"http://"
 #define kAppBaseURL         @"54.69.71.115"
 #define kAppBasePort        @":8080/"
-#define kAppIntranetPath    @"ObrasYProgramas/"
+#define kAppIntranetPath    @"ObrasYProgramasBackend/"
 #define kAppFullURL         kAppBaseProtocol kAppBaseURL kAppBasePort kAppIntranetPath
 
 /////////////       GENERAL
@@ -49,7 +49,11 @@ NSString * const kKeyStoreCity                  =  @"kmun";
 NSString * const kKeyStoreImpact                =  @"kimp";
 NSString * const kKeyStoreClasification         =  @"kcs";
 NSString * const kKeyStoreInvesments            =  @"kinv";
-
+NSString * const kKeyStoreInaugurators          =  @"kina";
+NSString * const kKeyStoreStartIniDate          =  @"ksid";
+NSString * const kKeyStoreStartEndDate          =  @"ksed";
+NSString * const kKeyStoreEndIniDate            =  @"keid";
+NSString * const kKeyStoreEndEndDate            =  @"keed";
 
 //              KEYS JSON
 /******************************************************/
@@ -118,23 +122,33 @@ NSString * const kKeyDbInaugurada               = @"inaugurada";
 NSString * const kKeyDbPoblacionObjetivo        = @"poblacionObjetivo";
 NSString * const kKeyDbMunicipio                = @"municipio";
 
+//General Response
 
-//              Parameters Servlet Buscar
+NSString * const kKeyListaObras                 = @"listaObras";
+NSString * const kKeyListaReporteEstado         = @"listaReporteEstado";
+NSString * const kKeyListaReporteDependencia    = @"listaReporteDependencia";
+NSString * const kKeyListaReporteGeneral        = @"listaReporteGeneral";
+
+//              Parameters Servlet Search
 /******************************************************/
 
-NSString * const kParamTipoDeObra       = @"tipoDeObra";
-NSString * const kParamDependencia      = @"dependencia";
-NSString * const kParamEstado           = @"estado";
-NSString * const kParamInversionMinima  = @"inversionMinima";
-NSString * const kParamImversionMaxima  = @"inversionMaxima";
-NSString * const kParamTipoDeInversion  = @"tipoDeInversion";
-NSString * const kParamFechaInicio      = @"fechaInicio";
-NSString * const kParamFechaFin         = @"fechaFin";
-NSString * const kParamImpacto          = @"impacto";
-NSString * const kParamClasificacion    = @"clasificacion";
-NSString * const kParamInaugurador      = @"inaugurador";
-NSString * const kParamSusceptible      = @"susceptible";
-NSString * const kParamInaugurada       = @"inaugurada";
+NSString * const kParamTipoDeObra           = @"tipoDeObra";
+NSString * const kParamDependencia          = @"dependencia";
+NSString * const kParamEstado               = @"estado";
+NSString * const kParamInversionMinima      = @"inversionMinima";
+NSString * const kParamImversionMaxima      = @"inversionMaxima";
+NSString * const kParamTipoDeInversion      = @"tipoDeInversion";
+NSString * const kParamFechaInicio          = @"fechaInicio";
+NSString * const kParamFechaInicioSegunda   = @"fechaInicioSegunda";
+NSString * const kParamFechaFin             = @"fechaFin";
+NSString * const kParamFechaFinSegunda      = @"fechaFinSegunda";
+NSString * const kParamImpacto              = @"impacto";
+NSString * const kParamClasificacion        = @"clasificacion";
+NSString * const kParamInaugurador          = @"inaugurador";
+NSString * const kParamSusceptible          = @"susceptible";
+NSString * const kParamInaugurada           = @"inaugurada";
+NSString * const kParamLimiteMin            = @"limiteMin";
+NSString * const kParamLimiteMax            = @"limiteMax";
 
 //              Alerts Messages and HUD Messages
 /******************************************************/

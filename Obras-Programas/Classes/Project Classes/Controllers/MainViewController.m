@@ -18,13 +18,28 @@
 #import "Inversion.h"
 #import "TipoObraPrograma.h"
 #import "Obra.h"
+#import "Inaugurador.h"
+#import "Consulta.h"
 #import "MDSpreadView.h"
+#import "QBPopupMenu.h"
+#import "QBPlasticPopupMenu.h"
+#import "ListaReporteGeneral.h"
+#import "ListaReporteEstado.h"
+#import "ListaReporteDependencia.h"
+#import "DBHelper.h"
 
 #define METERS_PER_MILE 1609.344
 
 @interface MainViewController () <MDSpreadViewDataSource, MDSpreadViewDelegate>
 
 #pragma mark - IBOutLets
+
+/* PopMenu */
+
+@property (nonatomic, strong) QBPopupMenu *popupMenu;
+@property (nonatomic, strong) QBPlasticPopupMenu *plasticPopupMenu;
+
+/* IBOutlets*/
 
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -43,10 +58,14 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnTypeInvestment;
 @property (weak, nonatomic) IBOutlet UIButton *btnStartDate;
 @property (weak, nonatomic) IBOutlet UIButton *btnEndDate;
+@property (weak, nonatomic) IBOutlet UIButton *btnInaugurator;
+@property (weak, nonatomic) IBOutlet UIButton *btnSusceptible;
 
-@property (weak, nonatomic) IBOutlet UILabel *lblStartDate;
-@property (weak, nonatomic) IBOutlet UILabel *lblEndDate;
+@property (weak, nonatomic) IBOutlet UILabel *lblStartIniDate;
+@property (weak, nonatomic) IBOutlet UILabel *lblStartEndDate;
 
+@property (weak, nonatomic) IBOutlet UILabel *lblEndIniDate;
+@property (weak, nonatomic) IBOutlet UILabel *lblEndEndDate;
 
 @property (strong, nonatomic) UIBarButtonItem *menuBarBtn;
 @property (strong, nonatomic) UIButton *btnWorksPrograms;
@@ -60,6 +79,9 @@
 @property (nonatomic, strong) PMCalendarController *pmCC;
 @property (nonatomic, strong) NSDateFormatter *dateFormatterGeneral;
 @property (nonatomic, strong) NSDateFormatter *dateFormatterShort;
+@property (nonatomic, strong) UIButton *btnCalendarSelected;
+@property (nonatomic, strong) UILabel *lblCalendarSelected;
+
 @property BOOL isStartDate;
 
 #pragma mark - PopUp Lis
@@ -85,7 +107,7 @@
 @property (nonatomic, strong) NSArray *worksResultData;
 @property (nonatomic, strong) NSArray *programasResultData;
 
-@property (nonatomic, strong) NSArray *tableViewData;
+@property (nonatomic, strong) NSMutableArray *tableViewData;
 
 #pragma mark - Data Saved For Selections
 
@@ -97,15 +119,28 @@
 @property (nonatomic, strong) NSArray *invesmentsSavedData;
 @property (nonatomic, strong) NSArray *worksProgramsSavedData;
 
+@property (nonatomic, strong) NSString *limiteMin;
+@property (nonatomic, strong) NSString *limiteMax;
+
+@property (nonatomic, strong) NSString *fechaInicio;
+@property (nonatomic, strong) NSString *fechaInicioSegunda;
+@property (nonatomic, strong) NSString *fechaFin;
+@property (nonatomic, strong) NSString *fechaFinSegunda;
+
 #pragma mark - Animations
 
 @property (nonatomic, strong) CATransition *transition;
+
+#pragma mark - Grid (Reportes)
+
+@property (nonatomic, strong) NSMutableArray *stateReportData;
+@property (nonatomic, strong) NSMutableArray *dependenciesReportData;
 
 #pragma mark - General
 
 @property (nonatomic, assign) MainSearchFields searchField;
 @property (nonatomic, strong) JSONHTTPClient *jsonClient;
-
+@property (nonatomic, strong) NSNumberFormatter *currencyFormatter;
 
 @end
 
@@ -119,11 +154,35 @@
     
     [TSMessage setDefaultViewController:self];
     _mapView.delegate = self;
+    
+    /* Number Formatter */
+    
+    _currencyFormatter = [[NSNumberFormatter alloc] init];
+    [_currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    
+    /* PopUp */
+    
+    
+    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Fecha inicio" target:self action:@selector(displayStartCalendar:)];
+    QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"Fecha final" target:self action:@selector(displayEndCalendar:)];
+    NSArray *items = @[item, item2];
+    
+    QBPopupMenu *popupMenu = [[QBPopupMenu alloc] initWithItems:items];
+    popupMenu.highlightedColor = [[UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0] colorWithAlphaComponent:0.8];
+    self.popupMenu = popupMenu;
+    
+    QBPlasticPopupMenu *plasticPopupMenu = [[QBPlasticPopupMenu alloc] initWithItems:items];
+    plasticPopupMenu.height = 40;
+    self.plasticPopupMenu = plasticPopupMenu;
 
     /* Date Formatters */
     
     _dateFormatterShort = [[NSDateFormatter alloc]init];
     [_dateFormatterShort setDateFormat:@"dd/MM/yy"];
+    
+    _dateFormatterGeneral = [[NSDateFormatter alloc]init];
+    [_dateFormatterGeneral setDateFormat:@"yyyy-MM-dd"];
 
     /* Setting up Views */
     [self setupUI];
@@ -134,7 +193,11 @@
     /*  Menu items */
     
     _menuData       = @[@"Busquedas recientes", @"Favoritos", @"Acerca de"];
-    _titleFields    = @[@"Nombre", @"Obras", @"Inversión"];
+    
+    _titleFields    = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
+                        @{@"title": @"Obras",      @"sortKey": @"numeroObras"},
+                        @{@"title": @"Inversión",  @"sortKey": @"totalInvertido"}];
+           ;
     
     /* Load Saved Selections */
     
@@ -145,6 +208,11 @@
     _clasificationsSavedData    = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreClasification];
     _invesmentsSavedData        = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreInvesments];
     _worksProgramsSavedData     = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreTypeWorkOrProgram];
+    _inauguratorSavedData       = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreInaugurators];
+    _lblStartIniDate.text       = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreStartIniDate];
+    _lblStartEndDate.text       = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreStartEndDate];
+    _lblEndIniDate.text         = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreEndIniDate];
+    _lblEndEndDate.text         = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreEndEndDate];
 
     //Si hay datos en los campos de busqueda, cambios el backgroundColor del boton
     
@@ -153,6 +221,8 @@
     [self changeBackgroundColorForNumberOfSelections:_impactsSavedData andTypeOfFieldButton:e_Impacto];
     [self changeBackgroundColorForNumberOfSelections:_clasificationsSavedData andTypeOfFieldButton:e_Clasificacion];
     [self changeBackgroundColorForNumberOfSelections:_invesmentsSavedData andTypeOfFieldButton:e_Tipo_Inversion];
+    [self changeBackgroundColorForNumberOfSelections:_inauguratorSavedData andTypeOfFieldButton:e_Nombre_Inaugura];
+
 }
 
 -(void)viewDidAppear:(BOOL)animated{
@@ -203,7 +273,7 @@
     
     /* Corner nav buttons bar */
     
-    float cornerRadius      = 12.0f;
+    float cornerRadius      = 8.0f;
     float borderWidth       = 1.0f;
     UIColor *borderColor    = [UIColor clearColor];
     
@@ -302,41 +372,6 @@
     
     NSLog(@"Error : %@", [error localizedDescription]);
 }
-
-
-#pragma mark - Resultado Busquedas
-
--(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseSearchWorks:(id)response{
-    
-    _tableViewData = response;
-    
-    [self.tableView reloadData];
-    
-    /* Animaciones para el TableView */
-    if (_tableView.isHidden) {
-        _tableView.hidden = NO;
-        _transition.subtype = kCATransitionFromLeft;
-        [_tableView.layer addAnimation:_transition forKey:nil];
-    }
-    
-    /* Animaciones para el Report View */
-
-    if (_reportView.isHidden) {
-        _reportView.hidden = NO;
-        _transition.subtype = kCATransitionFromRight;
-        [_reportView.layer addAnimation:_transition forKey:nil];
-    }
-
-    /* Muestra los pines en el mapa */
-    [self displayPinsMapView];
-    
-    _spreadView.delegate = self;
-    _spreadView.dataSource = self;
-    [_spreadView reloadData];
-    
-    [kAppDelegate notShowActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:1.0];
-}
-
 
 
 #pragma mark - MKMapDelegate
@@ -475,21 +510,58 @@
                    searchField:e_Tipo_Inversion];
 }
 
+- (IBAction)displayInaugurators:(id)sender {
+    
+    [self displayItemsOnButton:_btnInaugurator
+                withDataSource:_inauguratorData
+        withDataToShowCheckBox:_inauguratorSavedData
+               isBarButtonItem:NO
+                        isMenu:NO
+                   searchField:e_Nombre_Inaugura];
+
+}
+
+#pragma mark - Calendar
 
 - (IBAction)displayCalendar:(id)sender{
     
-    UIButton *button = (UIButton *)sender;
-    _isStartDate = button.tag == 0 ? YES : NO;
+    _btnCalendarSelected = (UIButton *)sender;
+    [self.popupMenu showInView:self.view targetRect:_btnCalendarSelected.frame animated:YES];
+  
+}
+
+-(void)displayStartCalendar:(id)sender{
+    
+    _isStartDate = YES;
+    if (_btnCalendarSelected == _btnStartDate) {
+        _lblCalendarSelected = _lblStartIniDate;
+    }else if (_btnCalendarSelected == _btnEndDate){
+        _lblCalendarSelected = _lblEndIniDate;
+    }
+    [self showCalendarControl];
+}
+
+-(void)showCalendarControl{
     
     if ([self.pmCC isCalendarVisible])  [self.pmCC dismissCalendarAnimated:NO];
-
+    
     [self initializeCalendar];
     
-    [self.pmCC presentCalendarFromView:sender
+    [self.pmCC presentCalendarFromView:_btnCalendarSelected
               permittedArrowDirections:PMCalendarArrowDirectionAny
                              isPopover:YES
                               animated:YES];
+}
+
+-(void)displayEndCalendar:(id)sender{
     
+    _isStartDate = NO;
+    if (_btnCalendarSelected == _btnStartDate) {
+        _lblCalendarSelected = _lblStartEndDate;
+    }else if (_btnCalendarSelected == _btnEndDate){
+        _lblCalendarSelected = _lblEndEndDate;
+    }
+    [self showCalendarControl];
 }
 
 
@@ -497,12 +569,15 @@
     
     self.pmCC = [[PMCalendarController alloc] initWithThemeName:@"default"];
     self.pmCC.delegate = self;
+    self.pmCC.allowsPeriodSelection = NO;
     self.pmCC.mondayFirstDayOfWeek = NO;
     self.pmCC.period = [PMPeriod oneDayPeriodWithDate:[NSDate date]];
     [self calendarController:self.pmCC didChangePeriod:self.pmCC.period];
 }
 
-#pragma mark - Realizar consulta
+#pragma mark - *************  REQUEST TO SERVER MAIN QUERY
+
+const NSInteger numberOfResults = 50;
 
 /* Realizar consulta */
 
@@ -515,13 +590,109 @@
     [_jsonClient performPOSTRequestWithParameters:parameters toServlet:kServletBuscar withOptions:@"obras"];
 }
 
+#pragma mark - Resultado Busquedas
+
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseSearchWorks:(id)response{
+    
+    NSDictionary *objectsResponse = response;
+    
+    _tableViewData          = objectsResponse[kKeyListaObras];
+    _stateReportData        = objectsResponse[kKeyListaReporteEstado];
+    _dependenciesReportData = objectsResponse[kKeyListaReporteDependencia];
+    NSArray *generalData    = objectsResponse[kKeyListaReporteGeneral];
+    
+    [self.tableView reloadData];
+    
+    /* Animaciones para el TableView */
+    if (_tableView.isHidden) {
+        _tableView.hidden = NO;
+        _transition.subtype = kCATransitionFromLeft;
+        [_tableView.layer addAnimation:_transition forKey:nil];
+    }
+    
+    /* Animaciones para el Report View */
+    
+    if (_reportView.isHidden) {
+        _reportView.hidden = NO;
+        _transition.subtype = kCATransitionFromRight;
+        [_reportView.layer addAnimation:_transition forKey:nil];
+    }
+    
+    /* Muestra los pines en el mapa */
+    [self displayPinsMapView];
+    
+    _spreadView.delegate = self;
+    _spreadView.dataSource = self;
+    [_spreadView reloadData];
+    
+    if (_tableViewData.count>0) {
+        
+        NSString *numObras = @"0";
+        
+        if (generalData>0) {
+            ListaReporteGeneral *general = generalData[0];
+            numObras = [NSString stringWithFormat:@"%@", general.numeroObras];
+        }
+        NSString *mesage = [NSString stringWithFormat:@"%@ resultados\nencontrados", numObras];
+        [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:mesage delay:2.0];
+        
+    }else{
+        [kAppDelegate notShowActivityIndicator:M13ProgressViewActionNone whithMessage:@"Sin resultados" delay:1.0];
+    }
+}
+
 #pragma mark - Guardar Consulta
 
 /* Guardar Consulta */
 
 - (IBAction)performSaveQuery:(id)sender {
+
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Guardando consulta"
+                                                   message:@"Ingresa el nombre de la consulta"
+                                                  delegate:self
+                                         cancelButtonTitle:@"Aceptar"
+                                         otherButtonTitles:@"Cancelar", nil];
     
-    [[[UIAlertView alloc]initWithTitle:@"Guardar consulta" message:@"¿Deseas guardar la consulta?" delegate:nil cancelButtonTitle:@"Aceptar" otherButtonTitles:@"Cancelar", nil]show];
+    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+    [alert show];
+}
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    NSString *title = [alertView buttonTitleAtIndex:buttonIndex];
+    
+    if ([title isEqualToString:@"Aceptar"]) {
+        
+        Consulta *consulta = [[Consulta alloc]init];
+        
+        UITextField *textfield =  [alertView textFieldAtIndex: 0];
+        NSString *queryName = textfield.text;
+        
+        
+        if (_dependenciesSavedData.count>0)
+            consulta.dependenciasData = _dependenciesSavedData;
+        if (_statesSavedData.count>0)
+            consulta.estadosData = _statesSavedData;
+
+        if (_invesmentsSavedData.count>0)
+            consulta.tipoDeInversionesData = _invesmentsSavedData;
+
+        if (_impactsSavedData.count>0)
+            consulta.impactosData = _impactsSavedData;
+
+        if (_clasificationsSavedData.count>0)
+            consulta.clasificacionesData = _clasificationsSavedData;
+
+        if (queryName.length == 0){
+            consulta.nombreConsulta = @"Sin Nombre";
+
+        }else{
+            consulta.nombreConsulta = queryName;
+        }
+        
+        [DBHelper saveConsulta:consulta];
+    }
+    [alertView dismissWithClickedButtonIndex:buttonIndex animated:YES];
 }
 
 #pragma mark - Servlet Parameters
@@ -609,8 +780,42 @@
         [parameters setObject:parameterValue forKey:kParamClasificacion];
     }
     
+    /* Inaguradores */
     
+    parameterValue = @"";
     
+    if (_inauguratorSavedData.count > 0) {
+        
+        for (int i=0; i<[_inauguratorSavedData count]; i++) {
+            Inaugurador *inaugurador = _inauguratorSavedData[i];
+            parameterValue = [parameterValue stringByAppendingString:inaugurador.idCargoInaugura];
+            if (i!=_inauguratorSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamInaugurador];
+    }
+    
+    /* Fechas */
+
+    if (_fechaInicio.length>0) {
+        [parameters setObject:_fechaInicio forKey:kParamFechaInicio];
+    }
+    if (_fechaInicioSegunda.length>0) {
+        [parameters setObject:_fechaInicioSegunda forKey:kParamFechaInicioSegunda];
+    }
+    if (_fechaFin.length>0) {
+        [parameters setObject:_fechaFin forKey:kParamFechaFin];
+    }
+    if (_fechaFinSegunda.length>0) {
+        [parameters setObject:_fechaFinSegunda forKey:kParamFechaFinSegunda];
+    }
+    
+    /*Limite */
+    [parameters setObject:@"0"  forKey:kParamLimiteMin];
+    [parameters setObject:@"500" forKey:kParamLimiteMax];
+
+
     return parameters;
 }
 
@@ -620,17 +825,17 @@
     
     [self.mapView removeAnnotations:self.mapView.annotations];
     
-    for (Obra *obra in _tableViewData) {
+    for (ListaReporteEstado *reporte in _stateReportData) {
         
         CLLocationCoordinate2D annotationCoord;
         
-        annotationCoord.latitude = [obra.estado.latitud doubleValue];
-        annotationCoord.longitude = [obra.estado.longitud doubleValue];
+        annotationCoord.latitude = [reporte.estado.latitud doubleValue];
+        annotationCoord.longitude = [reporte.estado.longitud doubleValue];
         
         MKPointAnnotation *annotationPoint = [[MKPointAnnotation alloc] init];
         annotationPoint.coordinate = annotationCoord;
-        annotationPoint.title = obra.denominacion;
-        annotationPoint.subtitle = obra.estado.nombreEstado;
+        annotationPoint.title = reporte.estado.nombreEstado;
+        annotationPoint.subtitle = [NSString stringWithFormat:@"%@ registros - $%@ total de insersión", reporte.numeroObras, reporte.totalInvertido];
         [_mapView addAnnotation:annotationPoint];
     }
     
@@ -658,6 +863,8 @@
                                                             searchField:aSearchField];
     _popUpTableView.delegate = self;
     
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:_popUpTableView];
+    
     if (!_popOverView.popoverVisible && _popOverView != nil) {
         _popOverView = nil;
     }
@@ -665,18 +872,14 @@
     UIButton *button = (UIButton *)sender;
 
     if (_popOverView == nil ) {
-        _popOverView = [[UIPopoverController alloc]initWithContentViewController:_popUpTableView];
-        
+        _popOverView = [[UIPopoverController alloc]initWithContentViewController:nav];
         if (isBarButton) {
             [_popOverView presentPopoverFromBarButtonItem:(UIBarButtonItem *)sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         }else if(aSearchField == e_Tipo){
             [_popOverView presentPopoverFromRect:button.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-
         }else{
             [_popOverView presentPopoverFromRect:button.frame inView:_buttonsView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-
         }
-        
     }else{
         [_popOverView dismissPopoverAnimated:YES];
         _popOverView = nil;
@@ -713,6 +916,10 @@
     }else if (popupListTableView.field == e_Tipo_Inversion){
         _invesmentsSavedData = data;
         [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreInvesments];
+        
+    }else if (popupListTableView.field == e_Nombre_Inaugura){
+        _inauguratorSavedData = data;
+        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreInaugurators];
     }
 }
 
@@ -724,18 +931,40 @@
     UIColor *colorForSelection = changeBackground ? [UIColor colorForButtonSelection] : [UIColor clearColor];
     
     if (field == e_Dependencia) {
-        _btndependency.backgroundColor = colorForSelection;
+        _btndependency.backgroundColor      = colorForSelection;
     }else if (field == e_Estado){
-        _btnStates.backgroundColor = colorForSelection;
+        _btnStates.backgroundColor          = colorForSelection;
     }else if (field == e_Impacto){
-        _btnImpact.backgroundColor = colorForSelection;
+        _btnImpact.backgroundColor          = colorForSelection;
     }else if (field == e_Clasificacion){
-        _btnClasification.backgroundColor = colorForSelection;
+        _btnClasification.backgroundColor   = colorForSelection;
     }else if (field == e_Tipo_Inversion){
-        _btnTypeInvestment.backgroundColor = colorForSelection;
+        _btnTypeInvestment.backgroundColor  = colorForSelection;
+    }else if (field == e_Nombre_Inaugura){
+        _btnInaugurator.backgroundColor     = colorForSelection;
     }
 }
 
+
+#pragma mark PMCalendarControllerDelegate methods
+
+- (void)calendarController:(PMCalendarController *)calendarController didChangePeriod:(PMPeriod *)newPeriod
+{
+    NSString *dateCalendar = [_dateFormatterShort stringFromDate:newPeriod.startDate];
+    _lblCalendarSelected.text = dateCalendar;
+    
+    dateCalendar = [_dateFormatterGeneral stringFromDate:newPeriod.startDate];
+    
+    if (_lblCalendarSelected == _lblStartIniDate) {
+        _fechaInicio = dateCalendar;
+    }else if (_lblCalendarSelected == _lblStartEndDate) {
+        _fechaInicioSegunda = dateCalendar;
+    }else if (_lblCalendarSelected == _lblEndIniDate) {
+        _fechaFin = dateCalendar;
+    }else if (_lblCalendarSelected == _lblEndEndDate) {
+        _fechaFinSegunda = dateCalendar;
+    }
+}
 
 #pragma mark - UITableView  DataSource
 
@@ -760,9 +989,12 @@
     cell.lblIdObraPrograma.text = obra.idObra;
     cell.lblEstado.text         = obra.estado.nombreEstado;
     
+    //SWTableViewCel
+    
+    cell.rightUtilityButtons = [self rightButtons];
+    cell.delegate = self;
     cell.backgroundColor = [UIColor clearColor];
     return cell;
-
 }
 
 #pragma mark - UITableView  Delegate
@@ -774,17 +1006,41 @@
     NSLog(@"%@", obra);
 }
 
-#pragma mark PMCalendarControllerDelegate methods
-
-- (void)calendarController:(PMCalendarController *)calendarController didChangePeriod:(PMPeriod *)newPeriod
+- (NSArray *)rightButtons
 {
-    NSString *startDate = [_dateFormatterShort stringFromDate:newPeriod.startDate];
-    NSString *endDate   = [_dateFormatterShort stringFromDate:newPeriod.endDate];
-    NSString *dateTitle = [NSString stringWithFormat:@"%@ - %@", startDate, endDate];
-    UILabel *label    = _isStartDate ? _lblStartDate : _lblEndDate;
-    label.text = dateTitle;
-    
+    NSMutableArray *rightUtilityButtons = [NSMutableArray new];
+    [rightUtilityButtons sw_addUtilityButtonWithColor:[UIColor darkGrayColor]
+                                                title:@"Guardar Obra"];
+   
+    return rightUtilityButtons;
 }
+
+#pragma mark - SwipeableTableViewCell
+
+- (void)swipeableTableViewCell:(SWTableViewCell *)cell didTriggerRightUtilityButtonWithIndex:(NSInteger)index{
+    switch (index) {
+        case 0:
+        {
+            [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:@"Guardando..." delay:0];
+            NSIndexPath *cellIndexPath = [_tableView indexPathForCell:cell];
+            
+            Obra *obra = _tableViewData[cellIndexPath.row];
+            [DBHelper saveObra:obra];
+            
+            NSString *message = [NSString stringWithFormat:@"Obra guardada\n%@", obra.idObra];
+            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:message delay:1.5];
+
+            break;
+
+        }
+        default:
+            break;
+    }
+    
+    [cell hideUtilityButtonsAnimated:YES];
+
+}
+
 
 #pragma mark - Spread View Datasource
 
@@ -805,12 +1061,13 @@
 
 - (NSInteger)spreadView:(MDSpreadView *)aSpreadView numberOfRowsInSection:(NSInteger)section{
     
-    return 6;
+    return _stateReportData.count;
 }
 
 #pragma mark --- Heights
 
 - (CGFloat)spreadView:(MDSpreadView *)aSpreadView heightForRowAtIndexPath:(MDIndexPath *)indexPath{
+    
     return 31;
 }
 
@@ -820,8 +1077,12 @@
 }
 
 - (CGFloat)spreadView:(MDSpreadView *)aSpreadView widthForColumnAtIndexPath:(MDIndexPath *)indexPath{
-    
-    return 88;
+    //Tamaño para el campo obras
+    if (indexPath.row ==1) {
+        return 68;
+    }else{ //Tamaño para el campo estado/dependencia y inversión
+        return 98;
+    }
 }
 
 - (CGFloat)spreadView:(MDSpreadView *)aSpreadView widthForColumnHeaderInSection:(NSInteger)columnSection{
@@ -835,19 +1096,55 @@
     
     static NSString *cellIdentifier = @"Cell";
     MDSpreadViewCell *cell = [aSpreadView dequeueReusableCellWithIdentifier:cellIdentifier];
-        
+    
+    ListaReporteEstado *reporte = _stateReportData[rowPath.row];
+    
     if (cell == nil) {
         cell = [[MDSpreadViewCell alloc] initWithStyle:MDSpreadViewCellStyleDefault reuseIdentifier:cellIdentifier];
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
     }
     
-    cell.textLabel.text = @"Texto";
+    if (columnPath.row == 0) {
+        cell.textLabel.text = reporte.estado.nombreEstado;
+        
+    }else if (columnPath.row == 1){
+        cell.textLabel.text = [NSString stringWithFormat:@"%@", reporte.numeroObras];
+        
+    }else if (columnPath.row == 2){
+      
+        cell.textLabel.text =  [NSString stringWithFormat:@"%@", [_currencyFormatter stringFromNumber:reporte.totalInvertido]];
+    }
+
     return cell;
 }
 
 - (id)spreadView:(MDSpreadView *)aSpreadView titleForHeaderInRowSection:(NSInteger)section forColumnAtIndexPath:(MDIndexPath *)columnPath
 {
+    NSDictionary *titleFieldDic = _titleFields[columnPath.row];
+    NSString *title = titleFieldDic[@"title"];
+    return title;
+}
 
-    return _titleFields[columnPath.row];
+#pragma mark - Sorting
+
+
+- (MDSortDescriptor *)spreadView:(MDSpreadView *)aSpreadView sortDescriptorPrototypeForHeaderInRowSection:(NSInteger)section forColumnAtIndexPath:(MDIndexPath *)columnPath
+{
+    NSDictionary *titleFieldDic = _titleFields[columnPath.row];
+    NSString *key = titleFieldDic[@"sortKey"];
+
+    return [MDSortDescriptor sortDescriptorWithKey:key ascending:YES selectsWholeSpreadView:NO];
+}
+
+- (MDSortDescriptor *)spreadView:(MDSpreadView *)aSpreadView sortDescriptorPrototypeForHeaderInColumnSection:(NSInteger)section forRowAtIndexPath:(MDIndexPath *)rowPath
+{
+    return nil;
+}
+
+- (void)spreadView:(MDSpreadView *)aSpreadView sortDescriptorsDidChange:(NSArray *)oldDescriptors
+{
+    [_stateReportData sortUsingDescriptors:aSpreadView.sortDescriptors];
+    [aSpreadView reloadData];
 }
 
 #pragma mark - UISearchBar Delegate

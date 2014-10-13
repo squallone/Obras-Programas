@@ -16,6 +16,9 @@
 #import "Inversion.h"
 #import "TipoObraPrograma.h"
 #import "Obra.h"
+#import "ListaReporteDependencia.h"
+#import "ListaReporteEstado.h"
+#import "ListaReporteGeneral.h"
 
 //Parametro que usa el Servlet para saber si la peticion proviene del movil
 
@@ -127,13 +130,34 @@
             
             if ([option isEqualToString:@"obras"]) {
                 
-                NSArray *JSONObras = JSONResponseDic[@"listaObras"];
+                //Resultado de las obras
+                NSArray *JSONListaObras = JSONResponseDic[kKeyListaObras];
+                JSONListaObras = [self deserializeWorksFromJSON:JSONListaObras];
                 
-                JSONObras = [self deserializeWorksFromJSON:JSONObras];
+                //Resultado de listaReporteGeneral
+                
+                NSArray *JSONListaReporteGeneral= JSONResponseDic[kKeyListaReporteGeneral];
+                
+                JSONListaReporteGeneral = [self deserializeListGeneralReporteFromJSON:JSONListaReporteGeneral];
+                
+                //Resultado listaReporteEstado
+                
+                NSArray *JSONListaReporteEstados = JSONResponseDic[kKeyListaReporteEstado];
+                JSONListaReporteEstados = [self deserializeListReporteStateFromJSON:JSONListaReporteEstados];
+
+                //Resultado listaReporteDependencia
+                
+                NSArray *JSONListaReporteDepedencia = JSONResponseDic[kKeyListaReporteDependencia];
+                JSONListaReporteDepedencia = [self deserializeListReportDependenciesromJSON:JSONListaReporteDepedencia];
                 
                 if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseSearchWorks:)]) {
                     
-                    [self.delegate JSONHTTPClientDelegate:self didResponseSearchWorks:JSONObras];
+                    NSDictionary *response = @{kKeyListaObras                   : JSONListaObras,
+                                                  kKeyListaReporteDependencia   : JSONListaReporteDepedencia,
+                                                  kKeyListaReporteEstado        : JSONListaReporteEstados,
+                                                  kKeyListaReporteGeneral       : JSONListaReporteGeneral};
+                    
+                    [self.delegate JSONHTTPClientDelegate:self didResponseSearchWorks:response];
                 }
             }
         }
@@ -148,11 +172,11 @@
             [self.delegate JSONHTTPClientDelegate:self didFailResponseWithError:error];
         }
         
-        [TSMessage showNotificationWithTitle:@"Se perdio la conexión con el servidor"
-                                    subtitle:[NSString stringWithFormat:@"%@\n%@", @"Mensaje", errorStr]
+        [TSMessage showNotificationWithTitle:@"Lo sentimos, se perdido la conexión con el servidor"
+                                    subtitle:[NSString stringWithFormat:@"%@\nMensaje: %@", @"Por favor intentalo de nuevo o contacta al administrador", errorStr]
                                         type:TSMessageNotificationTypeWarning];
         if ([servletName isEqualToString:kServletBuscar]) {
-            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionFailure whithMessage:@"Se perdio\nla conexión" delay:2.0];
+            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionFailure whithMessage:@"Se ha perdido\nla conexión" delay:2.6];
         }
         
     }];
@@ -186,7 +210,7 @@
 - (NSArray *)deserializeInauguratorsFromJSON:(NSArray *)inauguratorsJSON
 {
     NSError *error;
-    NSArray *inaugurators = [MTLJSONAdapter modelsOfClass:[Estado class] fromJSONArray:inauguratorsJSON error:&error];
+    NSArray *inaugurators = [MTLJSONAdapter modelsOfClass:[Inaugurador class] fromJSONArray:inauguratorsJSON error:&error];
     if (error) {
         NSLog(@"Couldn't convert inauguradores JSON to Inauguradores models: %@", error);
         return nil;
@@ -253,5 +277,45 @@
     
     return programasObras;
 }
+
+
+- (NSArray *)deserializeListReportDependenciesromJSON:(NSArray *)typeWorkProgramJSON
+{
+    NSError *error;
+    NSArray *programasObras = [MTLJSONAdapter modelsOfClass:[ListaReporteDependencia class] fromJSONArray:typeWorkProgramJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Programas Obras JSON to Programas Obras models: %@", error);
+        return nil;
+    }
+    
+    return programasObras;
+}
+
+
+- (NSArray *)deserializeListReporteStateFromJSON:(NSArray *)typeWorkProgramJSON
+{
+    NSError *error;
+    NSArray *programasObras = [MTLJSONAdapter modelsOfClass:[ListaReporteEstado class] fromJSONArray:typeWorkProgramJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Programas Obras JSON to Programas Obras models: %@", error);
+        return nil;
+    }
+    
+    return programasObras;
+}
+
+- (NSArray *)deserializeListGeneralReporteFromJSON:(NSArray *)typeWorkProgramJSON
+{
+    NSError *error;
+    NSArray *programasObras = [MTLJSONAdapter modelsOfClass:[ListaReporteGeneral class] fromJSONArray:typeWorkProgramJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Programas Obras JSON to Programas Obras models: %@", error);
+        return nil;
+    }
+    
+    return programasObras;
+}
+
+
 
 @end

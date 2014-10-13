@@ -6,6 +6,7 @@
 // Descripción: Clase que muestra los elementos por de la lista en un TableView dentro de la clase UIPopover
 
 #import "PopupListTableViewController.h"
+#import "DetailTableViewController.h"
 #import "Estado.h"
 #import "Inaugurador.h"
 #import "Impacto.h"
@@ -13,12 +14,15 @@
 #import "Dependencia.h"
 #import "TipoObraPrograma.h"
 #import "Inversion.h"
+#import "Inaugurador.h"
+#import "DBHelper.h"
 
 const NSInteger rowHeight = 45;
 
 @interface PopupListTableViewController ()
 
 @property (nonatomic, strong) NSArray *dataToMark;
+@property  CGSize size;
 
 @end
 
@@ -30,7 +34,7 @@ const NSInteger rowHeight = 45;
         
         /* Initialize instance variables */
         
-        self.dataSource     = datasource;        
+        self.dataSource     = datasource;
         self.dataToMark     = [loadData count] > 0 ? loadData : [NSArray new];
         
         self.dataSelected   = [NSMutableArray arrayWithArray:self.dataToMark];
@@ -41,8 +45,8 @@ const NSInteger rowHeight = 45;
         self.tableView.allowsMultipleSelection = _isMenu ? NO : YES;
         
         NSInteger rowsCount = [self.dataSource count];
-        NSInteger totalRowsHeight = rowsCount * rowHeight + 5;
-        
+        NSInteger totalRowsHeight = (rowsCount * rowHeight);
+        self.tableView.backgroundColor = [UIColor clearColor];
         //Calcula el ancho que debe tener la vista buscando que ancho de cada string se espera que sea
         
         CGFloat largestLabelWidth = 0;
@@ -53,7 +57,7 @@ const NSInteger rowHeight = 45;
             
             CGSize labelSize = [strValue sizeWithAttributes:
                            @{NSFontAttributeName:
-                                 [UIFont systemFontOfSize:20.0f]}];
+                                 [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0]}];
             
             if (labelSize.width > largestLabelWidth) {
                 largestLabelWidth = labelSize.width;
@@ -61,10 +65,14 @@ const NSInteger rowHeight = 45;
         }
         
         //Agrega un pequeño padding al ancho
-        CGFloat popoverWidth = largestLabelWidth + 100;
+        CGFloat popoverWidth = largestLabelWidth + 50;
+        popoverWidth = _isMenu ? popoverWidth + 50 : popoverWidth;
+        _size = CGSizeMake(popoverWidth, totalRowsHeight);
         
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
-        self.preferredContentSize = CGSizeMake(popoverWidth, totalRowsHeight);
+        self.preferredContentSize = _size;
+        self.tableView.frame = CGRectMake(0, 0, _size.width, _size.height);
+
     }
     
     return self;
@@ -76,6 +84,24 @@ const NSInteger rowHeight = 45;
 - (void)viewDidLoad {
     
     [super viewDidLoad];
+}
+
+-(CGSize)preferredContentSize
+{
+    return _size;
+    
+    
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+
+    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [super viewWillAppear:animated];
+
+}
+
+-(void)viewDidDisappear:(BOOL)animated{
+    [[UIApplication sharedApplication] setStatusBarHidden:NO withAnimation:UIStatusBarAnimationFade];
 }
 
 -(void)viewWillDisappear:(BOOL)animated{
@@ -103,13 +129,24 @@ const NSInteger rowHeight = 45;
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-
         value = [self textToDisplay:objecModel];
-        
+        cell.backgroundColor = [UIColor clearColor];
+        cell.textLabel.textColor = [UIColor blackColor];
         if (_isMenu) {
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            cell.imageView.image = [UIImage imageNamed:@"favoritos"];
+            
+            if (indexPath.row == 0) {
+                cell.imageView.image = [UIImage imageNamed:@"busquedas-icon"];
+
+            }else if (indexPath.row == 1){
+                cell.imageView.image = [UIImage imageNamed:@"favorito-icon"];
+
+            }else if (indexPath.row == 2){
+                cell.imageView.image = [UIImage imageNamed:@"info"];
+            }
+            
         }else{
+           
             for (id objectModel in _dataToMark) {
                     NSString *valueToCheck = [self textToDisplay:objectModel];
                 
@@ -119,7 +156,7 @@ const NSInteger rowHeight = 45;
                 }
             }
         }
-        
+        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
         cell.textLabel.text = value;
     }
     
@@ -140,10 +177,39 @@ const NSInteger rowHeight = 45;
             [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
         }
         [_dataSelected addObject:dataForSelectedRow];
+    }else{
+        
+        NSArray *dataSource = [NSArray array];
+        MenuOptions option;
+        if (indexPath.row == 0) {
+            dataSource =  [DBHelper getAllQueriesSaved];
+            option = o_Consultas;
+            if (dataSource.count == 0) {
+                [[[UIAlertView alloc]initWithTitle:@"No hay consultas"
+                                           message:@"Aun no tienes consultas guardadas"
+                                          delegate:nil
+                                 cancelButtonTitle:@"Aceptar"
+                                 otherButtonTitles:nil, nil]show];
+                return;
+            }        }else if (indexPath.row == 1){
+            dataSource =  [DBHelper getAllObras];
+            option = o_Favoritos;
+            if (dataSource.count == 0) {
+                [[[UIAlertView alloc]initWithTitle:@"No hay favoritos"
+                                           message:@"Aun no tienes favoritos guardados"
+                                          delegate:nil
+                                 cancelButtonTitle:@"Aceptar"
+                                 otherButtonTitles:nil, nil]show];
+                return;
+            }
+
+        }else{
+            return;
+        }
+        
+        DetailTableViewController *detailViewController = [[DetailTableViewController alloc]initWithDataSource:dataSource menuOption:option];
+        [self.navigationController pushViewController:detailViewController animated:YES];   
     }
-    
-    NSLog(@"Insert %@", _dataSelected);
-    
 }
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -152,7 +218,7 @@ const NSInteger rowHeight = 45;
        id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
         
         [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
-        [_dataSelected removeObjectIdenticalTo:dataForSelectedRow];
+        [_dataSelected removeObject:dataForSelectedRow];
     }
     NSLog(@"Insert %@", _dataSelected);
     

@@ -22,6 +22,13 @@ typedef NS_OPTIONS(NSInteger, MainSearchFields)
     e_Nombre_Inaugura = 7
 };
 
+typedef NS_OPTIONS(NSInteger, MenuOptions)
+{
+    o_Consultas = 0,
+    o_Favoritos = 1,
+    o_AcercaDe  = 2
+};
+
 
 /////////////       General
 /******************************************************/
@@ -57,6 +64,12 @@ extern NSString * const kKeyStoreCity;
 extern NSString * const kKeyStoreImpact;
 extern NSString * const kKeyStoreClasification;
 extern NSString * const kKeyStoreInvesments;
+extern NSString * const kKeyStoreInaugurators;
+
+extern NSString * const kKeyStoreStartIniDate;
+extern NSString * const kKeyStoreStartEndDate;
+extern NSString * const kKeyStoreEndIniDate;
+extern NSString * const kKeyStoreEndEndDate;
 
 /////////////       Keys JSON
 /******************************************************/
@@ -116,6 +129,11 @@ extern NSString * const kKeyDbInaugurada;
 extern NSString * const kKeyDbPoblacionObjetivo;
 extern NSString * const kKeyDbMunicipio;
 
+extern NSString * const kKeyListaObras;
+extern NSString * const kKeyListaReporteEstado;
+extern NSString * const kKeyListaReporteDependencia;
+extern NSString * const kKeyListaReporteGeneral;
+
 //              Parameters Servlet Buscar
 /******************************************************/
 
@@ -126,12 +144,16 @@ extern NSString * const kParamInversionMinima;
 extern NSString * const kParamImversionMaxima;
 extern NSString * const kParamTipoDeInversion;
 extern NSString * const kParamFechaInicio;
+extern NSString * const kParamFechaInicioSegunda;
 extern NSString * const kParamFechaFin;
+extern NSString * const kParamFechaFinSegunda;
 extern NSString * const kParamImpacto;
 extern NSString * const kParamClasificacion;
 extern NSString * const kParamInaugurador;
 extern NSString * const kParamSusceptible;
 extern NSString * const kParamInaugurada;
+extern NSString * const kParamLimiteMin;
+extern NSString * const kParamLimiteMax;
 
 //              Alerts Messages and HUD Messages
 /******************************************************/
