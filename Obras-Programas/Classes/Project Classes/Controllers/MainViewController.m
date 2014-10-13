@@ -27,6 +27,7 @@
 #import "ListaReporteEstado.h"
 #import "ListaReporteDependencia.h"
 #import "DBHelper.h"
+#import "FichaTecnicaViewController.h"
 
 #define METERS_PER_MILE 1609.344
 
@@ -1002,8 +1003,7 @@ const NSInteger numberOfResults = 50;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     Obra *obra = _tableViewData[indexPath.row];
-    [self performSegueWithIdentifier:@"ObraProgramaDetail" sender:self];
-    NSLog(@"%@", obra);
+    [self performSegueWithIdentifier:@"showFichaTecnica" sender:obra];
 }
 
 - (NSArray *)rightButtons
@@ -1209,5 +1209,20 @@ const NSInteger numberOfResults = 50;
 {
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
+
+#pragma mark - Segue
+
+// In a storyboard-based application, you will often want to do a little preparation before navigation
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    // Get the new view controller using [segue destinationViewController].
+    // Pass the selected object to the new view controller.
+    
+    if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
+        FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
+        fichaTecnicaViewController.obra = (Obra *)sender;
+        
+    }
+}
+
 
 @end
