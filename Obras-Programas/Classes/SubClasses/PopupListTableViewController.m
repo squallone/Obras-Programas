@@ -123,7 +123,7 @@ const NSInteger rowHeight = 45;
     id objecModel = [self.dataSource objectAtIndex:indexPath.row];
     NSString *value = @"";
     
-    static NSString *CellIdentifier = @"Cell";
+    NSString *CellIdentifier = [NSString stringWithFormat:@"cell%ld", (long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
     if (cell == nil) {

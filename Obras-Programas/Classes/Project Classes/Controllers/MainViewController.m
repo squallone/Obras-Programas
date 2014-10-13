@@ -226,9 +226,16 @@
 
 }
 
+
 -(void)viewDidAppear:(BOOL)animated{
     /* Request */
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showFichaTecnica:) name:@"showFichaTecnica" object:nil];
+
     [self requestToWebServices];
+}
+
+-(void)viewWillAppear:(BOOL)animated{
+    [_popOverView dismissPopoverAnimated:YES];
 }
 
 #pragma mark Server Requests (JSON)
@@ -375,41 +382,6 @@
 }
 
 
-#pragma mark - MKMapDelegate
-
-//-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
-//    
-//    MKAnnotationView *mypin = (MKAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier: [annotation title]];
-//    if (mypin == nil) {
-//        mypin = [[MKAnnotationView alloc]  initWithAnnotation: annotation reuseIdentifier: [annotation title]];
-//    } else {
-//        mypin.annotation = annotation;
-//        //pin = [[[MKPinAnnotationView alloc]  initWithAnnotation: annotation reuseIdentifier: [annotation title]] autorelease];
-//        
-//    }
-//    
-//    mypin.tintColor = [UIColor greenColor];
-//    mypin.backgroundColor = [UIColor redColor];
-//    //UIButton *goToDetail = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-//    //mypin.rightCalloutAccessoryView = myBtn;
-//    mypin.draggable = NO;
-//    mypin.highlighted = YES;
-//    //mypin.animatesDrop = TRUE;
-//    mypin.canShowCallout = YES;
-//    return mypin;
-//}
-//
-//
-//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
-//calloutAccessoryControlTapped:(UIControl *)control
-//{
-//    
-//    NSLog(@"%@",view.annotation.title);
-//    NSLog(@"%@",view.annotation.subtitle);}
-//
-//- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
-//    NSLog(@"Entro 1");
-//}
 
 #pragma mark - Methods of action (Selectors - IBOulet)
 
@@ -599,6 +571,7 @@ const NSInteger numberOfResults = 50;
     
     _tableViewData          = objectsResponse[kKeyListaObras];
     _stateReportData        = objectsResponse[kKeyListaReporteEstado];
+    
     _dependenciesReportData = objectsResponse[kKeyListaReporteDependencia];
     NSArray *generalData    = objectsResponse[kKeyListaReporteGeneral];
     
@@ -830,13 +803,13 @@ const NSInteger numberOfResults = 50;
         
         CLLocationCoordinate2D annotationCoord;
         
-        annotationCoord.latitude = [reporte.estado.latitud doubleValue];
-        annotationCoord.longitude = [reporte.estado.longitud doubleValue];
+        annotationCoord.latitude = [reporte.estado.longitud doubleValue];
+        annotationCoord.longitude = [reporte.estado.latitud doubleValue];
         
         MKPointAnnotation *annotationPoint = [[MKPointAnnotation alloc] init];
         annotationPoint.coordinate = annotationCoord;
         annotationPoint.title = reporte.estado.nombreEstado;
-        annotationPoint.subtitle = [NSString stringWithFormat:@"%@ registros - $%@ total de insersión", reporte.numeroObras, reporte.totalInvertido];
+        annotationPoint.subtitle = [NSString stringWithFormat:@"%@ Obras - $%@ en inversión", reporte.numeroObras, reporte.totalInvertido];
         [_mapView addAnnotation:annotationPoint];
     }
     
@@ -887,6 +860,41 @@ const NSInteger numberOfResults = 50;
     }
 }
 
+#pragma mark - MKMapDelegate
+
+//-(MKAnnotationView *)mapView:(MKMapView *)mapView viewForAnnotation:(id<MKAnnotation>)annotation{
+//
+//    MKAnnotationView *mypin = (MKAnnotationView *) [self.mapView dequeueReusableAnnotationViewWithIdentifier: [annotation title]];
+//    if (mypin == nil) {
+//        mypin = [[MKAnnotationView alloc]  initWithAnnotation: annotation reuseIdentifier: [annotation title]];
+//    } else {
+//        mypin.annotation = annotation;
+//        //pin = [[[MKPinAnnotationView alloc]  initWithAnnotation: annotation reuseIdentifier: [annotation title]] autorelease];
+//
+//    }
+//
+//    mypin.tintColor = [UIColor greenColor];
+//    mypin.backgroundColor = [UIColor redColor];
+//    //UIButton *goToDetail = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+//    //mypin.rightCalloutAccessoryView = myBtn;
+//    mypin.draggable = NO;
+//    mypin.highlighted = YES;
+//    //mypin.animatesDrop = TRUE;
+//    mypin.canShowCallout = YES;
+//    return mypin;
+//}
+//
+//
+//- (void)mapView:(MKMapView *)mapView annotationView:(MKAnnotationView *)view
+//calloutAccessoryControlTapped:(UIControl *)control
+//{
+//
+//    NSLog(@"%@",view.annotation.title);
+//    NSLog(@"%@",view.annotation.subtitle);}
+//
+//- (void)mapView:(MKMapView *)mapView didSelectAnnotationView:(MKAnnotationView *)view{
+//    NSLog(@"Entro 1");
+//}
 
 #pragma mark - PopupListTableView Delegate -Save Data
 
@@ -930,19 +938,32 @@ const NSInteger numberOfResults = 50;
     BOOL changeBackground = dataField.count > 0 ? YES : NO;
     
     UIColor *colorForSelection = changeBackground ? [UIColor colorForButtonSelection] : [UIColor clearColor];
+    UIColor *colorForTitleSelection = changeBackground ? [UIColor whiteColor] : [UIColor darkGrayColor];
+
     
     if (field == e_Dependencia) {
         _btndependency.backgroundColor      = colorForSelection;
+        [_btndependency setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
     }else if (field == e_Estado){
         _btnStates.backgroundColor          = colorForSelection;
+        [_btnStates setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+
     }else if (field == e_Impacto){
         _btnImpact.backgroundColor          = colorForSelection;
+        [_btnImpact setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+
     }else if (field == e_Clasificacion){
         _btnClasification.backgroundColor   = colorForSelection;
+        [_btnClasification setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+
     }else if (field == e_Tipo_Inversion){
         _btnTypeInvestment.backgroundColor  = colorForSelection;
+        [_btnTypeInvestment setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+
     }else if (field == e_Nombre_Inaugura){
         _btnInaugurator.backgroundColor     = colorForSelection;
+        [_btnInaugurator setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+
     }
 }
 
@@ -1210,6 +1231,7 @@ const NSInteger numberOfResults = 50;
     return (interfaceOrientation != UIInterfaceOrientationPortraitUpsideDown);
 }
 
+
 #pragma mark - Segue
 
 // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -1222,6 +1244,12 @@ const NSInteger numberOfResults = 50;
         fichaTecnicaViewController.obra = (Obra *)sender;
         
     }
+}
+
+-(void)showFichaTecnica:(NSNotification *)notification{
+    
+    Obra *obra = [notification object];
+    [self performSegueWithIdentifier:@"showFichaTecnica" sender:obra];
 }
 
 

@@ -9,6 +9,7 @@
 #import "DetailTableViewController.h"
 #import "Obra.h"
 #import "Consulta.h"
+#import "FichaTecnicaViewController.h"
 
 @interface DetailTableViewController ()
 
@@ -119,6 +120,20 @@
     cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", subtitle];
     return cell;
 }
+
+#pragma mark - UITableView  Delegate
+
+-(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (_option == o_Consultas) {
+        
+    }else if (_option == o_Favoritos){
+        Obra *obra = _dataSource[indexPath.row];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:obra];
+    }
+}
+
+#pragma mark - Segue
+
 
 -(NSDictionary *)textToDisplay:(id)objectModel{
     
