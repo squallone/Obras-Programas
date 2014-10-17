@@ -10,6 +10,8 @@
 #import "Obra.h"
 #define DESCRIPCION 0
 #define INAUGURACION 1
+#define OBSERVACIONES 2
+
 @interface ThirdColumnTableViewController ()
 
 @end
@@ -36,17 +38,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 2;
+    return 3;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == DESCRIPCION) {
-        return 2;
+        return 1;
     }
     else if(section == INAUGURACION){
         return 3;
     }
-    else
+    else if(section==OBSERVACIONES){
+        return 1;
+    }
         // Return the number of rows in the section.
         return 0;
 }
@@ -61,12 +65,6 @@
             textView.text = _obra.descripcion;
 
         }
-        else if(indexPath.row==1){
-            cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-            cell.textLabel.text = @"Observaciones";
-
-            cell.detailTextLabel.text = _obra.observaciones;
-            }
     }
     
     if(indexPath.section==INAUGURACION){
@@ -90,7 +88,19 @@
                 cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
                 cell.textLabel.text = @"Inaugurador";
                 cell.detailTextLabel.text = _obra.inaugurador.nombreCargoInaugura;
+                [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+
             }
+    }
+    
+    if(indexPath.section==OBSERVACIONES){
+        if(indexPath.row==0){
+            cell = [tableView dequeueReusableCellWithIdentifier:@"DescripcionCell" forIndexPath:indexPath];
+            UITextView *textView = (UITextView*)[cell.contentView viewWithTag:101];
+            textView.text = _obra.observaciones;
+        }
+
+
     }
     
     else cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
@@ -116,7 +126,9 @@
         return @"Inauguración";
     }
 
-    else
+    else if(section==OBSERVACIONES){
+        return @"Observaciones";
+    }else
         // Return the number of rows in the section.
         return @"";
 }
@@ -125,6 +137,8 @@
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (indexPath.section == DESCRIPCION & indexPath.row==0) {
+        return 116;
+    }else if(indexPath.section == OBSERVACIONES){
         return 116;
     }
     else return 44;

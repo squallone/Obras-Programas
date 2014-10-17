@@ -8,9 +8,25 @@
 
 #import "SecondColumnTableViewController.h"
 #import "Obra.h"
+#import "Inversion.h"
+#import "Clasificacion.h"
 #define INVERSION 0
 #define POBLACION 1
 #define CLASIFICACION 2
+
+#define FEDERAL 101
+#define ESTATAL 102
+#define MUNICIPAL 103
+#define SOCIAL 104
+#define PRIVADA 105
+#define OTROS 106
+
+#define COMPROMISOGOBIERNO 201
+#define PNG 202
+#define PM 203
+#define PNI 204
+#define CNCH 205
+#define OTRACLASIFICACION 206
 
 
 @interface SecondColumnTableViewController ()
@@ -61,9 +77,70 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell ;
+    NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
+
+    [f setNumberStyle:NSNumberFormatterCurrencyStyle];
     
-    if (indexPath.section == INVERSION & indexPath.row ==0) {
-        cell =  [tableView dequeueReusableCellWithIdentifier:@"InversionCell" forIndexPath:indexPath];
+    NSNumber *number = [NSNumber numberWithInt:[self.obra.inversionTotal integerValue]];
+
+    
+    if (indexPath.section == INVERSION) {
+        if(indexPath.row ==0){
+            cell =  [tableView dequeueReusableCellWithIdentifier:@"InversionCell" forIndexPath:indexPath];
+            UIImageView *imagenFederal = (UIImageView*)[cell.contentView viewWithTag:FEDERAL];
+            UIImageView *imagenEstatal = (UIImageView*)[cell.contentView viewWithTag:ESTATAL];
+            UIImageView *imagenMunicipal = (UIImageView*)[cell.contentView viewWithTag:MUNICIPAL];
+            UIImageView *imagenSocial = (UIImageView*)[cell.contentView viewWithTag:SOCIAL];
+            UIImageView *imagenPrivada = (UIImageView*)[cell.contentView viewWithTag:PRIVADA];
+            UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTROS];
+            
+            
+            imagenFederal.hidden =YES;
+            imagenEstatal.hidden=YES;
+            imagenMunicipal.hidden=YES;
+            imagenSocial.hidden =YES;
+            imagenPrivada.hidden= YES;
+            imagenOtros.hidden=YES;
+            
+            Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
+            NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
+            NSArray *items = @[@"Federal", @"Estatal", @"Municipal",@"Social",@"Privada",@"Otro"];
+
+            for (Inversion *inversion in self.obra.inversiones) {
+                NSString *stringInversion = [inversion valueForKey:@"nombreTipoInversion"];
+                int item = [items indexOfObject:stringInversion];
+                
+                switch (item) {
+                    case 0:
+                        imagenFederal.hidden = NO;
+                        break;
+                    case 1:
+                        imagenEstatal.hidden = NO;
+                        break;
+                    case 2:
+                        imagenMunicipal.hidden = NO;
+                        break;
+                    case 3:
+                        imagenSocial.hidden = NO;
+                        break;
+                    case 4:
+                        imagenPrivada.hidden = NO;
+                        break;
+                    case 5:
+                        imagenOtros.hidden = NO;
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+        else if(indexPath.row==1){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Inversión Total";
+            cell.detailTextLabel.text =  [NSString stringWithFormat:@"%@ %@", [f stringFromNumber:number], self.obra.tipoMoneda];
+
+
+        }
     }else
         
     if(indexPath.section == POBLACION){
@@ -90,6 +167,65 @@
     }
     else if(indexPath.section == CLASIFICACION & indexPath.row==0){
         cell =  [tableView dequeueReusableCellWithIdentifier:@"ClaisificacionCell" forIndexPath:indexPath];
+        
+        
+        
+        UIImageView *imagenGobierno = (UIImageView*)[cell.contentView viewWithTag:COMPROMISOGOBIERNO];
+        UIImageView *imagenGuerrero = (UIImageView*)[cell.contentView viewWithTag:PNG];
+        UIImageView *imagenMichoacan = (UIImageView*)[cell.contentView viewWithTag:PM];
+        UIImageView *imagenPNI = (UIImageView*)[cell.contentView viewWithTag:PNI];
+        UIImageView *imagenCNCH = (UIImageView*)[cell.contentView viewWithTag:CNCH];
+        UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTRACLASIFICACION];
+        
+        
+        imagenGobierno.hidden =YES;
+        imagenGuerrero.hidden=YES;
+        imagenMichoacan.hidden=YES;
+        imagenPNI.hidden =YES;
+        imagenCNCH.hidden= YES;
+        imagenOtros.hidden=YES;
+        
+        Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
+        NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
+        NSArray *items = @[@"Compromiso de Gobierno"
+                           , @"Plan Nuevo Guerrero",
+                           @"Plan Michoacán",
+                           @"Plan Nacional de Infraestructura",
+                           @"Cruzada Nacional Contra el Hambre",
+                           @"Otro"];
+        
+        for (Clasificacion *clasificacion in self.obra.clasificaciones) {
+            NSString *stringInversion = [clasificacion valueForKey:@"nombreTipoClasificacion"];
+            int item = [items indexOfObject:stringInversion];
+            
+            switch (item) {
+                case 0:
+                    imagenGobierno.hidden = NO;
+                    break;
+                case 1:
+                    imagenGuerrero.hidden = NO;
+                    break;
+                case 2:
+                    imagenMichoacan.hidden = NO;
+                    break;
+                case 3:
+                    imagenPNI.hidden = NO;
+                    break;
+                case 4:
+                    imagenCNCH.hidden = NO;
+                    break;
+                case 5:
+                    imagenOtros.hidden = NO;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        
+        
+        
+        
 
     }
     

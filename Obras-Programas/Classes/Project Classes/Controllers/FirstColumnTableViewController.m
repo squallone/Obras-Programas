@@ -58,22 +58,44 @@ willDisplayHeaderView : (UIView*) view
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     UITableViewCell *cell;
-
+    
+    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+    NSLog(@"System time: %@", [self.obra.fechaInicio description]);
+    
     
     // Configure the cell...
     if(indexPath.row == 0){
         cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         cell.textLabel.text = @"Identificador de Obra";
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         cell.detailTextLabel.text = self.obra.idObra;
 
     }else if(indexPath.row == 1){
         cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         cell.textLabel.text = @"Denominación";
-        cell.detailTextLabel.text = self.obra.denominacion;
+        cell.detailTextLabel.lineBreakMode = NSLineBreakByClipping;
+        cell.detailTextLabel.numberOfLines = 2;
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+        
+        
+        NSString *fullString = self.obra.denominacion;
+        NSString *prefix = nil;
+        
+        if ([fullString length] >= 80)
+            prefix = [fullString substringToIndex:80];
+        else
+            prefix = fullString;
+        
+        
+        cell.detailTextLabel.text = prefix;
     }
     else    if(indexPath.row == 2){
         cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Dependencia";
+        cell.textLabel.text = @"Dependencia/Secretaría";
+        
+        
+        
         cell.detailTextLabel.text = self.obra.dependencia.nombreDependencia;
 
     }
@@ -92,23 +114,23 @@ willDisplayHeaderView : (UIView*) view
     else    if(indexPath.row == 5){
         cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         cell.textLabel.text = @"Tipo de Obra";
-        cell.detailTextLabel.text = self.obra.denominacion;
+        cell.detailTextLabel.text = self.obra.tipoObra.nombreTipoObra;
 
     }
     else    if(indexPath.row == 6){
         cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         cell.textLabel.text = @"Avance";
-        cell.detailTextLabel.text = self.obra.porcentajeAvance;
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %%",self.obra.porcentajeAvance];
        
 
     }
     else    if(indexPath.row == 7){
         cell = [tableView dequeueReusableCellWithIdentifier:@"CellFecha" forIndexPath:indexPath];
         UILabel *labelInicio = (UILabel*)[cell.contentView viewWithTag:1];
-        labelInicio.text = @"2015-09-01";
+        labelInicio.text = [self.obra.fechaInicio description];
         
         UILabel *labelFinal = (UILabel*)[cell.contentView viewWithTag:2];
-        labelFinal.text = @"2018-09-01";
+        labelFinal.text = [self.obra.fechaTermino description];
         
         [labelInicio setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
         [labelFinal setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
@@ -117,7 +139,9 @@ willDisplayHeaderView : (UIView*) view
     else    if(indexPath.row == 8){
         cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
         cell.textLabel.text = @"Última modificación";
-        cell.detailTextLabel.text = self.obra.tipoObra.nombreTipoObra;
+        cell.detailTextLabel.text = [self.obra.fechaModificacion description];
+        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+
     }
     
     if(indexPath.row !=7) [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];

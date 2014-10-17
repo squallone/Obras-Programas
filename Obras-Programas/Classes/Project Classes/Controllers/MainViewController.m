@@ -28,6 +28,8 @@
 #import "ListaReporteDependencia.h"
 #import "DBHelper.h"
 #import "FichaTecnicaViewController.h"
+#import "GraficasViewController.h"
+
 
 #define METERS_PER_MILE 1609.344
 
@@ -1510,8 +1512,27 @@ const NSInteger numberOfResults = 50;
         FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
         fichaTecnicaViewController.obra = (Obra *)sender;
         
-    }
+    }else
+        if ([segue.identifier isEqualToString:@"showGrafica"]) {
+            GraficasViewController *graficasViewController = segue.destinationViewController;
+            graficasViewController.stateReportData = _stateReportData;
+            
+#warning La lista de reporte de dependencias no tiene el atributo de los nombres sustituir reporteDependenciaarr por _dependenciesReportData
+            ListaReporteDependencia *reporteDependencia = [[ListaReporteDependencia alloc] init];
+            Dependencia *dependencia = [Dependencia new];
+            dependencia.nombreDependencia = @"CFE";
+            dependencia.idDependencia = @"1";
+            reporteDependencia.dependencia =dependencia;
+            reporteDependencia.totalInvertido = @"100";
+            reporteDependencia.numeroObras = @"50";
+            
+            NSMutableArray *reporteDependenciaarr = [NSMutableArray new];
+            [reporteDependenciaarr addObject:reporteDependencia];
+            
+            graficasViewController.dependenciesReportData = reporteDependenciaarr;
+        }
 }
+
 
 -(void)showFichaTecnica:(NSNotification *)notification{
     [_popOverView dismissPopoverAnimated:YES];
