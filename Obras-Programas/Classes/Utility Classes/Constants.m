@@ -55,6 +55,10 @@ NSString * const kKeyStoreStartEndDate          =  @"ksed";
 NSString * const kKeyStoreEndIniDate            =  @"keid";
 NSString * const kKeyStoreEndEndDate            =  @"keed";
 
+NSString * const kKeyStoreInauguradaOption      =  @"kiopt";
+NSString * const kKeyStoreSusceptibleOption     =  @"ksopt";
+
+
 //              KEYS JSON
 /******************************************************/
 

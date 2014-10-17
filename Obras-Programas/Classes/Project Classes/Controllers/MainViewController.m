@@ -38,16 +38,17 @@
 /* PopMenu */
 
 @property (nonatomic, strong) QBPopupMenu *popupMenu;
-@property (nonatomic, strong) QBPlasticPopupMenu *plasticPopupMenu;
+@property (nonatomic, strong) QBPopupMenu *morePopupMenu;
 
 /* IBOutlets*/
 
+@property (weak, nonatomic) IBOutlet UITextField *txtRangoMinimo;
+@property (weak, nonatomic) IBOutlet UITextField *txtRangoMaximo;
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
 @property (weak, nonatomic) IBOutlet MDSpreadView *spreadView;
 @property (weak, nonatomic) IBOutlet UIView *reportView;
-
 
 @property (weak, nonatomic) IBOutlet UIButton *btnQuery;
 @property (weak, nonatomic) IBOutlet UIButton *btnSaveQuery;
@@ -61,6 +62,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnEndDate;
 @property (weak, nonatomic) IBOutlet UIButton *btnInaugurator;
 @property (weak, nonatomic) IBOutlet UIButton *btnSusceptible;
+@property (weak, nonatomic) IBOutlet UIButton *btnInaugurada;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblStartIniDate;
 @property (weak, nonatomic) IBOutlet UILabel *lblStartEndDate;
@@ -70,6 +72,8 @@
 
 @property (strong, nonatomic) UIBarButtonItem *menuBarBtn;
 @property (strong, nonatomic) UIButton *btnWorksPrograms;
+
+
 
 #pragma mark - Reporte 
 
@@ -105,6 +109,9 @@
 @property (nonatomic, strong) NSArray *invesmentsData;
 @property (nonatomic, strong) NSArray *worksProgramsData;
 
+@property (nonatomic, strong) NSArray *inauguratorOptionData;
+@property (nonatomic, strong) NSArray *susceptibleOptionData;
+
 @property (nonatomic, strong) NSArray *worksResultData;
 @property (nonatomic, strong) NSArray *programasResultData;
 
@@ -119,14 +126,17 @@
 @property (nonatomic, strong) NSArray *clasificationsSavedData;
 @property (nonatomic, strong) NSArray *invesmentsSavedData;
 @property (nonatomic, strong) NSArray *worksProgramsSavedData;
+@property (nonatomic, strong) NSArray *inauguratorOptionSavedData;
+@property (nonatomic, strong) NSArray *susceptibleOptionSavedData;
+
 
 @property (nonatomic, strong) NSString *limiteMin;
 @property (nonatomic, strong) NSString *limiteMax;
 
-@property (nonatomic, strong) NSString *fechaInicio;
-@property (nonatomic, strong) NSString *fechaInicioSegunda;
-@property (nonatomic, strong) NSString *fechaFin;
-@property (nonatomic, strong) NSString *fechaFinSegunda;
+@property (nonatomic, strong) NSDate *fechaInicio;
+@property (nonatomic, strong) NSDate *fechaInicioSegunda;
+@property (nonatomic, strong) NSDate *fechaFin;
+@property (nonatomic, strong) NSDate *fechaFinSegunda;
 
 #pragma mark - Animations
 
@@ -142,6 +152,7 @@
 @property (nonatomic, assign) MainSearchFields searchField;
 @property (nonatomic, strong) JSONHTTPClient *jsonClient;
 @property (nonatomic, strong) NSNumberFormatter *currencyFormatter;
+@property ReportOption reportOption;
 
 @end
 
@@ -155,27 +166,42 @@
     
     [TSMessage setDefaultViewController:self];
     _mapView.delegate = self;
+    _mapView.showsUserLocation = YES;
     
     /* Number Formatter */
     
     _currencyFormatter = [[NSNumberFormatter alloc] init];
     [_currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     
+    /* Inaugurador, Suceptible Data for Array*/
+    
+    NSArray *options = @[@"Si", @"No"];
+    
+    _inauguratorOptionData = options;
+    _susceptibleOptionData = options;
     
     /* PopUp */
     
-    
     QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Fecha inicio" target:self action:@selector(displayStartCalendar:)];
-    QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"Fecha final" target:self action:@selector(displayEndCalendar:)];
-    NSArray *items = @[item, item2];
+    QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"" image:[UIImage imageNamed:@"trash"] target:self action:@selector(deleteStartDate:)];
+    QBPopupMenuItem *item3 = [QBPopupMenuItem itemWithTitle:@"Fecha final" target:self action:@selector(displayEndCalendar:)];
+    QBPopupMenuItem *item4 = [QBPopupMenuItem itemWithTitle:@"" image:[UIImage imageNamed:@"trash"] target:self action:@selector(deleteEndDate:)];
+
+    NSArray *items = @[item, item2, item3, item4];
     
     QBPopupMenu *popupMenu = [[QBPopupMenu alloc] initWithItems:items];
     popupMenu.highlightedColor = [[UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0] colorWithAlphaComponent:0.8];
     self.popupMenu = popupMenu;
+
     
-    QBPlasticPopupMenu *plasticPopupMenu = [[QBPlasticPopupMenu alloc] initWithItems:items];
-    plasticPopupMenu.height = 40;
-    self.plasticPopupMenu = plasticPopupMenu;
+    QBPopupMenuItem *item10 = [QBPopupMenuItem itemWithTitle:@"Limpiar consulta" target:self action:@selector(cleanQuery:)];
+    QBPopupMenuItem *item11 = [QBPopupMenuItem itemWithTitle:@"Ver detalle consulta" target:self action:@selector(displayQueryDetail:)];
+    
+    NSArray *itemsMoreButton = @[item10, item11];
+    
+    self.morePopupMenu = [[QBPopupMenu alloc] initWithItems:itemsMoreButton];
+    self.morePopupMenu.highlightedColor = [[UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0] colorWithAlphaComponent:0.8];
+
 
     /* Date Formatters */
     
@@ -193,7 +219,7 @@
 
     /*  Menu items */
     
-    _menuData       = @[@"Busquedas recientes", @"Favoritos", @"Acerca de"];
+    _menuData       = @[@"Busquedas guardadas", @"Registros guardados", @"Acerca de"];
     
     _titleFields    = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
                         @{@"title": @"Obras",      @"sortKey": @"numeroObras"},
@@ -214,6 +240,9 @@
     _lblStartEndDate.text       = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreStartEndDate];
     _lblEndIniDate.text         = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreEndIniDate];
     _lblEndEndDate.text         = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreEndEndDate];
+    
+    _inauguratorOptionSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreInauguradaOption];
+    _susceptibleOptionSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSusceptibleOption];
 
     //Si hay datos en los campos de busqueda, cambios el backgroundColor del boton
     
@@ -223,7 +252,8 @@
     [self changeBackgroundColorForNumberOfSelections:_clasificationsSavedData andTypeOfFieldButton:e_Clasificacion];
     [self changeBackgroundColorForNumberOfSelections:_invesmentsSavedData andTypeOfFieldButton:e_Tipo_Inversion];
     [self changeBackgroundColorForNumberOfSelections:_inauguratorSavedData andTypeOfFieldButton:e_Nombre_Inaugura];
-
+    [self changeBackgroundColorForNumberOfSelections:_inauguratorOptionSavedData andTypeOfFieldButton:e_Inaugurada];
+    [self changeBackgroundColorForNumberOfSelections:_susceptibleOptionSavedData andTypeOfFieldButton:e_Suscpetible];
 }
 
 
@@ -377,8 +407,6 @@
     NSLog(@"Error : %@", [error localizedDescription]);
 }
 
-
-
 #pragma mark - Methods of action (Selectors - IBOulet)
 
 /* Display the menu items */
@@ -433,7 +461,6 @@
                isBarButtonItem:NO
                         isMenu:NO
                    searchField:e_Estado];
-
 }
 
 /* Muestra los municpios */
@@ -490,6 +517,53 @@
 
 }
 
+- (IBAction)displayReportByDependency:(id)sender {
+    
+    _reportOption = r_dependency;
+    
+    [_spreadView reloadData];
+
+}
+
+- (IBAction)displayReportByState:(id)sender {
+    _reportOption = r_state;
+    [_spreadView reloadData];
+}
+
+- (IBAction)displayInauguradaOptions:(id)sender {
+    
+    [self displayItemsOnButton:_btnInaugurada
+                withDataSource:_inauguratorOptionData
+        withDataToShowCheckBox:_inauguratorOptionSavedData
+               isBarButtonItem:NO
+                        isMenu:NO
+                   searchField:e_Inaugurada];
+}
+
+- (IBAction)displaySusceptibleOptions:(id)sender {
+    
+    [self displayItemsOnButton:_btnSusceptible
+                withDataSource:_susceptibleOptionData
+        withDataToShowCheckBox:_susceptibleOptionSavedData
+               isBarButtonItem:NO
+                        isMenu:NO
+                   searchField:e_Suscpetible];
+}
+
+- (IBAction)displayMoreOptions:(id)sender {
+    UIButton *button = (UIButton *)sender;
+    [self.morePopupMenu showInView:self.view targetRect:button.frame animated:YES];
+ 
+}
+
+-(void)cleanQuery:(id)sender{
+    
+}
+
+-(void)displayQueryDetail:(id)sender{
+    
+}
+
 #pragma mark - Calendar
 
 - (IBAction)displayCalendar:(id)sender{
@@ -544,6 +618,61 @@
     [self calendarController:self.pmCC didChangePeriod:self.pmCC.period];
 }
 
+-(void)deleteStartDate:(id)sender{
+    
+    if (_btnCalendarSelected == _btnStartDate) {
+        _lblStartIniDate.text = @"";
+    }else if (_btnCalendarSelected == _btnEndDate){
+        _lblEndIniDate.text = @"";
+    }
+}
+
+-(void)deleteEndDate:(id)sender{
+    if (_btnCalendarSelected == _btnStartDate) {
+        _lblStartEndDate.text = @"";
+    }else if (_btnCalendarSelected == _btnEndDate){
+        _lblEndEndDate.text = @"";
+    }
+}
+
+#pragma mark PMCalendarControllerDelegate methods
+
+- (void)calendarController:(PMCalendarController *)calendarController didChangePeriod:(PMPeriod *)newPeriod
+{
+    NSString *dateCalendar = [_dateFormatterShort stringFromDate:newPeriod.startDate];
+    
+    if (_lblCalendarSelected == _lblStartIniDate) {
+        
+        if (_lblStartIniDate.text.length==0) {
+            _fechaInicioSegunda = newPeriod.startDate;
+            _lblStartEndDate.text = dateCalendar;
+        }
+        _fechaInicio = newPeriod.startDate;
+    }else if (_lblCalendarSelected == _lblStartEndDate) {
+        _fechaInicioSegunda = newPeriod.startDate;
+    }else if (_lblCalendarSelected == _lblEndIniDate) {
+        
+        if (_lblEndIniDate.text.length==0) {
+            _fechaFin = newPeriod.startDate;
+            _lblEndEndDate.text = dateCalendar;
+        }
+        
+        //        NSComparisonResult result = [_fechaInicio compare:newPeriod.startDate];
+        //
+        //        if (result != NSOrderedAscending) {
+        //            [[[UIAlertView alloc]initWithTitle:@"Fecha incorrecta" message:@"La fecha de termino no puede ser menor a la fecha de comienzo" delegate:nil cancelButtonTitle:@"Aceptar" otherButtonTitles:nil, nil] show];
+        //            return;
+        //        }
+        
+        _fechaFin = newPeriod.startDate;
+    }else if (_lblCalendarSelected == _lblEndEndDate) {
+        _fechaFinSegunda = newPeriod.startDate;
+    }
+    
+    _lblCalendarSelected.text = dateCalendar;
+}
+
+
 #pragma mark - *************  REQUEST TO SERVER MAIN QUERY
 
 const NSInteger numberOfResults = 50;
@@ -569,6 +698,8 @@ const NSInteger numberOfResults = 50;
     _stateReportData        = objectsResponse[kKeyListaReporteEstado];
     
     _dependenciesReportData = objectsResponse[kKeyListaReporteDependencia];
+    
+    
     NSArray *generalData    = objectsResponse[kKeyListaReporteGeneral];
     
     [self.tableView reloadData];
@@ -702,6 +833,27 @@ const NSInteger numberOfResults = 50;
         [parameters setObject:parameterValue forKey:kParamEstado];
     }
     
+    /* Rango de inversion*/
+    
+    if (_txtRangoMinimo.text.length >0) {
+        [parameters setObject:[self changeFormatStringToNSNumber:_txtRangoMinimo.text] forKey:kParamInversionMinima];
+        
+        if (_txtRangoMaximo.text.length == 0) {
+            NSNumber *maxFloat = [NSNumber numberWithFloat:MAXFLOAT];
+            [parameters setObject:maxFloat forKey:kParamImversionMaxima];
+        }
+    }
+    
+    if (_txtRangoMaximo.text.length > 0){
+        [parameters setObject:[self changeFormatStringToNSNumber:_txtRangoMaximo.text] forKey:kParamImversionMaxima];
+
+        if (_txtRangoMinimo.text.length == 0) {
+            NSNumber *minFloat = [NSNumber numberWithFloat:0];
+            [parameters setObject:minFloat forKey:kParamInversionMinima];
+        }
+    }
+    
+    
     /* Tipo de inversión */
     
     parameterValue = @"";
@@ -767,18 +919,23 @@ const NSInteger numberOfResults = 50;
     }
     
     /* Fechas */
+    
+    if (_lblStartIniDate.text.length>0) {
+        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicio];
+        [parameters setObject:dateStr forKey:kParamFechaInicio];
+    }
+    if (_lblStartEndDate.text.length>0) {
+        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicioSegunda];
 
-    if (_fechaInicio.length>0) {
-        [parameters setObject:_fechaInicio forKey:kParamFechaInicio];
+        [parameters setObject:dateStr forKey:kParamFechaInicioSegunda];
     }
-    if (_fechaInicioSegunda.length>0) {
-        [parameters setObject:_fechaInicioSegunda forKey:kParamFechaInicioSegunda];
+    if (_lblEndIniDate.text.length>0) {
+        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaFin];
+        [parameters setObject:dateStr forKey:kParamFechaFin];
     }
-    if (_fechaFin.length>0) {
-        [parameters setObject:_fechaFin forKey:kParamFechaFin];
-    }
-    if (_fechaFinSegunda.length>0) {
-        [parameters setObject:_fechaFinSegunda forKey:kParamFechaFinSegunda];
+    if (_lblEndEndDate.text.length>0) {
+        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaFinSegunda];
+        [parameters setObject:dateStr forKey:kParamFechaFinSegunda];
     }
     
     /*Limite */
@@ -787,6 +944,28 @@ const NSInteger numberOfResults = 50;
 
 
     return parameters;
+}
+
+-(NSNumber *)changeFormatStringToNSNumber:(NSString *)textFieldStr{
+    
+    NSMutableString *textFieldStrValue = [NSMutableString stringWithString:textFieldStr];
+    
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    [textFieldStrValue replaceOccurrencesOfString:numberFormatter.currencySymbol
+                                       withString:@""
+                                          options:NSLiteralSearch
+                                            range:NSMakeRange(0, [textFieldStrValue length])];
+    
+    [textFieldStrValue replaceOccurrencesOfString:numberFormatter.groupingSeparator
+                                       withString:@""
+                                          options:NSLiteralSearch
+                                            range:NSMakeRange(0, [textFieldStrValue length])];
+    
+    NSDecimalNumber *textFieldNum = [NSDecimalNumber decimalNumberWithString:textFieldStrValue];
+    
+    return textFieldNum;
 }
 
 #pragma mark - displayPinsOnMap
@@ -925,6 +1104,12 @@ const NSInteger numberOfResults = 50;
     }else if (popupListTableView.field == e_Nombre_Inaugura){
         _inauguratorSavedData = data;
         [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreInaugurators];
+    }else if (popupListTableView.field == e_Inaugurada){
+        _inauguratorOptionSavedData = data;
+        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreInauguradaOption];
+    }else if (popupListTableView.field == e_Suscpetible){
+        _susceptibleOptionSavedData = data;
+        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreSusceptibleOption];
     }
 }
 
@@ -960,27 +1145,13 @@ const NSInteger numberOfResults = 50;
         _btnInaugurator.backgroundColor     = colorForSelection;
         [_btnInaugurator setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
 
-    }
-}
-
-
-#pragma mark PMCalendarControllerDelegate methods
-
-- (void)calendarController:(PMCalendarController *)calendarController didChangePeriod:(PMPeriod *)newPeriod
-{
-    NSString *dateCalendar = [_dateFormatterShort stringFromDate:newPeriod.startDate];
-    _lblCalendarSelected.text = dateCalendar;
-    
-    dateCalendar = [_dateFormatterGeneral stringFromDate:newPeriod.startDate];
-    
-    if (_lblCalendarSelected == _lblStartIniDate) {
-        _fechaInicio = dateCalendar;
-    }else if (_lblCalendarSelected == _lblStartEndDate) {
-        _fechaInicioSegunda = dateCalendar;
-    }else if (_lblCalendarSelected == _lblEndIniDate) {
-        _fechaFin = dateCalendar;
-    }else if (_lblCalendarSelected == _lblEndEndDate) {
-        _fechaFinSegunda = dateCalendar;
+    }else if (field == e_Inaugurada){
+        _btnInaugurada.backgroundColor     = colorForSelection;
+        [_btnInaugurada setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+        
+    }else if (field == e_Suscpetible){
+        _btnSusceptible.backgroundColor     = colorForSelection;
+        [_btnSusceptible setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
     }
 }
 
@@ -1078,7 +1249,11 @@ const NSInteger numberOfResults = 50;
 
 - (NSInteger)spreadView:(MDSpreadView *)aSpreadView numberOfRowsInSection:(NSInteger)section{
     
-    return _stateReportData.count;
+    if (_reportOption == r_state) {
+        return _stateReportData.count;
+    }else{
+        return _dependenciesReportData.count;
+    }
 }
 
 #pragma mark --- Heights
@@ -1111,28 +1286,58 @@ const NSInteger numberOfResults = 50;
 
 - (MDSpreadViewCell *)spreadView:(MDSpreadView *)aSpreadView cellForRowAtIndexPath:(MDIndexPath *)rowPath forColumnAtIndexPath:(MDIndexPath *)columnPath{
     
-    static NSString *cellIdentifier = @"Cell";
-    MDSpreadViewCell *cell = [aSpreadView dequeueReusableCellWithIdentifier:cellIdentifier];
     
-    ListaReporteEstado *reporte = _stateReportData[rowPath.row];
-    
-    if (cell == nil) {
-        cell = [[MDSpreadViewCell alloc] initWithStyle:MDSpreadViewCellStyleDefault reuseIdentifier:cellIdentifier];
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
-    }
-    
-    if (columnPath.row == 0) {
-        cell.textLabel.text = reporte.estado.nombreEstado;
-        
-    }else if (columnPath.row == 1){
-        cell.textLabel.text = [NSString stringWithFormat:@"%@", reporte.numeroObras];
-        
-    }else if (columnPath.row == 2){
-      
-        cell.textLabel.text =  [NSString stringWithFormat:@"%@", [_currencyFormatter stringFromNumber:reporte.totalInvertido]];
-    }
+    if (_reportOption == r_state) {
+        static NSString *cellIdentifier = @"Cell";
+        MDSpreadViewCell *cell = [aSpreadView dequeueReusableCellWithIdentifier:cellIdentifier];
 
-    return cell;
+        ListaReporteEstado *reporte = _stateReportData[rowPath.row];
+        
+        if (cell == nil) {
+            cell = [[MDSpreadViewCell alloc] initWithStyle:MDSpreadViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        }
+        
+        if (columnPath.row == 0) {
+            cell.textLabel.text = reporte.estado.nombreEstado;
+            
+        }else if (columnPath.row == 1){
+            cell.textLabel.text = [NSString stringWithFormat:@"%@", reporte.numeroObras];
+            
+        }else if (columnPath.row == 2){
+            
+            cell.textLabel.text =  [NSString stringWithFormat:@"%@", [_currencyFormatter stringFromNumber:reporte.totalInvertido]];
+        }
+        
+        return cell;
+
+    
+    }else{
+        static NSString *cellIdentifier = @"Cell2";
+        MDSpreadViewCell *cell = [aSpreadView dequeueReusableCellWithIdentifier:cellIdentifier];
+
+        ListaReporteDependencia *reporte = _dependenciesReportData[rowPath.row];
+        
+        if (cell == nil) {
+            cell = [[MDSpreadViewCell alloc] initWithStyle:MDSpreadViewCellStyleDefault reuseIdentifier:cellIdentifier];
+            cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:14];
+        }
+        
+        if (columnPath.row == 0) {
+            
+            cell.textLabel.text = @"Dependencia";
+            
+        }else if (columnPath.row == 1){
+            cell.textLabel.text = [NSString stringWithFormat:@"%@", reporte.numeroObras];
+            
+        }else if (columnPath.row == 2){
+            
+            cell.textLabel.text =  [NSString stringWithFormat:@"%@", [_currencyFormatter stringFromNumber:reporte.totalInvertido]];
+        }
+        
+        return cell;
+    }
+    
 }
 
 - (id)spreadView:(MDSpreadView *)aSpreadView titleForHeaderInRowSection:(NSInteger)section forColumnAtIndexPath:(MDIndexPath *)columnPath
@@ -1187,6 +1392,72 @@ const NSInteger numberOfResults = 50;
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     
 }
+
+#pragma mark - UITextField Delegate
+
+
+-(BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string{
+    
+    NSInteger MAX_DIGITS = 11; // $999,999,999.99
+
+    NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
+    [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    [numberFormatter setMaximumFractionDigits:1];
+    [numberFormatter setMinimumFractionDigits:1];
+    
+    NSString *stringMaybeChanged = [NSString stringWithString:string];
+    if (stringMaybeChanged.length > 1)
+    {
+        NSMutableString *stringPasted = [NSMutableString stringWithString:stringMaybeChanged];
+        
+        [stringPasted replaceOccurrencesOfString:numberFormatter.currencySymbol
+                                      withString:@""
+                                         options:NSLiteralSearch
+                                           range:NSMakeRange(0, [stringPasted length])];
+        
+        [stringPasted replaceOccurrencesOfString:numberFormatter.groupingSeparator
+                                      withString:@""
+                                         options:NSLiteralSearch
+                                           range:NSMakeRange(0, [stringPasted length])];
+        
+        NSDecimalNumber *numberPasted = [NSDecimalNumber decimalNumberWithString:stringPasted];
+        stringMaybeChanged = [numberFormatter stringFromNumber:numberPasted];
+    }
+    
+    NSMutableString *textFieldTextStr = [NSMutableString stringWithString:textField.text];
+    
+    [textFieldTextStr replaceCharactersInRange:range withString:stringMaybeChanged];
+    
+    [textFieldTextStr replaceOccurrencesOfString:numberFormatter.currencySymbol
+                                      withString:@""
+                                         options:NSLiteralSearch
+                                           range:NSMakeRange(0, [textFieldTextStr length])];
+    
+    [textFieldTextStr replaceOccurrencesOfString:numberFormatter.groupingSeparator
+                                      withString:@""
+                                         options:NSLiteralSearch
+                                           range:NSMakeRange(0, [textFieldTextStr length])];
+    
+    [textFieldTextStr replaceOccurrencesOfString:numberFormatter.decimalSeparator
+                                      withString:@""
+                                         options:NSLiteralSearch
+                                           range:NSMakeRange(0, [textFieldTextStr length])];
+    
+    if (textFieldTextStr.length <= MAX_DIGITS)
+    {
+        NSDecimalNumber *textFieldTextNum = [NSDecimalNumber decimalNumberWithString:textFieldTextStr];
+        NSDecimalNumber *divideByNum = [[[NSDecimalNumber alloc] initWithInt:10] decimalNumberByRaisingToPower:numberFormatter.maximumFractionDigits];
+        NSDecimalNumber *textFieldTextNewNum = [textFieldTextNum decimalNumberByDividingBy:divideByNum];
+        NSString *textFieldTextNewStr = [numberFormatter stringFromNumber:textFieldTextNewNum];
+        
+        textField.text = textFieldTextNewStr;
+
+    }
+
+    return NO;
+
+  }
 
 #pragma mark Hide Lists
 

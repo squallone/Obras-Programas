@@ -17,12 +17,22 @@
 #import "Inaugurador.h"
 #import "DBHelper.h"
 
+typedef NS_OPTIONS(NSInteger, TypeSelection)
+{
+    t_DeleteAllNoTodo  = 0,
+    t_Disable_Todo          = 1,
+    t_Enable_Todo           = 2
+};
+
+
 const NSInteger rowHeight = 45;
 
 @interface PopupListTableViewController ()
 
 @property (nonatomic, strong) NSArray *dataToMark;
 @property  CGSize size;
+@property TypeSelection typeSelection;
+@property TypeSelection cleanSelection;
 
 @end
 
@@ -33,7 +43,7 @@ const NSInteger rowHeight = 45;
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
         
         /* Initialize instance variables */
-        
+        _typeSelection = t_Enable_Todo;
         self.dataSource     = datasource;
         self.dataToMark     = [loadData count] > 0 ? loadData : [NSArray new];
         
@@ -66,7 +76,7 @@ const NSInteger rowHeight = 45;
         
         //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 50;
-        popoverWidth = _isMenu ? popoverWidth + 50 : popoverWidth;
+        popoverWidth = _isMenu || _field == e_Inaugurada || _field == e_Suscpetible ? popoverWidth + 50 : popoverWidth;
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
@@ -89,8 +99,6 @@ const NSInteger rowHeight = 45;
 -(CGSize)preferredContentSize
 {
     return _size;
-    
-    
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -115,51 +123,72 @@ const NSInteger rowHeight = 45;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return self.dataSource.count;
+    return _isMenu ? self.dataSource.count : self.dataSource.count+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    id objecModel = [self.dataSource objectAtIndex:indexPath.row];
+    id objecModel = nil;
     NSString *value = @"";
-    
+
+    if (_isMenu) {
+       objecModel  = [self.dataSource objectAtIndex:indexPath.row];
+    }else if (indexPath.row != 0) {
+            objecModel  = [self.dataSource objectAtIndex:indexPath.row-1];
+    }
+    value = [self textToDisplay:objecModel];
+
     NSString *CellIdentifier = [NSString stringWithFormat:@"cell%ld", (long)indexPath.row];
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    if (cell == nil) {
+    if (cell == nil)
+    {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
-        value = [self textToDisplay:objecModel];
         cell.backgroundColor = [UIColor clearColor];
         cell.textLabel.textColor = [UIColor blackColor];
-        if (_isMenu) {
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            
-            if (indexPath.row == 0) {
-                cell.imageView.image = [UIImage imageNamed:@"busquedas-icon"];
+    }
+    
+    if (_isMenu) {
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        if (indexPath.row == 0) {
+            cell.imageView.image = [UIImage imageNamed:@"busquedas-icon"];
+        }else if (indexPath.row == 1){
+            cell.imageView.image = [UIImage imageNamed:@"favorito-icon"];
+        }else if (indexPath.row == 2){
+            cell.imageView.image = [UIImage imageNamed:@"info"];
+        }
+        cell.textLabel.text = value;
+        
+    }else{
+        if (indexPath.row != 0) {
+            cell.textLabel.text = value;
+            if (_typeSelection == t_DeleteAllNoTodo) {
+                cell.accessoryType = UITableViewCellAccessoryNone;
 
-            }else if (indexPath.row == 1){
-                cell.imageView.image = [UIImage imageNamed:@"favorito-icon"];
-
-            }else if (indexPath.row == 2){
-                cell.imageView.image = [UIImage imageNamed:@"info"];
             }
-            
-        }else{
-           
             for (id objectModel in _dataToMark) {
-                    NSString *valueToCheck = [self textToDisplay:objectModel];
+                NSString *valueToCheck = [self textToDisplay:objectModel];
                 
                 if ([valueToCheck isEqualToString:value]) {
                     cell.accessoryType = UITableViewCellAccessoryCheckmark;
                     [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
                 }
             }
+        }else{
+            cell.textLabel.text = @"TODO";
+            if (_dataToMark.count==0) {
+                if (_typeSelection == t_Enable_Todo) {
+                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                }else if (_typeSelection == t_Disable_Todo) {
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                }
+            }
         }
-        cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
-        cell.textLabel.text = value;
     }
     
+    cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
     return cell;
 }
 
@@ -169,16 +198,34 @@ const NSInteger rowHeight = 45;
 {
     //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
     if (!_isMenu) {
-        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
-        
-       id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
-        
-        if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
-            [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
+
+        if (indexPath.row !=0) {
+            _typeSelection = t_Disable_Todo;
+
+            [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+            [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
+            
+            id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row-1];
+            
+            if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
+                [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
+            }
+            [_dataSelected addObject:dataForSelectedRow];
+        }else{
+            //Cuando la selección es todo
+            [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];
+
+            for (int i= 0; i<self.dataSource.count; i++) {
+                if (i!=0) {
+                    [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                }
+            }
+            _cleanSelection = t_DeleteAllNoTodo;
+            _typeSelection = t_Enable_Todo;
+            [self.dataSelected removeAllObjects];
         }
-        [_dataSelected addObject:dataForSelectedRow];
+     
     }else{
-        
         NSArray *dataSource = [NSArray array];
         MenuOptions option;
         if (indexPath.row == 0) {
@@ -186,7 +233,7 @@ const NSInteger rowHeight = 45;
             option = o_Consultas;
             if (dataSource.count == 0) {
                 [[[UIAlertView alloc]initWithTitle:@"No hay consultas"
-                                           message:@"Aun no tienes consultas guardadas"
+                                           message:@"Aún no tienes consultas guardadas"
                                           delegate:nil
                                  cancelButtonTitle:@"Aceptar"
                                  otherButtonTitles:nil, nil]show];
@@ -195,8 +242,8 @@ const NSInteger rowHeight = 45;
             dataSource =  [DBHelper getAllObras];
             option = o_Favoritos;
             if (dataSource.count == 0) {
-                [[[UIAlertView alloc]initWithTitle:@"No hay favoritos"
-                                           message:@"Aun no tienes favoritos guardados"
+                [[[UIAlertView alloc]initWithTitle:@"No hay registros"
+                                           message:@"Aún no tienes registros guardados"
                                           delegate:nil
                                  cancelButtonTitle:@"Aceptar"
                                  otherButtonTitles:nil, nil]show];
@@ -215,13 +262,12 @@ const NSInteger rowHeight = 45;
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (!_isMenu) {
-       id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row];
-        
-        [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
-        [_dataSelected removeObject:dataForSelectedRow];
+        if (indexPath.row !=0) {
+            id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row-1];
+            [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
+            [_dataSelected removeObject:dataForSelectedRow];
+        }
     }
-    NSLog(@"Insert %@", _dataSelected);
-    
 }
 
 -(NSString *)textToDisplay:(id)objectModel{
@@ -229,40 +275,30 @@ const NSInteger rowHeight = 45;
     NSString *value = @"";
 
     if (_isMenu) {
-        
         value = objectModel;
-        
     }else if (_field == e_Estado) {
-        
         Estado *state = (Estado *)objectModel;
         value = state.nombreEstado;
-        
     }else if (_field == e_Nombre_Inaugura){
-        
         Inaugurador *inaugurator = (Inaugurador *)objectModel;
         value = inaugurator.nombreCargoInaugura;
-        
     }else if (_field == e_Impacto){
-        
         Impacto *impact = (Impacto *)objectModel;
         value = impact.nombreImpacto;
     }else if (_field == e_Clasificacion){
-        
         Clasificacion *clasification = (Clasificacion *)objectModel;
         value = clasification.nombreTipoClasificacion;
-        
     }else if (_field == e_Dependencia){
-        
         Dependencia *dependency = (Dependencia *)objectModel;
         value = dependency.nombreDependencia;
     }else if (_field == e_Tipo_Inversion){
-        
         Inversion *invesment = (Inversion *)objectModel;
         value = invesment.nombre;
     }else if (_field == e_Tipo){
-        
         TipoObraPrograma *tipo = (TipoObraPrograma *)objectModel;
         value = tipo.nombreTipoObra;
+    }else if (_field == e_Inaugurada || _field == e_Suscpetible){
+        value = (NSString *)objectModel;
     }
     
     return value;

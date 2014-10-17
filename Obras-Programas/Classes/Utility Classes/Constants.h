@@ -19,7 +19,11 @@ typedef NS_OPTIONS(NSInteger, MainSearchFields)
     e_Tipo_Inversion  = 4,
     e_Impacto         = 5,
     e_Clasificacion   = 6,
-    e_Nombre_Inaugura = 7
+    e_Nombre_Inaugura = 7,
+    e_Inaugurada      = 8,
+    e_Suscpetible     = 9,
+    e_RangoInversion  = 10
+
 };
 
 typedef NS_OPTIONS(NSInteger, MenuOptions)
@@ -29,6 +33,11 @@ typedef NS_OPTIONS(NSInteger, MenuOptions)
     o_AcercaDe  = 2
 };
 
+typedef NS_OPTIONS(NSInteger, ReportOption)
+{
+    r_state = 0,
+    r_dependency = 1,
+};
 
 /////////////       General
 /******************************************************/
@@ -70,6 +79,8 @@ extern NSString * const kKeyStoreStartIniDate;
 extern NSString * const kKeyStoreStartEndDate;
 extern NSString * const kKeyStoreEndIniDate;
 extern NSString * const kKeyStoreEndEndDate;
+extern NSString * const kKeyStoreInauguradaOption;
+extern NSString * const kKeyStoreSusceptibleOption;
 
 /////////////       Keys JSON
 /******************************************************/

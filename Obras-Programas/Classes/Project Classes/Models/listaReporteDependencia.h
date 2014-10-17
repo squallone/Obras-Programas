@@ -13,7 +13,7 @@
 
 @interface ListaReporteDependencia : MTLModel <MTLJSONSerializing>
 
-@property (nonatomic, strong) NSString *numeroObras;
-@property (nonatomic, strong) NSString *totalInvertido;
+@property (nonatomic, strong) NSNumber *numeroObras;
+@property (nonatomic, strong) NSNumber *totalInvertido;
 @property (nonatomic, strong) Dependencia *dependencia;
 @end

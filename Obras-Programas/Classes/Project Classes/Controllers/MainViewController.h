@@ -13,12 +13,13 @@
 #import "PMCalendar.h"
 #import "SWTableViewCell.h"
 
-@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate, SWTableViewCellDelegate>
+@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate, SWTableViewCellDelegate, UITextFieldDelegate>
 
 - (IBAction)perfomQuery:(id)sender;
 
 - (IBAction)performSaveQuery:(id)sender;
 
+- (IBAction)displayMoreOptions:(id)sender;
 
 /* Ordena la busqueda */
 
@@ -60,5 +61,13 @@
 - (IBAction)displayCalendar:(id)sender;
 
 - (IBAction)displayInaugurators:(id)sender;
+
+- (IBAction)displayReportByDependency:(id)sender;
+
+- (IBAction)displayReportByState:(id)sender;
+
+- (IBAction)displayInauguradaOptions:(id)sender;
+
+- (IBAction)displaySusceptibleOptions:(id)sender;
 
 @end
