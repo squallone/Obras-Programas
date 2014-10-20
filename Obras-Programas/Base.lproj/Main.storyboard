@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="13E28" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2m6-oD-mLd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2m6-oD-mLd">
     <dependencies>
         <deployment defaultVersion="1792" identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
@@ -44,7 +44,7 @@
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWn-Hs-zqZ">
                                 <rect key="frame" x="16" y="228" width="79" height="27"/>
-                                <color key="backgroundColor" red="0.5250093227" green="0.73361073369999996" blue="0.14888699380000001" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                 <state key="normal" title="Ordenar">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -57,7 +57,7 @@
                                     <action selector="sortSearch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0HD-WZ-mmD"/>
                                 </connections>
                             </button>
-                            <tableView clipsSubviews="YES" alpha="0.84999999999999987" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1gE-Fe-sGf">
+                            <tableView clipsSubviews="YES" alpha="0.89999999999999991" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="22" sectionFooterHeight="22" translatesAutoresizingMaskIntoConstraints="NO" id="1gE-Fe-sGf">
                                 <rect key="frame" x="-1" y="259" width="266" height="509"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -109,7 +109,7 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hjl-r0-WKS">
                                         <rect key="frame" x="8" y="17" width="92" height="30"/>
-                                        <color key="backgroundColor" red="0.082545047103215793" green="0.57509754666170787" blue="0.85328209918478259" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="17"/>
                                         <state key="normal" title="Consultar">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
@@ -134,7 +134,7 @@
                                 </subviews>
                                 <color key="backgroundColor" white="0.86328125" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
-                            <view alpha="0.89999999999999991" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14g-2F-FcP" userLabel="HeaderView 1">
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="14g-2F-FcP" userLabel="HeaderView 1">
                                 <rect key="frame" x="0.0" y="64" width="1024" height="100"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Nombre o denominación" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7wG-Qi-5TA">
@@ -148,7 +148,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f7k-oY-mWi">
-                                        <rect key="frame" x="342" y="0.0" width="146" height="50"/>
+                                        <rect key="frame" x="342" y="0.0" width="157" height="49"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <state key="normal" title="Dependencia">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -159,7 +159,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MDx-ef-QoZ">
-                                        <rect key="frame" x="487" y="0.0" width="138" height="50"/>
+                                        <rect key="frame" x="498" y="0.0" width="127" height="49"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <state key="normal" title="Estado">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -170,7 +170,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="e0h-ty-EC2">
-                                        <rect key="frame" x="891" y="0.0" width="133" height="36"/>
+                                        <rect key="frame" x="891" y="0.0" width="133" height="50"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
                                         <state key="normal" title="Tipo de inversión">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -181,7 +181,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="b2H-mw-bu5">
-                                        <rect key="frame" x="362" y="50" width="121" height="50"/>
+                                        <rect key="frame" x="363" y="50" width="114" height="50"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <state key="normal" title="Impacto">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -192,7 +192,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AXt-2R-saO">
-                                        <rect key="frame" x="482" y="50" width="115" height="50"/>
+                                        <rect key="frame" x="476" y="50" width="121" height="50"/>
                                         <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="15"/>
                                         <state key="normal" title="Clasificación">
                                             <color key="titleColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
@@ -242,7 +242,7 @@
                                         <rect key="frame" x="341" y="0.0" width="1" height="50"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="TyV-v0-D0n">
-                                        <rect key="frame" x="487" y="0.0" width="1" height="50"/>
+                                        <rect key="frame" x="498" y="0.0" width="1" height="50"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="U5n-Yh-u7F">
                                         <rect key="frame" x="624" y="0.0" width="1" height="50"/>
@@ -251,10 +251,10 @@
                                         <rect key="frame" x="891" y="0.0" width="1" height="50"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="QWb-kg-6mL">
-                                        <rect key="frame" x="362" y="50" width="1" height="50"/>
+                                        <rect key="frame" x="363" y="50" width="1" height="50"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="xAG-h6-tMn">
-                                        <rect key="frame" x="482" y="50" width="1" height="50"/>
+                                        <rect key="frame" x="476" y="50" width="1" height="50"/>
                                     </imageView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris" translatesAutoresizingMaskIntoConstraints="NO" id="5Tg-Tu-dOB">
                                         <rect key="frame" x="596" y="50" width="1" height="50"/>
@@ -308,7 +308,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Minimo" textAlignment="center" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="EnD-U2-ktS">
-                                        <rect key="frame" x="633" y="17" width="120" height="30"/>
+                                        <rect key="frame" x="633" y="12" width="120" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                                         <connections>
@@ -316,13 +316,16 @@
                                         </connections>
                                     </textField>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="bottom" placeholder="Máximo" textAlignment="center" minimumFontSize="11" translatesAutoresizingMaskIntoConstraints="NO" id="FCs-Qd-CM7">
-                                        <rect key="frame" x="764" y="17" width="120" height="30"/>
+                                        <rect key="frame" x="764" y="12" width="120" height="30"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad" returnKeyType="next"/>
                                         <connections>
                                             <outlet property="delegate" destination="BYZ-38-t0r" id="BOd-EM-gex"/>
                                         </connections>
                                     </textField>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="linea_barragris_horizontal" translatesAutoresizingMaskIntoConstraints="NO" id="lBp-S0-afn">
+                                        <rect key="frame" x="0.0" y="49" width="1024" height="1"/>
+                                    </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="calibratedRGB"/>
                             </view>
@@ -363,42 +366,46 @@
                                     <action selector="displayMoreOptions:" destination="BYZ-38-t0r" eventType="touchUpInside" id="lM2-OV-prO"/>
                                 </connections>
                             </button>
-                            <view alpha="0.84999999999999987" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JO1-Cj-x9c" userLabel="Rigth View">
+                            <view alpha="0.89999999999999991" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JO1-Cj-x9c" userLabel="Rigth View">
                                 <rect key="frame" x="759" y="259" width="264" height="509"/>
                                 <subviews>
                                     <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="c2p-4c-u5R" customClass="MDSpreadView">
-                                        <rect key="frame" x="-1" y="0.0" width="265" height="400"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="265" height="400"/>
                                     </view>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKW-V7-CNY">
-                                        <rect key="frame" x="7" y="427" width="120" height="30"/>
-                                        <color key="backgroundColor" red="0.0" green="0.3084299512" blue="0.63733440900000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Dependencia">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="displayReportByDependency:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UoQ-En-GFA"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xH1-Mt-5fe">
-                                        <rect key="frame" x="136" y="427" width="120" height="30"/>
-                                        <color key="backgroundColor" red="0.0" green="0.3084299512" blue="0.63733440900000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Estado">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="displayReportByState:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BGI-x8-iHK"/>
-                                        </connections>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="08r-Xm-TTU">
-                                        <rect key="frame" x="71" y="465" width="120" height="30"/>
-                                        <color key="backgroundColor" red="0.0" green="0.3084299512" blue="0.63733440900000005" alpha="1" colorSpace="calibratedRGB"/>
-                                        <state key="normal" title="Total">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                            <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
-                                        </state>
-                                    </button>
+                                    <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jxf-ra-2bb">
+                                        <rect key="frame" x="0.0" y="400" width="265" height="94"/>
+                                        <subviews>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KKW-V7-CNY">
+                                                <rect key="frame" x="134" y="27" width="120" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <state key="normal" title="Dependencia">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="5.0"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="displayReportByDependency:" destination="BYZ-38-t0r" eventType="touchUpInside" id="UoQ-En-GFA"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xH1-Mt-5fe">
+                                                <rect key="frame" x="6" y="27" width="120" height="30"/>
+                                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <state key="normal" title="Estado">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="5.0"/>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="displayReportByState:" destination="BYZ-38-t0r" eventType="touchUpInside" id="BGI-x8-iHK"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    </view>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -407,8 +414,8 @@
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jlA-BC-DUf">
                                         <rect key="frame" x="95" y="15" width="162" height="30"/>
-                                        <color key="backgroundColor" white="0.56155493950000002" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                        <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="AvenirNext-DemiBold" family="Avenir Next" pointSize="17"/>
                                         <state key="normal" title="Consultar Gráfica">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                             <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
@@ -609,7 +616,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="7vG-yF-G4c" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2451" y="728"/>
+            <point key="canvasLocation" x="2510" y="970"/>
         </scene>
         <!--Charts View Controller-->
         <scene sceneID="2Ik-8R-xSS">
@@ -1047,6 +1054,7 @@
         <image name="banner.png" width="760" height="89"/>
         <image name="checked.png" width="56" height="52"/>
         <image name="linea_barragris" width="1" height="21"/>
+        <image name="linea_barragris_horizontal" width="1024" height="1"/>
         <image name="logoPresidencia.png" width="759" height="264"/>
         <image name="logo_sct.png" width="233" height="140"/>
     </resources>

@@ -17,7 +17,7 @@
 
 + (UIColor *)colorForButtonSelection{
     
-    return [UIColor colorWithRed:34.0/255.0 green:142.0/255.0 blue:236.0/255.0 alpha:1];
+    return [UIColor colorWithRed:0.0/255.0 green:122.0/255.0 blue:255.0/255.0 alpha:1];
 
 }
 

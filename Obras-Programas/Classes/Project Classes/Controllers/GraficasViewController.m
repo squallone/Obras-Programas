@@ -110,8 +110,8 @@
     for(int i=0;i<[_dependenciesReportData count];i++){
         reporteDependencia = [_dependenciesReportData objectAtIndex:i];
         nombre = reporteDependencia.dependencia.nombreDependencia;
-        valorObrasDependencia = reporteDependencia.numeroObras;
-        valorInvertidoDependencia = reporteDependencia.totalInvertido;
+        valorObrasDependencia = [NSString stringWithFormat:@"%@", reporteDependencia.numeroObras];
+        valorInvertidoDependencia = [NSString stringWithFormat:@"%@", reporteDependencia.totalInvertido];
         
         [diccionarioNumeroObrasDependencias setObject:valorObrasDependencia forKey:nombre];
         [diccionarioTotalInvertidoDependencias setObject:valorInvertidoDependencia forKey:nombre];

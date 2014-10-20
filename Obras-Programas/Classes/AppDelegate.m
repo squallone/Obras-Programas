@@ -33,7 +33,8 @@
 }
 
 -(void)setupHUD{
-    
+    //self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
+
     //ProgressHUD
     [self.window makeKeyAndVisible];
 

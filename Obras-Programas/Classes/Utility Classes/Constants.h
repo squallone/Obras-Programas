@@ -22,15 +22,17 @@ typedef NS_OPTIONS(NSInteger, MainSearchFields)
     e_Nombre_Inaugura = 7,
     e_Inaugurada      = 8,
     e_Suscpetible     = 9,
-    e_RangoInversion  = 10
-
+    e_RangoInversion  = 10,
+    e_Sort_Result     = 11
 };
 
 typedef NS_OPTIONS(NSInteger, MenuOptions)
 {
-    o_Consultas = 0,
-    o_Favoritos = 1,
-    o_AcercaDe  = 2
+    o_Consultas         = 0,
+    o_Favoritos         = 1,
+    o_AcercaDe          = 2,
+    o_Detalle_Consulta  = 3
+
 };
 
 typedef NS_OPTIONS(NSInteger, ReportOption)
