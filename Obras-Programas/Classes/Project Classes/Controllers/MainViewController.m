@@ -1595,6 +1595,21 @@ const NSInteger numberOfResults = 50;
 
 #pragma mark - Segue
 
+- (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
+{
+    if (_stateReportData.count ==0) {
+        UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
+                                                         message:@"Para consultar la gráfica primero tienes que consultar un reporte."
+                                                        delegate:self
+                                               cancelButtonTitle:@"Aceptar"
+                                               otherButtonTitles: nil];
+        [alert show];
+        return NO;
+    }
+    else return YES;
+}
+
+
 // In a storyboard-based application, you will often want to do a little preparation before navigation
 - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     // Get the new view controller using [segue destinationViewController].
@@ -1608,7 +1623,7 @@ const NSInteger numberOfResults = 50;
             GraficasViewController *graficasViewController = segue.destinationViewController;
             graficasViewController.stateReportData = _stateReportData;
             
-#warning La lista de reporte de dependencias no tiene el atributo de los nombres sustituir reporteDependenciaarr por _dependenciesReportData
+            #warning La lista de reporte de dependencias no tiene el atributo de los nombres sustituir reporteDependenciaarr por _dependenciesReportData
             ListaReporteDependencia *reporteDependencia = [[ListaReporteDependencia alloc] init];
             Dependencia *dependencia = [Dependencia new];
             dependencia.nombreDependencia = @"CFE";

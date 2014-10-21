@@ -440,6 +440,9 @@
         endOfLine.x = oldLabelCenter.x + (EXTRUSION-30.f) * cosf(angle);
         endOfLine.y = oldLabelCenter.y - (EXTRUSION-30.f) * sinf(angle);
         
+        self.reporteSeleccionado = @"totalInvertido";
+        
+
         [label setText:[NSString stringWithFormat:@"%@ , %@", datapoint.xValue,datapoint.yValue]];
         label.textColor = [UIColor blackColor];
         [label sizeToFit];
@@ -459,6 +462,11 @@
     [lineView setFrame:glFrame];
     // remove the old point-pairs from the line view
     [lineView reset];
+}
+
+- (void)sChartDidFinishLoadingData:(ShinobiChart *)chart {
+    NSNumber * padding = @(chart.yAxis.dataRange.span.doubleValue * 0.05);
+    chart.yAxis.rangePaddingHigh = padding;
 }
 
 @end
