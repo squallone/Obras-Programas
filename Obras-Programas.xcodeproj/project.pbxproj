@@ -211,6 +211,7 @@
 		ABFCC51819C2E0460074CA01 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC51719C2E0460074CA01 /* libsqlite3.0.dylib */; };
 		ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC54D19C2E43F0074CA01 /* MainViewController.m */; };
 		ABFCC55019C2E5990074CA01 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC54F19C2E5990074CA01 /* MapKit.framework */; };
+		EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB21B4FB19F6174D00F70F6A /* LineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -570,6 +571,8 @@
 		ABFCC54C19C2E43F0074CA01 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		ABFCC54D19C2E43F0074CA01 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		ABFCC54F19C2E5990074CA01 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		EB21B4FA19F6174D00F70F6A /* LineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineView.h; sourceTree = "<group>"; };
+		EB21B4FB19F6174D00F70F6A /* LineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -797,6 +800,8 @@
 		ABC993FB19F195180041B6B5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EB21B4FA19F6174D00F70F6A /* LineView.h */,
+				EB21B4FB19F6174D00F70F6A /* LineView.m */,
 				ABC993F219F1950E0041B6B5 /* GridViewController.h */,
 				ABC993F319F1950E0041B6B5 /* GridViewController.m */,
 				ABC993F419F1950E0041B6B5 /* ChartsViewController.h */,
@@ -1621,6 +1626,7 @@
 				ABFCC51519C2DE450074CA01 /* Offline.m in Sources */,
 				AB36C62A19D6074500B77B83 /* MTLReflection.m in Sources */,
 				AB36C63419D60BBB00B77B83 /* Inaugurador.m in Sources */,
+				EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */,
 				AB36C62B19D6074500B77B83 /* MTLValueTransformer.m in Sources */,
 				AB36C62419D6074500B77B83 /* EXTScope.m in Sources */,
 				ABCDCDBA19E9050300C6AACC /* DBHelper.m in Sources */,

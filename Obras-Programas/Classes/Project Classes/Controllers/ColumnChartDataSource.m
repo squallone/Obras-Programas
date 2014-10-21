@@ -39,8 +39,21 @@
         columnSeries.animationEnabled = YES;
         SChartAnimation *animation = [SChartAnimation growVerticalAnimation];
         columnSeries.entryAnimation = animation;
-        columnSeries.title = self.reporte       ;
-
+        columnSeries.title = self.reporte;
+        
+        //Display labels
+        columnSeries.style.dataPointLabelStyle.showLabels = YES;
+        
+        //Position labels
+        columnSeries.style.dataPointLabelStyle.offsetFromDataPoint = CGPointMake(0, -15);
+        columnSeries.style.dataPointLabelStyle.offsetFlippedForNegativeValues = YES;
+        
+        //Style labels
+        columnSeries.style.dataPointLabelStyle.textColor = [UIColor blackColor];
+        columnSeries.style.dataPointLabelStyle.displayValues = SChartDataPointLabelDisplayValuesY;
+        
+        
+        
         return columnSeries;
 
     }else if(chart.tag==4){

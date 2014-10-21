@@ -10,6 +10,8 @@
 #import <ShinobiCharts/ShinobiCharts.h>
 #import "ColumnChartDataSource.h"
 #import "PieChartDataSource.h"
+#import <ShinobiCharts/SChartCanvas.h>
+
 
 @interface ChartsViewController ()
 
@@ -23,7 +25,7 @@
 @synthesize _pieChart;
 @synthesize _barChart;
 @synthesize pieDataSource;
-
+@synthesize lineView;
 
 -(void)prepareColumnChartWithTitle:(NSString *)title{
 
@@ -85,6 +87,7 @@
         
     columnDataSource.reporte = title;
     _chart.datasource = columnDataSource;
+        _chart.delegate = self;
         _chart.legend.hidden = YES;
         [self.view addSubview:_chart];
 
@@ -117,6 +120,8 @@
         
         pieDataSource.reporte = title;
         _pieChart.datasource = pieDataSource;
+
+        _pieChart.delegate =self;
         _pieChart.legend.hidden = NO;
 
 
@@ -152,6 +157,7 @@
         pieDataSource.reporte = title;
 
         _donutChart.datasource = pieDataSource;
+        _donutChart.delegate=self;
         _donutChart.legend.hidden = NO;
         [self.view addSubview:_donutChart];
         
@@ -361,6 +367,11 @@
     [self preparePieChartWithTitle:@"totalInvertido"];
     [self prepareDonutChartWithTitle:@"totalInvertido"];
 
+    lineView = [[LineView alloc] init];
+    [lineView setUserInteractionEnabled:NO];
+    [lineView setBackgroundColor:[UIColor clearColor]];
+    [_donutChart addSubview:lineView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -375,6 +386,80 @@
     if(_donutChart) [self updateDonutTitle:title];
     if(_barChart)[self updateBarTitle:title];
 
+}
+
+
+//-(void)sChart:(ShinobiChart *)chart alterDataPointLabel:(SChartDataPointLabel *)label forDataPoint:(SChartDataPoint *)datapoint inSeries:(SChartSeries *)series
+//{
+//    //Do some additional label styling
+//    label.layer.cornerRadius = 10;
+//    label.backgroundColor = [UIColor colorWithWhite:.8 alpha:1];
+//    label.textAlignment = NSTextAlignmentCenter;
+//}
+
+#define EXTRUSION 90
+- (void)sChart:(ShinobiChart *)chart alterLabel:(UILabel *)label forDatapoint:(SChartRadialDataPoint *)datapoint atSliceIndex:(NSInteger)index inRadialSeries:(SChartRadialSeries *)series {
+    
+    if (chart == _pieChart) {
+        label.adjustsFontSizeToFitWidth = YES;
+        if (datapoint.value.floatValue < 5.f) {
+            label.text = @"";
+            
+        }  else if (datapoint.value.floatValue < 15.f) {
+            label.adjustsFontSizeToFitWidth = YES;
+            CGRect f = label.frame;
+            f.size.width = 35.f;
+            label.frame = f;
+        }
+    } else
+    if( chart == _donutChart){
+        SChartPieSeries *pieSeries = (SChartPieSeries *)series;
+        
+        //get our radial point from our datasource method
+        
+        // three points:
+        CGPoint pieCenter;      // chart center for trig calculations
+        CGPoint oldLabelCenter; // original label center
+        CGPoint labelCenter;    // new label center
+        CGPoint endOfLine;     // we want our line to finish just short of our label
+        
+        pieCenter = [pieSeries getDonutCenter];
+        oldLabelCenter = labelCenter = [pieSeries getSliceCenter:index];
+        
+        // find the angle of the slice, and add on a little to the label's center
+        float xChange, yChange;
+        
+        xChange = pieCenter.x - labelCenter.x;
+        yChange = pieCenter.y - labelCenter.y;
+        
+        float angle = atan2f(xChange, yChange) + M_PI / 2.f;
+        // we do the M_PI / 2 adjustment because of how the pie is drawn internally
+        
+        labelCenter.x = oldLabelCenter.x + EXTRUSION * cosf(angle);
+        labelCenter.y = oldLabelCenter.y - EXTRUSION * sinf(angle);
+        
+        endOfLine.x = oldLabelCenter.x + (EXTRUSION-30.f) * cosf(angle);
+        endOfLine.y = oldLabelCenter.y - (EXTRUSION-30.f) * sinf(angle);
+        
+        [label setText:[NSString stringWithFormat:@"%@ , %@", datapoint.xValue,datapoint.yValue]];
+        label.textColor = [UIColor blackColor];
+        [label sizeToFit];
+        [label setCenter:labelCenter]; // this must be after sizeToFit
+        [label setHidden:NO];
+        
+        // connect our old label point to our new label
+        [lineView addPointPair:oldLabelCenter second:endOfLine forLabel:label];
+    }
+
+}
+
+- (void) sChartRenderStarted:(ShinobiChart *)chart withFullRedraw:(BOOL)fullRedraw {
+    // position our view over the top of the GL canvas
+    CGRect glFrame = chart.canvas.glView.frame;
+    glFrame.origin.y = chart.canvas.frame.origin.y;
+    [lineView setFrame:glFrame];
+    // remove the old point-pairs from the line view
+    [lineView reset];
 }
 
 @end
