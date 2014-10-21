@@ -111,7 +111,6 @@
         _pieChart.PlotAreaBackgroundColor = [UIColor clearColor];
         _pieChart.CanvasAreaBackgroundColor = [UIColor clearColor];
         _pieChart.gestureDoubleTapResetsZoom = YES;
-        
         _pieChart.BorderColor = [UIColor clearColor];
         
         _pieChart.PlotAreaBorderColor = [UIColor clearColor];
@@ -224,7 +223,7 @@
         yAxis.style.majorGridLineStyle.showMajorGridLines = YES;
         
         _barChart.yAxis = yAxis;
-
+        _barChart.delegate = self;
         
         [self.view addSubview:_barChart];
         
@@ -413,7 +412,7 @@
         }
     } else
     if( chart == _donutChart){
-        SChartPieSeries *pieSeries = (SChartPieSeries *)series;
+        SChartDonutSeries *pieSeries = (SChartDonutSeries *)series;
         
         //get our radial point from our datasource method
         
