@@ -481,6 +481,8 @@
                         <outlet property="reportView" destination="JO1-Cj-x9c" id="53V-0a-dpF"/>
                         <outlet property="spreadView" destination="c2p-4c-u5R" id="dzc-aI-1LU"/>
                         <outlet property="tableView" destination="1gE-Fe-sGf" id="6Uk-qo-cGT"/>
+                        <outlet property="txtDenominacion" destination="7wG-Qi-5TA" id="zcz-Ht-q18"/>
+                        <outlet property="txtIDObraPrograma" destination="LDH-1W-GmG" id="TTC-DN-Xf7"/>
                         <outlet property="txtRangoMaximo" destination="FCs-Qd-CM7" id="uQW-4v-k5r"/>
                         <outlet property="txtRangoMinimo" destination="EnD-U2-ktS" id="dky-en-Mo5"/>
                         <segue destination="S5j-CH-Qxb" kind="show" identifier="showFichaTecnica" id="VE4-NM-y3j"/>

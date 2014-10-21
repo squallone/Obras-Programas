@@ -48,6 +48,9 @@
 
 @property (weak, nonatomic) IBOutlet UITextField *txtRangoMinimo;
 @property (weak, nonatomic) IBOutlet UITextField *txtRangoMaximo;
+@property (weak, nonatomic) IBOutlet UITextField *txtDenominacion;
+@property (weak, nonatomic) IBOutlet UITextField *txtIDObraPrograma;
+
 @property (weak, nonatomic) IBOutlet MKMapView *mapView;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (weak, nonatomic) IBOutlet UIView *buttonsView;
