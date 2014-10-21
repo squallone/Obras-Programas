@@ -67,8 +67,17 @@
     SChartDataPoint *datapoint = [[SChartDataPoint alloc] init];
     
     NSDictionary* elementosReporte = [self dataForReport];
-    NSString* key = elementosReporte.allKeys[dataIndex];
     
+    
+    NSArray *sortedKeys = [[elementosReporte allKeys] sortedArrayUsingSelector: @selector(compare:)];
+    NSMutableArray *sortedValues = [NSMutableArray array];
+    for (NSString *key in sortedKeys) {
+        [sortedValues addObject: [elementosReporte objectForKey: key]];
+    }
+
+    
+    NSString* key = sortedKeys[dataIndex];
+
 
     datapoint.xValue = key;
     datapoint.yValue = elementosReporte[key];

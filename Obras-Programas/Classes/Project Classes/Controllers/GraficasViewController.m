@@ -164,27 +164,24 @@
 }
 
 - (IBAction)displayColumnChart:(id)sender {
-    
+    [chartController prepareColumnChartWithTitle:_tituloGrafica];
     [chartController activateColumn];
 }
 
 - (IBAction)displayPieChart:(id)sender {
     [chartController preparePieChartWithTitle:_tituloGrafica];
     [chartController activatePie];
-    NSLog(@"%@",_tituloGrafica);
 
 }
 
 - (IBAction)displayDonutChart:(id)sender {
     [chartController prepareDonutChartWithTitle:_tituloGrafica];
     [chartController activateDonut];
-    NSLog(@"%@",_tituloGrafica);
 }
 
 - (IBAction)displayBubbleChart:(id)sender {
     [chartController prepareBarChartWithTitle:_tituloGrafica];
     [chartController activateBar];
-    NSLog(@"%@",_tituloGrafica);
 
 }
 

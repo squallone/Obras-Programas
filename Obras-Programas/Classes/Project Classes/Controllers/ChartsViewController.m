@@ -39,7 +39,7 @@
     _chart.CanvasAreaBackgroundColor = [UIColor clearColor];
     _chart.borderColor = [UIColor blackColor];
     _chart.gestureDoubleTapResetsZoom = YES;
-    _chart.hidden = NO;
+    _chart.hidden = YES;
     _chart.tag = 1;
     
     _chart.BorderColor = [UIColor clearColor];
@@ -53,10 +53,17 @@
     xAxis.enableGesturePanning = YES;
     xAxis.enableGestureZooming = NO;
     xAxis.style.majorTickStyle.labelFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-        int max= [[_diccionario valueForKey:title] count];
+    int max= [[_diccionario valueForKey:title] count];
     
     [xAxis setDefaultRange:[[SChartNumberRange alloc] initWithMinimum:@0 andMaximum:[NSNumber numberWithInt:max]]];
 
+        
+    xAxis.style.majorGridLineStyle.lineWidth = @1;
+    //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    xAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+    xAxis.style.majorGridLineStyle.showMajorGridLines = YES;
+
+        
     xAxis.allowPanningOutOfDefaultRange =YES;
     _chart.xAxis = xAxis;
     
@@ -67,13 +74,18 @@
     yAxis.enableGesturePanning = YES;
     yAxis.zoomInLimit = 5;
 
+        
+    yAxis.style.majorGridLineStyle.lineWidth = @1;
+    //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    yAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+    yAxis.style.majorGridLineStyle.showMajorGridLines = YES;
     //[yAxis setRangeWithMinimum:@0 andMaximum:@15];
     
     _chart.yAxis = yAxis;
         
     columnDataSource.reporte = title;
     _chart.datasource = columnDataSource;
-        _chart.legend.hidden = NO;
+        _chart.legend.hidden = YES;
         [self.view addSubview:_chart];
 
     }
@@ -157,7 +169,7 @@
     if(!self._barChart){
         _barChart = [[ShinobiChart alloc] initWithFrame:self.view.bounds];
         
-        _barChart.hidden =YES;
+        _barChart.hidden =NO;
         [self updateBarTitle:title];
         _barChart.autoresizingMask =  ~UIViewAutoresizingNone;
         _barChart.BackgroundColor = [UIColor clearColor];
@@ -186,6 +198,10 @@
         [xAxis setRangeWithMinimum:@0.5 andMaximum:@15];
         xAxis.rangePaddingHigh = @1.0;
 
+        xAxis.style.majorGridLineStyle.lineWidth = @1;
+        //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        xAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+        xAxis.style.majorGridLineStyle.showMajorGridLines = YES;
 
         
         xAxis.allowPanningOutOfDefaultRange =YES   ;
@@ -195,6 +211,11 @@
         yAxis.rangePaddingHigh = @1.0;
         yAxis.enableGestureZooming = NO;
         yAxis.enableGesturePanning = YES;
+        
+        yAxis.style.majorGridLineStyle.lineWidth = @1;
+        //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        yAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+        yAxis.style.majorGridLineStyle.showMajorGridLines = YES;
         
         _barChart.yAxis = yAxis;
 
@@ -336,7 +357,7 @@
 
     columnDataSource = [[ColumnChartDataSource alloc]initWithData:_diccionario displayReporte:@"totalInvertido"];
     pieDataSource = [[PieChartDataSource alloc] initWithData:_diccionario displayReporte:@"totalInvertido"];
-    [self prepareColumnChartWithTitle:@"totalInvertido"];
+    [self prepareBarChartWithTitle:@"totalInvertido"];
     [self preparePieChartWithTitle:@"totalInvertido"];
     [self prepareDonutChartWithTitle:@"totalInvertido"];
 
