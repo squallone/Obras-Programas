@@ -1325,7 +1325,6 @@ const NSInteger numberOfResults = 50;
     [cell hideUtilityButtonsAnimated:YES];
 }
 
-
 #pragma mark - Spread View Datasource
 
 - (NSInteger)numberOfColumnSectionsInSpreadView:(MDSpreadView *)aSpreadView{
