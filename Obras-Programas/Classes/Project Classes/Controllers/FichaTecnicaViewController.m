@@ -11,6 +11,8 @@
 #import "FirstColumnTableViewController.h"
 #import "SecondColumnTableViewController.h"
 #import "ThirdColumnTableViewController.h"
+#import "SDWebImageManager.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 
 @interface FichaTecnicaViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imagenBanner;
@@ -31,6 +33,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    [_imagenLogoDependencia setImageWithURL:self.obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+
     // Do any additional setup after loading the view.
 }
 

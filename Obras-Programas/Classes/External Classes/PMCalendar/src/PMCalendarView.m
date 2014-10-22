@@ -190,8 +190,8 @@
                                          inContext:context];
     }
     
-    int month = currentMonth;
-    int year = currentYear;
+    int month = (int)currentMonth;
+    int year = (int)currentYear;
 
     
 	NSString *monthTitle = [NSString stringWithFormat:@"%@ %d", [monthTitles objectAtIndex:(month - 1)], year];
@@ -381,7 +381,7 @@
     NSInteger index = [self indexForDate:_period.startDate];
     NSInteger length = [_period lengthInDays];
     
-    int numDaysInMonth      = [_currentDate numberOfDaysInMonth];
+    int numDaysInMonth      = (int)[_currentDate numberOfDaysInMonth];
     NSDate *monthStartDate  = [_currentDate monthStartDate];
     NSInteger monthStartDay = [monthStartDate weekday];
     monthStartDay           = (monthStartDay + (self.mondayFirstDayOfWeek?5:6)) % 7;

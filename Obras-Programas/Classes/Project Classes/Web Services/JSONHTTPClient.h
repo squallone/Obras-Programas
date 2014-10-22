@@ -13,7 +13,7 @@
 @interface JSONHTTPClient : AFHTTPSessionManager
 
 @property (nonatomic, weak) id<JSONHTTPClientDelegate>delegate;
-
+@property (nonatomic, strong) NSString *servletName;
 + (JSONHTTPClient *)sharedJSONAPIClient;
 
 - (instancetype)initWithBaseURL:(NSURL *)url;

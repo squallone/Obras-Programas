@@ -46,7 +46,8 @@ typedef NS_OPTIONS(NSInteger, ReportOption)
 
 extern NSString * const kDbName;
 extern NSString * const kAppURL; //http://desarrollo.smartthinking.com.mx:8080/versailles_intranet/
-
+extern NSString * const kAppImagenesDependencia;
+extern NSString * const kImageNamePlaceHolder;
 /////////////       Server
 /******************************************************/
 
@@ -149,7 +150,10 @@ extern NSString * const kKeyListaReporteGeneral;
 
 //              Parameters Servlet Buscar
 /******************************************************/
-
+extern NSString * const kParamDenominacion;
+extern NSString * const kParamIdObra;
+extern NSString * const kParamIdPrograma;
+extern NSString * const kParamBusquedaRapida;
 extern NSString * const kParamTipoDeObra;
 extern NSString * const kParamDependencia;
 extern NSString * const kParamEstado;

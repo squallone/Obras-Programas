@@ -96,14 +96,15 @@ CGFloat const kAnimationDuration = 0.2f;
         offset = ([table_ contentSize].height - [table_ contentOffset].y) - CGRectGetHeight([table_ frame]);
     }
     
-    return offset + self.contentInset.bottom;
+    return offset;
 }
 
 /*
  * Relocate pull-to-refresh view
  */
 - (void)relocatePullToRefreshView {
-        
+    
+    [pullToRefreshView_ removeFromSuperview];
     CGFloat yOrigin = 0.0f;
     
     if ([table_ contentSize].height >= CGRectGetHeight([table_ frame])) {
@@ -120,8 +121,6 @@ CGFloat const kAnimationDuration = 0.2f;
     [pullToRefreshView_ setFrame:frame];
     
     [table_ addSubview:pullToRefreshView_];
-    
-    self.table.contentInset = self.contentInset;
 }
 
 /*
@@ -179,13 +178,11 @@ CGFloat const kAnimationDuration = 0.2f;
                 
                 if ([table_ contentSize].height >= CGRectGetHeight([table_ frame])) {
                 
-                    UIEdgeInsets insets = self.contentInset;
-                    insets.bottom -= height;
-                    [table_ setContentInset:insets];
+                    [table_ setContentInset:UIEdgeInsetsMake(0.0f, 0.0f, -height, 0.0f)];
                     
                 } else {
                     
-                    [table_ setContentInset:self.contentInset];
+                    [table_ setContentInset:UIEdgeInsetsMake(height, 0.0f, 0.0f, 0.0f)];
                 }
             }];
         }
@@ -197,7 +194,7 @@ CGFloat const kAnimationDuration = 0.2f;
  */
 - (void)tableViewReloadFinished {
     
-    [table_ setContentInset:self.contentInset];
+    [table_ setContentInset:UIEdgeInsetsZero];
 
     [self relocatePullToRefreshView];
 

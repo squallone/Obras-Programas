@@ -21,6 +21,6 @@
  * WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. 
  */
 
-"MNM_BOTTOM_PTR_PULL_TEXT" = "Потяни для обновления…";
-"MNM_BOTTOM_PTR_RELEASE_TEXT" = "Отпусти для обновления…";
-"MNM_BOTTOM_PTR_LOADING_TEXT" = "Обновление…";
+"MNM_BOTTOM_PTR_PULL_TEXT" = "Tira para buscar mas...";
+"MNM_BOTTOM_PTR_RELEASE_TEXT" = "Suelta ahora!";
+"MNM_BOTTOM_PTR_LOADING_TEXT" = "Buscando...";

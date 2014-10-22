@@ -31,7 +31,8 @@
 #import "GraficasViewController.h"
 #import "MZFormSheetController.h"
 #import "ConsultasGuardadasTableViewController.h"
-
+#import "SDWebImageManager.h"
+#import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 
 #define METERS_PER_MILE 1609.344
 
@@ -159,8 +160,13 @@
 
 @property (nonatomic, assign) MainSearchFields searchField;
 @property (nonatomic, strong) JSONHTTPClient *jsonClient;
+@property (nonatomic, strong) MNMBottomPullToRefreshManager *pullToRefreshManager;
 @property (nonatomic, strong) NSNumberFormatter *currencyFormatter;
 @property ReportOption reportOption;
+@property (nonatomic, strong) CLLocationManager *locationManager;
+@property int numTotalPages;
+@property int numCurrentPage;
+@property BOOL isFromMainQuery;
 
 @end
 
@@ -168,13 +174,66 @@
 
 #pragma mark - View Life cycle
 
+- (void)viewDidLayoutSubviews {
+    
+    [super viewDidLayoutSubviews];
+    [_pullToRefreshManager relocatePullToRefreshView];
+}
+
+
 - (void)viewDidLoad {
     
     [super viewDidLoad];
     
+    /* Setting up Views */
+    [self setupUI];
+    [self initializeData];
+
+    /* Hide TableView */
+    [self hideSearchList:nil];
+    [self hideReporteView:nil];
+    /* Load Saved Selections */
+    [self loadSelections];
+    [self changeAllBackgrounds];
+}
+
+#pragma mark - Initialize
+
+-(void)initializeData{
+    
     [TSMessage setDefaultViewController:self];
+    _pullToRefreshManager = [[MNMBottomPullToRefreshManager alloc] initWithPullToRefreshViewHeight:60.0f tableView:_tableView withClient:self];
+    
+    /*  Menu items */
+    
+    _menuData       = @[@"Consultas guardadas", @"Registros guardados", @"Acerca de"];
+    
+    _titleFields    = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
+                        @{@"title": @"Obras",      @"sortKey": @"numeroObras"},
+                        @{@"title": @"Inversión",  @"sortKey": @"totalInvertido"}];
+    ;
+    
     _mapView.delegate = self;
     _mapView.showsUserLocation = YES;
+    
+    _locationManager = [[CLLocationManager alloc] init];
+    _locationManager.distanceFilter = kCLDistanceFilterNone; //whenever we move
+    _locationManager.desiredAccuracy = kCLLocationAccuracyBest;
+    
+#ifdef __IPHONE_8_0
+    NSUInteger code = [CLLocationManager authorizationStatus];
+    if (code == kCLAuthorizationStatusNotDetermined && ([self.locationManager respondsToSelector:@selector(requestAlwaysAuthorization)] || [self.locationManager respondsToSelector:@selector(requestWhenInUseAuthorization)])) {
+        // choose one request according to your business.
+        if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationAlwaysUsageDescription"]){
+            [self.locationManager requestAlwaysAuthorization];
+        } else if([[NSBundle mainBundle] objectForInfoDictionaryKey:@"NSLocationWhenInUseUsageDescription"]) {
+            [self.locationManager  requestWhenInUseAuthorization];
+        } else {
+            NSLog(@"Info.plist does not contain NSLocationAlwaysUsageDescription or NSLocationWhenInUseUsageDescription");
+        }
+    }
+#endif
+    [self.locationManager startUpdatingLocation];
     
     /* Number Formatter */
     
@@ -182,7 +241,7 @@
     [_currencyFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     
     /* Inaugurador, Suceptible Data for Array*/
-    
+
     NSArray *options = @[@"Si", @"No"];
     
     _inauguratorOptionData = options;
@@ -194,13 +253,12 @@
     QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"" image:[UIImage imageNamed:@"trash"] target:self action:@selector(deleteStartDate:)];
     QBPopupMenuItem *item3 = [QBPopupMenuItem itemWithTitle:@"Fecha final" target:self action:@selector(displayEndCalendar:)];
     QBPopupMenuItem *item4 = [QBPopupMenuItem itemWithTitle:@"" image:[UIImage imageNamed:@"trash"] target:self action:@selector(deleteEndDate:)];
-
     NSArray *items = @[item, item2, item3, item4];
     
     QBPopupMenu *popupMenu = [[QBPopupMenu alloc] initWithItems:items];
+    popupMenu.color = [UIColor darkGrayColor];
     popupMenu.highlightedColor = [[UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0] colorWithAlphaComponent:0.8];
     self.popupMenu = popupMenu;
-
     
     QBPopupMenuItem *item10 = [QBPopupMenuItem itemWithTitle:@"Limpiar consulta" target:self action:@selector(cleanQuery:)];
     QBPopupMenuItem *item11 = [QBPopupMenuItem itemWithTitle:@"Ver detalle consulta" target:self action:@selector(displayQueryDetail:)];
@@ -208,9 +266,10 @@
     NSArray *itemsMoreButton = @[item10, item11];
     
     self.morePopupMenu = [[QBPopupMenu alloc] initWithItems:itemsMoreButton];
+    self.morePopupMenu.color = [UIColor darkGrayColor];
     self.morePopupMenu.highlightedColor = [[UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0] colorWithAlphaComponent:0.8];
-
-
+    
+    
     /* Date Formatters */
     
     _dateFormatterShort = [[NSDateFormatter alloc]init];
@@ -219,25 +278,22 @@
     _dateFormatterGeneral = [[NSDateFormatter alloc]init];
     [_dateFormatterGeneral setDateFormat:@"yyyy-MM-dd"];
 
-    /* Setting up Views */
-    [self setupUI];
-    /* Hide TableView */
-    [self hideSearchList:nil];
-    [self hideReporteView:nil];
+}
 
-    /*  Menu items */
+-(void)initializeCalendar{
     
-    _menuData       = @[@"Consultas guardadas", @"Registros guardados", @"Acerca de"];
-    
-    _titleFields    = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
-                        @{@"title": @"Obras",      @"sortKey": @"numeroObras"},
-                        @{@"title": @"Inversión",  @"sortKey": @"totalInvertido"}];
-           ;
-    
-    /* Load Saved Selections */
+    self.pmCC = [[PMCalendarController alloc] initWithThemeName:@"default"];
+    self.pmCC.delegate = self;
+    self.pmCC.allowsPeriodSelection = NO;
+    self.pmCC.mondayFirstDayOfWeek = NO;
+    self.pmCC.period = [PMPeriod oneDayPeriodWithDate:[NSDate date]];
+    [self calendarController:self.pmCC didChangePeriod:self.pmCC.period];
+}
+
+
+-(void)loadSelections{
     
     _dependenciesSavedData      = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreDependencies];
-    
     _statesSavedData            = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreStates];
     _impactsSavedData           = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreImpact];
     _clasificationsSavedData    = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreClasification];
@@ -252,9 +308,8 @@
     _lblEndIniDate.text         = [_dateFormatterShort stringFromDate:_fechaFin];
     _fechaFinSegunda            = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreEndEndDate];
     _lblEndEndDate.text         = [_dateFormatterShort stringFromDate:_fechaFinSegunda];
-        _inauguratorOptionSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreInauguradaOption];
+    _inauguratorOptionSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreInauguradaOption];
     _susceptibleOptionSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSusceptibleOption];
-    [self changeAllBackgrounds];
 }
 
 -(void)changeAllBackgrounds{
@@ -326,7 +381,6 @@
     
     self.navigationItem.titleView = _btnWorksPrograms;
 }
-
 
 -(void)setupUI{
     
@@ -437,6 +491,13 @@
 
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
     
+    if ([client.servletName isEqualToString:kServletBuscar]) {
+        if (_isFromMainQuery) {
+        } [kAppDelegate notShowActivityIndicator:M13ProgressViewActionFailure whithMessage:@"Se ha perdido\nla conexión" delay:2.6];
+    
+        [_pullToRefreshManager tableViewReloadFinished];
+    }
+
     NSLog(@"Error : %@", [error localizedDescription]);
 }
 
@@ -561,7 +622,6 @@
 - (IBAction)displayReportByDependency:(id)sender {
     
     _reportOption = r_dependency;
-    
     [_spreadView reloadData];
 
 }
@@ -610,8 +670,13 @@
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Nombre_Inaugura];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Inaugurada];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Suscpetible];
-    self.txtRangoMaximo.text = @"";
-    self.txtRangoMinimo.text = @"";
+    self.txtRangoMaximo.text    = @"";
+    self.txtRangoMinimo.text    = @"";
+    self.txtDenominacion.text   = @"";
+    self.txtIDObraPrograma.text = @"";
+    _numCurrentPage = 0;
+    _numTotalPages = 0;
+    
     [self changeAllBackgrounds];
     [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:@"Se han limpiado\nlos campos de\nbúsqueda" delay:1.5];
 }
@@ -677,16 +742,6 @@
     [self showCalendarControl];
 }
 
-
--(void)initializeCalendar{
-    
-    self.pmCC = [[PMCalendarController alloc] initWithThemeName:@"default"];
-    self.pmCC.delegate = self;
-    self.pmCC.allowsPeriodSelection = NO;
-    self.pmCC.mondayFirstDayOfWeek = NO;
-    self.pmCC.period = [PMPeriod oneDayPeriodWithDate:[NSDate date]];
-    [self calendarController:self.pmCC didChangePeriod:self.pmCC.period];
-}
 
 -(void)deleteStartDate:(id)sender{
     
@@ -757,22 +812,31 @@
         [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_fechaFinSegunda forKey:kKeyStoreEndEndDate];
 
     }
-    
 }
 
 
 #pragma mark - *************  REQUEST TO SERVER MAIN QUERY
 
-const NSInteger numberOfResults = 50;
-
 /* Realizar consulta */
 
-- (IBAction)perfomQuery:(id)sender {
+- (IBAction)performQuery:(id)sender {
     
-    NSDictionary *parameters = [self buildServletParameters];
-    NSLog(@"%@", parameters);
-    [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
+    _numTotalPages = 0;
+    _numCurrentPage = 0;
+    _isFromMainQuery = YES;
+    _tableViewData = [NSMutableArray array];
+    [self perfomQueryWithParameters];
+}
+
+const int numResultsPerPage = 200;
+
+-(void)perfomQueryWithParameters{
     
+    NSMutableDictionary *parameters = [self buildServletParameters];
+    //int limiteMin = _numCurrentPage * numResultsPerPage;
+    [parameters setObject:[NSString stringWithFormat:@"%d", numResultsPerPage] forKey:kParamLimiteMax];
+    [parameters setObject:[NSString stringWithFormat:@"%d", _numCurrentPage * numResultsPerPage]  forKey:kParamLimiteMin];
+    if (_isFromMainQuery)[kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
     [_jsonClient performPOSTRequestWithParameters:parameters toServlet:kServletBuscar withOptions:@"obras"];
 }
 
@@ -782,12 +846,17 @@ const NSInteger numberOfResults = 50;
     
     NSDictionary *objectsResponse = response;
     
-    _tableViewData          = objectsResponse[kKeyListaObras];
+    NSArray *results = objectsResponse[kKeyListaObras];
+    
+    [_tableViewData addObjectsFromArray:results];
     _stateReportData        = objectsResponse[kKeyListaReporteEstado];
     _dependenciesReportData = objectsResponse[kKeyListaReporteDependencia];
     NSArray *generalData    = objectsResponse[kKeyListaReporteGeneral];
     
-    [self.tableView reloadData];
+    [_tableView reloadData];
+    [_pullToRefreshManager tableViewReloadFinished];
+
+    NSLog(@"%lu", (unsigned long)_tableViewData.count);
     
     /* Animaciones para el TableView */
     if (_tableView.isHidden) {
@@ -805,27 +874,57 @@ const NSInteger numberOfResults = 50;
     }
     
     /* Muestra los pines en el mapa */
-    [self displayPinsMapView];
     
+    NSString *numObras = @"0";
+
+    if (generalData.count > 0) {
+        _general = generalData[0];
+        numObras = [NSString stringWithFormat:@"%@", _general.numeroObras];
+        _numTotalPages = ceil([numObras floatValue]/numResultsPerPage);
+    }
     
     if (_tableViewData.count>0) {
-        
-        NSString *numObras = @"0";
-        
-        if (generalData>0) {
-            _general = generalData[0];
-            numObras = [NSString stringWithFormat:@"%@", _general.numeroObras];
+        if (_isFromMainQuery) {
+            NSString *mesage = [NSString stringWithFormat:@"%@ resultados\nencontrados", numObras];
+            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:mesage delay:2.0];
         }
-        NSString *mesage = [NSString stringWithFormat:@"%@ resultados\nencontrados", numObras];
-        [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:mesage delay:2.0];
-        
     }else{
         [kAppDelegate notShowActivityIndicator:M13ProgressViewActionNone whithMessage:@"Sin resultados" delay:1.0];
     }
-    _spreadView.delegate = self;
-    _spreadView.dataSource = self;
-    [_spreadView reloadData];
+    
+    if (_isFromMainQuery) {
+        [self displayPinsMapView];
+        _spreadView.delegate = self;
+        _spreadView.dataSource = self;
+        [_spreadView reloadData];
+    }
+}
 
+#pragma mark -
+#pragma mark MNMBottomPullToRefreshManagerClient
+
+
+- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
+    [_pullToRefreshManager tableViewScrolled];
+}
+
+- (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
+    [_pullToRefreshManager tableViewReleased];
+}
+
+- (void)bottomPullToRefreshTriggered:(MNMBottomPullToRefreshManager *)manager {
+    
+    [self performSelector:@selector(loadTable) withObject:nil afterDelay:1.0f];
+}
+
+- (void)loadTable {
+    _numCurrentPage ++;
+    if (_numCurrentPage < _numTotalPages) {
+        _isFromMainQuery = NO;
+        [self perfomQueryWithParameters];
+    }else{
+        [_pullToRefreshManager tableViewReloadFinished];
+    }
 }
 
 #pragma mark - Guardar Consulta
@@ -893,11 +992,18 @@ const NSInteger numberOfResults = 50;
 
 #pragma mark - Servlet Parameters
 
--(NSDictionary *)buildServletParameters{
+-(NSMutableDictionary *)buildServletParameters{
     
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *parameterValue = @"";
     
+    if (self.txtDenominacion.text.length>0) {
+        [parameters setObject:self.txtDenominacion.text forKey:kParamDenominacion];
+    }
+    
+    if (self.txtIDObraPrograma.text.length>0) {
+        [parameters setObject:self.txtIDObraPrograma.text forKey:kParamIdObra];
+    }
     
     /* Tipo de Obra */
     
@@ -965,7 +1071,6 @@ const NSInteger numberOfResults = 50;
             [parameters setObject:minFloat forKey:kParamInversionMinima];
         }
     }
-    
     
     /* Tipo de inversión */
     
@@ -1051,12 +1156,6 @@ const NSInteger numberOfResults = 50;
         [parameters setObject:dateStr forKey:kParamFechaFinSegunda];
     }
     
-    /*Limite */
-    
-    [parameters setObject:@"0"  forKey:kParamLimiteMin];
-    [parameters setObject:@"5000000" forKey:kParamLimiteMax];
-
-
     return parameters;
 }
 
@@ -1275,7 +1374,7 @@ const NSInteger numberOfResults = 50;
     cell.lblDenominacion.text   = obra.denominacion;
     cell.lblIdObraPrograma.text = obra.idObra;
     cell.lblEstado.text         = obra.estado.nombreEstado;
-    
+    [cell.logoImageView setImageWithURL:obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     //SWTableViewCel
     
     cell.rightUtilityButtons = [self rightButtons];
@@ -1500,8 +1599,8 @@ const NSInteger numberOfResults = 50;
     NSNumberFormatter *numberFormatter = [[NSNumberFormatter alloc] init];
     [numberFormatter setNumberStyle:NSNumberFormatterCurrencyStyle];
     
-    [numberFormatter setMaximumFractionDigits:1];
-    [numberFormatter setMinimumFractionDigits:1];
+    [numberFormatter setMaximumFractionDigits:2];
+    [numberFormatter setMinimumFractionDigits:2];
     
     NSString *stringMaybeChanged = [NSString stringWithString:string];
     if (stringMaybeChanged.length > 1)
