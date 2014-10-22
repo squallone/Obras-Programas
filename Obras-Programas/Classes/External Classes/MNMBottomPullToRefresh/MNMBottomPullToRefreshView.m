@@ -99,7 +99,7 @@
     if (self = [super initWithFrame:frame]) {
         
         [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleLeftMargin | UIViewAutoresizingFlexibleRightMargin];
-        [self setBackgroundColor:UIColor.clearColor];
+        [self setBackgroundColor:[UIColor colorWithWhite:0.75f alpha:1.0f]];
         
         containerView_ = [[UIView alloc] initWithFrame:CGRectMake(0.0f, 0.0f, CGRectGetWidth(frame), CGRectGetHeight(frame))];
         
@@ -117,7 +117,7 @@
         
         [containerView_ addSubview:iconImageView_];
         
-        loadingActivityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        loadingActivityIndicator_ = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:UIActivityIndicatorViewStyleWhite];
         [loadingActivityIndicator_ setCenter:[iconImageView_ center]];
         [loadingActivityIndicator_ setHidesWhenStopped:YES];
         [loadingActivityIndicator_ setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
@@ -129,7 +129,7 @@
         
         messageLabel_ = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(iconImageView_.frame) + gap, topMargin, CGRectGetWidth(frame) - CGRectGetMaxX([iconImageView_ frame]) - gap * 2.0f, CGRectGetHeight(frame) - topMargin * 2.0f)];
         [messageLabel_ setBackgroundColor:[UIColor clearColor]];
-        [messageLabel_ setTextColor:[UIColor colorWithRed:0.56 green:0.61 blue:0.68 alpha:1]];
+        [messageLabel_ setTextColor:[UIColor whiteColor]];
         [messageLabel_ setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin];
         
         [containerView_ addSubview:messageLabel_];
@@ -153,7 +153,7 @@
     
     [super layoutSubviews];
     
-    CGSize messageSize = [[messageLabel_ text] sizeWithFont:[messageLabel_ font]];
+    CGSize messageSize = [messageLabel_.text sizeWithAttributes: @{NSFontAttributeName: [messageLabel_ font]}];
     
     CGRect frame = [messageLabel_ frame];
     frame.size.width = messageSize.width;
@@ -190,7 +190,8 @@
             
             if (rotateIconWhileBecomingVisible_) {
             
-                CGFloat angle = (-offset * M_PI) / self.fixedHeight;                
+                CGFloat angle = (-offset * M_PI) / CGRectGetHeight([self frame]);
+                
                 [iconImageView_ setTransform:CGAffineTransformRotate(CGAffineTransformIdentity, angle)];
                 
             } else {

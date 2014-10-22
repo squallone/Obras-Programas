@@ -19,7 +19,7 @@
 
 typedef NS_OPTIONS(NSInteger, TypeSelection)
 {
-    t_DeleteAllNoTodo  = 0,
+    t_DeleteAllWithoutTodo  = 3,
     t_Disable_Todo          = 1,
     t_Enable_Todo           = 2
 };
@@ -43,11 +43,16 @@ const NSInteger rowHeight = 45;
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
         
         /* Initialize instance variables */
-        _typeSelection = t_Enable_Todo;
+   
         self.dataSource     = datasource;
         self.dataToMark     = [loadData count] > 0 ? loadData : [NSArray new];
         
         self.dataSelected   = [NSMutableArray arrayWithArray:self.dataToMark];
+        
+        if (_dataSelected.count == 0 && _field != e_Tipo) {
+            _typeSelection = t_Enable_Todo;
+        }
+        
         self.isMenu         = option;
         self.field          = field;
         
@@ -73,18 +78,15 @@ const NSInteger rowHeight = 45;
                 largestLabelWidth = labelSize.width;
             }
         }
-        
         //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 50;
-        popoverWidth = _isMenu || _field == e_Inaugurada || _field == e_Suscpetible ? popoverWidth + 50 : popoverWidth;
+        popoverWidth = _isMenu || _field == e_Inaugurada || _field == e_Suscpetible  || _field == e_Tipo ? popoverWidth + 50 : popoverWidth;
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
         self.preferredContentSize = _size;
         self.tableView.frame = CGRectMake(0, 0, _size.width, _size.height);
-
     }
-    
     return self;
 }
 
@@ -164,26 +166,26 @@ const NSInteger rowHeight = 45;
     }else{
         if (indexPath.row != 0) {
             cell.textLabel.text = value;
-            if (_typeSelection == t_DeleteAllNoTodo) {
+            if (_cleanSelection == t_DeleteAllWithoutTodo) {
                 cell.accessoryType = UITableViewCellAccessoryNone;
 
-            }
-            for (id objectModel in _dataToMark) {
-                NSString *valueToCheck = [self textToDisplay:objectModel];
-                
-                if ([valueToCheck isEqualToString:value]) {
-                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                    [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+            }else{
+                for (id objectModel in _dataSelected) {
+                    NSString *valueToCheck = [self textToDisplay:objectModel];
+                    
+                    if ([valueToCheck isEqualToString:value]) {
+                        cell.accessoryType = UITableViewCellAccessoryCheckmark;
+                        [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                    }
                 }
             }
+            
         }else{
-            cell.textLabel.text = @"TODO";
-            if (_dataToMark.count==0) {
-                if (_typeSelection == t_Enable_Todo) {
-                    cell.accessoryType = UITableViewCellAccessoryCheckmark;
-                }else if (_typeSelection == t_Disable_Todo) {
-                    cell.accessoryType = UITableViewCellAccessoryNone;
-                }
+            cell.textLabel.text = _field == e_Tipo ? @"OBRAS TOTALES" : @"TODO";
+            if (_typeSelection == t_Enable_Todo) {
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            }else if (_typeSelection == t_Disable_Todo) {
+                cell.accessoryType = UITableViewCellAccessoryNone;
             }
         }
     }
@@ -198,34 +200,79 @@ const NSInteger rowHeight = 45;
 {
     //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
     if (!_isMenu) {
-
+       
         if (indexPath.row !=0) {
-            _typeSelection = t_Disable_Todo;
-
-            [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
-            [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
             
             id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row-1];
-            
-            if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
-                [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
-            }
-            [_dataSelected addObject:dataForSelectedRow];
-        }else{
-            //Cuando la selección es todo
-            [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];
-
-            for (int i= 0; i<self.dataSource.count; i++) {
-                if (i!=0) {
-                    [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+            NSString *value = [self textToDisplay:dataForSelectedRow];
+            if ([value isEqualToString:@"PROGRAMAS"]) {
+                //Cuando la selección es PROGRMAS
+                //Deshabilitamos las OBRAS TOTALES
+                [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                
+                for (int i= 0; i<self.dataSource.count+1; i++) {
+                    if (i!= self.dataSource.count) {
+                        [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                        id dataForSelectedRow = [self.dataSource objectAtIndex:i];
+                        [_dataSelected removeObject:dataForSelectedRow];
+                    }
                 }
+                _typeSelection = t_Disable_Todo;
+
+                [self.tableView reloadData];
+
+                //Seleccionamos la celda de PROGRAMAS
+                [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:self.dataSource.count inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];
+                //Quitamos las demas selecciones
+                
+                [_dataSelected addObject:dataForSelectedRow];
+
+                //[self.dataSelected removeAllObjects];
+
+            }else{
+                _typeSelection = t_Disable_Todo;
+                _cleanSelection = t_Disable_Todo;
+                [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryCheckmark];
+                
+                //Para la selección de tipo de obra o programa, deseleccionamos el ulitmo registro que corresponde a obras
+                if (_field == e_Tipo) {
+                    [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_dataSource.count inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                    id dataForSelectedRow = [self.dataSource objectAtIndex:_dataSource.count-1];
+                    
+                    [_dataSelected removeObject:dataForSelectedRow];
+
+                }
+    
+                if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
+                    [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
+                }
+                [_dataSelected addObject:dataForSelectedRow];
+
             }
-            _cleanSelection = t_DeleteAllNoTodo;
-            _typeSelection = t_Enable_Todo;
-            [self.dataSelected removeAllObjects];
-        }
+
+            }else{
+                //Cuando la selección es TODO
+                [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];
+                //Para la selección de tipo de obra o programa, deseleccionamos el ulitmo registro que corresponde a obras
+                if (_field == e_Tipo) {
+                    [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:_dataSource.count inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                  
+                }
+                for (int i= 0; i<self.dataSource.count; i++) {
+                    if (i!=0) {
+                        [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:i inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
+                    }
+                }
+                _cleanSelection = t_DeleteAllWithoutTodo;
+                _typeSelection = t_Enable_Todo;
+                [self.dataSelected removeAllObjects];
+                [self.tableView reloadData];
+            }
      
     }else{
+    /* MENU */
+        NSString *value  = [self.dataSource objectAtIndex:indexPath.row];
         NSArray *dataSource = [NSArray array];
         MenuOptions option;
         if (indexPath.row == 0) {
@@ -255,9 +302,13 @@ const NSInteger rowHeight = 45;
         }
         
         DetailTableViewController *detailViewController = [[DetailTableViewController alloc]initWithDataSource:dataSource menuOption:option];
+        detailViewController.title = value;
         [self.navigationController pushViewController:detailViewController animated:YES];   
     }
+    NSLog(@"add %@", _dataSelected);
 }
+
+
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -268,13 +319,15 @@ const NSInteger rowHeight = 45;
             [_dataSelected removeObject:dataForSelectedRow];
         }
     }
+    NSLog(@"delete %@", _dataSelected);
+
 }
 
 -(NSString *)textToDisplay:(id)objectModel{
     
     NSString *value = @"";
 
-    if (_isMenu) {
+    if (_isMenu || _field == e_Sort_Result) {
         value = objectModel;
     }else if (_field == e_Estado) {
         Estado *state = (Estado *)objectModel;

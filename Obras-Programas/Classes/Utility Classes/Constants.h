@@ -22,15 +22,17 @@ typedef NS_OPTIONS(NSInteger, MainSearchFields)
     e_Nombre_Inaugura = 7,
     e_Inaugurada      = 8,
     e_Suscpetible     = 9,
-    e_RangoInversion  = 10
-
+    e_RangoInversion  = 10,
+    e_Sort_Result     = 11
 };
 
 typedef NS_OPTIONS(NSInteger, MenuOptions)
 {
-    o_Consultas = 0,
-    o_Favoritos = 1,
-    o_AcercaDe  = 2
+    o_Consultas         = 0,
+    o_Favoritos         = 1,
+    o_AcercaDe          = 2,
+    o_Detalle_Consulta  = 3
+
 };
 
 typedef NS_OPTIONS(NSInteger, ReportOption)
@@ -44,7 +46,8 @@ typedef NS_OPTIONS(NSInteger, ReportOption)
 
 extern NSString * const kDbName;
 extern NSString * const kAppURL; //http://desarrollo.smartthinking.com.mx:8080/versailles_intranet/
-
+extern NSString * const kAppImagenesDependencia;
+extern NSString * const kImageNamePlaceHolder;
 /////////////       Server
 /******************************************************/
 
@@ -147,7 +150,10 @@ extern NSString * const kKeyListaReporteGeneral;
 
 //              Parameters Servlet Buscar
 /******************************************************/
-
+extern NSString * const kParamDenominacion;
+extern NSString * const kParamIdObra;
+extern NSString * const kParamIdPrograma;
+extern NSString * const kParamBusquedaRapida;
 extern NSString * const kParamTipoDeObra;
 extern NSString * const kParamDependencia;
 extern NSString * const kParamEstado;

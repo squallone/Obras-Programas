@@ -13,18 +13,19 @@
 /////////////       SERVER
 /******************************************************/
 
-#define kAppBaseProtocol    @"http://"
-#define kAppBaseURL         @"54.69.71.115"
-#define kAppBasePort        @":8080/"
-#define kAppIntranetPath    @"ObrasYProgramasBackend/"
-#define kAppFullURL         kAppBaseProtocol kAppBaseURL kAppBasePort kAppIntranetPath
+#define kAppBaseProtocol        @"http://"
+#define kAppBaseURL             @"54.69.71.115"
+#define kAppBasePort            @":8080/"
+#define kAppIntranetPath        @"ObrasYProgramasBackend/"
+#define kAppFullURL             kAppBaseProtocol kAppBaseURL kAppBasePort kAppIntranetPath
 
 /////////////       GENERAL
 /******************************************************/
 
 NSString * const kDbName = @"oyp";
 NSString * const kAppURL = kAppFullURL;
-
+NSString * const kAppImagenesDependencia =  @"imagenesDependencias/";
+NSString * const kImageNamePlaceHolder = @"no_image.jpg";
 //              Servlets
 /******************************************************/
 
@@ -136,6 +137,10 @@ NSString * const kKeyListaReporteGeneral        = @"listaReporteGeneral";
 //              Parameters Servlet Search
 /******************************************************/
 
+NSString * const kParamDenominacion         = @"denominacion";
+NSString * const kParamIdObra               = @"idObra";
+NSString * const kParamIdPrograma           = @"idObra";
+NSString * const kParamBusquedaRapida       = @"busquedaRapida";
 NSString * const kParamTipoDeObra           = @"tipoDeObra";
 NSString * const kParamDependencia          = @"dependencia";
 NSString * const kParamEstado               = @"estado";

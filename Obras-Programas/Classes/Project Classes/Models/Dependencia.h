@@ -15,5 +15,6 @@
 
 @property (nonatomic, strong) NSString *idDependencia;
 @property (nonatomic, strong) NSString *nombreDependencia;
+@property (nonatomic, strong) NSURL *imagenDependencia;
 
 @end

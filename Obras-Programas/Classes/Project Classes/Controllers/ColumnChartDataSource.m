@@ -39,8 +39,21 @@
         columnSeries.animationEnabled = YES;
         SChartAnimation *animation = [SChartAnimation growVerticalAnimation];
         columnSeries.entryAnimation = animation;
-        columnSeries.title = self.reporte       ;
-
+        columnSeries.title = self.reporte;
+        
+        //Display labels
+        columnSeries.style.dataPointLabelStyle.showLabels = YES;
+        
+        //Position labels
+        columnSeries.style.dataPointLabelStyle.offsetFromDataPoint = CGPointMake(0, -15);
+        columnSeries.style.dataPointLabelStyle.offsetFlippedForNegativeValues = YES;
+        
+        //Style labels
+        columnSeries.style.dataPointLabelStyle.textColor = [UIColor blackColor];
+        columnSeries.style.dataPointLabelStyle.displayValues = SChartDataPointLabelDisplayValuesY;
+        
+        
+        
         return columnSeries;
 
     }else if(chart.tag==4){
@@ -67,8 +80,17 @@
     SChartDataPoint *datapoint = [[SChartDataPoint alloc] init];
     
     NSDictionary* elementosReporte = [self dataForReport];
-    NSString* key = elementosReporte.allKeys[dataIndex];
     
+    
+    NSArray *sortedKeys = [[elementosReporte allKeys] sortedArrayUsingSelector: @selector(compare:)];
+    NSMutableArray *sortedValues = [NSMutableArray array];
+    for (NSString *key in sortedKeys) {
+        [sortedValues addObject: [elementosReporte objectForKey: key]];
+    }
+
+    
+    NSString* key = sortedKeys[dataIndex];
+
 
     datapoint.xValue = key;
     datapoint.yValue = elementosReporte[key];

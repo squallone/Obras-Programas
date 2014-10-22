@@ -28,11 +28,11 @@
     
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
         
+        _option = option;
         /* Initialize instance variables */
         self.navigationController.navigationBar.hidden = NO;
 
         self.dataSource     = dataSource;
-        _option = option;
         
         self.clearsSelectionOnViewWillAppear = NO;
         
@@ -58,16 +58,13 @@
                 largestLabelWidth = labelSize.width;
             }
         }
-        
         //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 90;
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
         self.preferredContentSize = _size;
     }
-    
     return self;
-    
 }
 
 - (void)viewDidLoad {
@@ -128,6 +125,7 @@
         
     }else if (_option == o_Favoritos){
         Obra *obra = _dataSource[indexPath.row];
+        [self dismissViewControllerAnimated:YES completion:nil];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:obra];
     }
 }

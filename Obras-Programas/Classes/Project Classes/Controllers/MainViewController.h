@@ -12,10 +12,11 @@
 #import "JSONHTTPClient.h"
 #import "PMCalendar.h"
 #import "SWTableViewCell.h"
+#import "MNMBottomPullToRefreshManager.h"
 
-@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate, SWTableViewCellDelegate, UITextFieldDelegate>
+@interface MainViewController : UIViewController <UISearchBarDelegate, UITabBarControllerDelegate, UITableViewDelegate, PopupListTableViewControllerDelegate, JSONHTTPClientDelegate, PMCalendarControllerDelegate, MKMapViewDelegate, SWTableViewCellDelegate, UITextFieldDelegate, MNMBottomPullToRefreshManagerClient>
 
-- (IBAction)perfomQuery:(id)sender;
+- (IBAction)performQuery:(id)sender;
 
 - (IBAction)performSaveQuery:(id)sender;
 

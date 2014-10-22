@@ -52,6 +52,7 @@
 
 -(void)performPOSTRequestWithParameters:(NSDictionary *)parameters toServlet:(NSString *)servletName withOptions:(NSString *)option{
     
+    self.servletName = servletName;
     //Ejectuta la petición al servidor
     
     [self POST:servletName parameters:parameters success:^(NSURLSessionDataTask *task, id responseObject) {
@@ -123,7 +124,7 @@
                 [self.delegate JSONHTTPClientDelegate:self didResponseToTypesOfWorksAndPrograms:worksProgramas];
             }
             
-        //Buscar
+        //Buscar y Reportes
         }else if ([servletName isEqualToString:kServletBuscar]){
             
             NSDictionary *JSONResponseDic = responseObject;
@@ -175,9 +176,6 @@
         [TSMessage showNotificationWithTitle:@"Lo sentimos, se perdido la conexión con el servidor"
                                     subtitle:[NSString stringWithFormat:@"%@\nMensaje: %@", @"Por favor intentalo de nuevo o contacta al administrador", errorStr]
                                         type:TSMessageNotificationTypeWarning];
-        if ([servletName isEqualToString:kServletBuscar]) {
-            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionFailure whithMessage:@"Se ha perdido\nla conexión" delay:2.6];
-        }
         
     }];
 }

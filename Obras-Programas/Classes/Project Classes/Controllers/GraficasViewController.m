@@ -110,8 +110,8 @@
     for(int i=0;i<[_dependenciesReportData count];i++){
         reporteDependencia = [_dependenciesReportData objectAtIndex:i];
         nombre = reporteDependencia.dependencia.nombreDependencia;
-        valorObrasDependencia = reporteDependencia.numeroObras;
-        valorInvertidoDependencia = reporteDependencia.totalInvertido;
+        valorObrasDependencia = [NSString stringWithFormat:@"%@", reporteDependencia.numeroObras];
+        valorInvertidoDependencia = [NSString stringWithFormat:@"%@", reporteDependencia.totalInvertido];
         
         [diccionarioNumeroObrasDependencias setObject:valorObrasDependencia forKey:nombre];
         [diccionarioTotalInvertidoDependencias setObject:valorInvertidoDependencia forKey:nombre];
@@ -164,27 +164,24 @@
 }
 
 - (IBAction)displayColumnChart:(id)sender {
-    
+    [chartController prepareColumnChartWithTitle:_tituloGrafica];
     [chartController activateColumn];
 }
 
 - (IBAction)displayPieChart:(id)sender {
     [chartController preparePieChartWithTitle:_tituloGrafica];
     [chartController activatePie];
-    NSLog(@"%@",_tituloGrafica);
 
 }
 
 - (IBAction)displayDonutChart:(id)sender {
     [chartController prepareDonutChartWithTitle:_tituloGrafica];
     [chartController activateDonut];
-    NSLog(@"%@",_tituloGrafica);
 }
 
 - (IBAction)displayBubbleChart:(id)sender {
     [chartController prepareBarChartWithTitle:_tituloGrafica];
     [chartController activateBar];
-    NSLog(@"%@",_tituloGrafica);
 
 }
 

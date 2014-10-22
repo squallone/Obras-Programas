@@ -7,6 +7,7 @@
 //
 
 #import "Dependencia.h"
+#import "MTLValueTransformer.h"
 
 @implementation Dependencia
 
@@ -15,9 +16,27 @@
     // model_property_name : json_field_name
     return @{
              @"idDependencia"    :kKeyDbIdDependencia,
-             @"nombreDependencia":kKeyDbNombreDependencia
+             @"nombreDependencia":kKeyDbNombreDependencia,
+             @"imagenDependencia":@"imagenDependencia"
+
              };
 }
 
++ (NSValueTransformer *)imagenDependenciaJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        NSURL *imageURL = nil;
+        
+        if (![str isEqualToString:@"null"]) {
+            NSString *imageStrURL = [NSString stringWithFormat:@"%@%@%@", kAppURL, kAppImagenesDependencia, str];
+            imageURL = [NSURL URLWithString:imageStrURL];
+        }
+        
+        return imageURL;
+        
+    } reverseBlock:^(NSDate *date) {
+        return @"";
+    }];
+}
 
 @end

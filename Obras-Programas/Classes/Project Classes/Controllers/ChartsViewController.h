@@ -7,11 +7,13 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <ShinobiCharts/ShinobiCharts.h>
+#import "LineView.h"
 @class ShinobiChart;
 @class ColumnChartDataSource;
 @class PieChartDataSource;
 
-@interface ChartsViewController : UIViewController
+@interface ChartsViewController : UIViewController <SChartDelegate>
 @property  NSDictionary* _diccionario;
 @property  ShinobiChart * _chart;
 @property ShinobiChart * _pieChart;
@@ -22,7 +24,7 @@
 
 @property ColumnChartDataSource * columnDataSource;
 @property PieChartDataSource * pieDataSource;
-
+@property LineView *lineView;
 -(void)activateColumn;
 -(void)activatePie;
 -(void)activateDonut;

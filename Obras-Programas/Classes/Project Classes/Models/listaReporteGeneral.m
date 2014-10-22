@@ -8,6 +8,7 @@
 
 #import "ListaReporteGeneral.h"
 #import "MTLValueTransformer.h"
+#import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
 
 @implementation ListaReporteGeneral
 
@@ -16,7 +17,7 @@
     // model_property_name : json_field_name
     return @{
              @"numeroObras"     :@"numeroRegistros",
-             @"totalInvertido"  :@"totalInvertido",
+             @"totalInvertido"  :@"totalInvertido"
              };
 }
 
@@ -27,7 +28,7 @@
         float value = [str floatValue];
         NSNumber *numero = [NSNumber numberWithFloat:value];
         return numero;
-    } reverseBlock:^(NSDate *date) {
+    } reverseBlock:^(NSNumber *numero) {
         return [NSNumber numberWithFloat:0.0];
     }];
 }
@@ -39,8 +40,9 @@
         float value = [str floatValue];
         NSNumber *total = [NSNumber numberWithFloat:value];
         return total;
-    } reverseBlock:^(NSDate *date) {
+    } reverseBlock:^(NSNumber *numero) {
         return [NSNumber numberWithFloat:0.0];
+        
     }];
 }
 
