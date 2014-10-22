@@ -81,7 +81,7 @@
 
     [f setNumberStyle:NSNumberFormatterCurrencyStyle];
     
-    NSNumber *number = [NSNumber numberWithInt:[self.obra.inversionTotal integerValue]];
+    NSNumber *number = [NSNumber numberWithFloat:[self.obra.inversionTotal floatValue]];
 
     
     if (indexPath.section == INVERSION) {

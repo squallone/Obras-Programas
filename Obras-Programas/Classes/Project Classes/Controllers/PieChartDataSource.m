@@ -36,6 +36,16 @@
         SChartPieSeries *pieSeries = [SChartPieSeries new];
         pieSeries.selectionMode = SChartSelectionPoint;
         pieSeries.animationEnabled = YES;
+        pieSeries.style.showLabels = YES;
+        pieSeries.gesturePanningEnabled = YES;
+        
+        pieSeries.style.chartEffect = SChartRadialChartEffectFlat;
+        pieSeries.selectedStyle.showLabels = YES;
+        pieSeries.selectedStyle.chartEffect = SChartRadialChartEffectFlat;
+        pieSeries.selectedStyle.labelFontColor = [UIColor blackColor];
+        pieSeries.selectedStyle.protrusion = 10.f;
+        pieSeries.selectedPosition = [NSNumber numberWithInt:45];
+        
         SChartAnimation *animation = [SChartAnimation growAnimation];
         
         pieSeries.entryAnimation = animation;
@@ -43,8 +53,9 @@
         
     }else if(chart.tag==3){
         SChartDonutSeries *donutSeries = [SChartDonutSeries new];
-        donutSeries.selectionMode = SChartSelectionPoint;
         donutSeries.animationEnabled = YES;
+        donutSeries.gesturePanningEnabled = YES;
+        donutSeries.selectedPosition = [NSNumber numberWithInt: 90];
         SChartAnimation *animation = [SChartAnimation growAnimation];
         
         donutSeries.entryAnimation = animation;
@@ -64,7 +75,14 @@
     SChartDataPoint *datapoint = [[SChartDataPoint alloc] init];
     NSDictionary* dataForReport = [self dataForReport];
 
-    NSString* key = dataForReport.allKeys[dataIndex];
+    NSArray *sortedKeys = [[dataForReport allKeys] sortedArrayUsingSelector: @selector(compare:)];
+    NSMutableArray *sortedValues = [NSMutableArray array];
+    for (NSString *key in sortedKeys) {
+        [sortedValues addObject: [dataForReport objectForKey: key]];
+    }
+
+    
+    NSString* key = sortedKeys[dataIndex];
     
     datapoint.xValue = key;
     datapoint.yValue = dataForReport[key];

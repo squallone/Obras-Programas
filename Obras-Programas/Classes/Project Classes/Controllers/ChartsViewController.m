@@ -10,6 +10,8 @@
 #import <ShinobiCharts/ShinobiCharts.h>
 #import "ColumnChartDataSource.h"
 #import "PieChartDataSource.h"
+#import <ShinobiCharts/SChartCanvas.h>
+
 
 @interface ChartsViewController ()
 
@@ -23,7 +25,7 @@
 @synthesize _pieChart;
 @synthesize _barChart;
 @synthesize pieDataSource;
-
+@synthesize lineView;
 
 -(void)prepareColumnChartWithTitle:(NSString *)title{
 
@@ -39,7 +41,7 @@
     _chart.CanvasAreaBackgroundColor = [UIColor clearColor];
     _chart.borderColor = [UIColor blackColor];
     _chart.gestureDoubleTapResetsZoom = YES;
-    _chart.hidden = NO;
+    _chart.hidden = YES;
     _chart.tag = 1;
     
     _chart.BorderColor = [UIColor clearColor];
@@ -53,10 +55,17 @@
     xAxis.enableGesturePanning = YES;
     xAxis.enableGestureZooming = NO;
     xAxis.style.majorTickStyle.labelFont = [UIFont fontWithName:@"HelveticaNeue-Light" size:10];
-        int max= [[_diccionario valueForKey:title] count];
+    int max= [[_diccionario valueForKey:title] count];
     
     [xAxis setDefaultRange:[[SChartNumberRange alloc] initWithMinimum:@0 andMaximum:[NSNumber numberWithInt:max]]];
 
+        
+    xAxis.style.majorGridLineStyle.lineWidth = @1;
+    //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    xAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+    xAxis.style.majorGridLineStyle.showMajorGridLines = YES;
+
+        
     xAxis.allowPanningOutOfDefaultRange =YES;
     _chart.xAxis = xAxis;
     
@@ -67,13 +76,19 @@
     yAxis.enableGesturePanning = YES;
     yAxis.zoomInLimit = 5;
 
+        
+    yAxis.style.majorGridLineStyle.lineWidth = @1;
+    //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+    yAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+    yAxis.style.majorGridLineStyle.showMajorGridLines = YES;
     //[yAxis setRangeWithMinimum:@0 andMaximum:@15];
     
     _chart.yAxis = yAxis;
         
     columnDataSource.reporte = title;
     _chart.datasource = columnDataSource;
-        _chart.legend.hidden = NO;
+        _chart.delegate = self;
+        _chart.legend.hidden = YES;
         [self.view addSubview:_chart];
 
     }
@@ -96,7 +111,6 @@
         _pieChart.PlotAreaBackgroundColor = [UIColor clearColor];
         _pieChart.CanvasAreaBackgroundColor = [UIColor clearColor];
         _pieChart.gestureDoubleTapResetsZoom = YES;
-        
         _pieChart.BorderColor = [UIColor clearColor];
         
         _pieChart.PlotAreaBorderColor = [UIColor clearColor];
@@ -105,6 +119,8 @@
         
         pieDataSource.reporte = title;
         _pieChart.datasource = pieDataSource;
+
+        _pieChart.delegate =self;
         _pieChart.legend.hidden = NO;
 
 
@@ -140,6 +156,7 @@
         pieDataSource.reporte = title;
 
         _donutChart.datasource = pieDataSource;
+        _donutChart.delegate=self;
         _donutChart.legend.hidden = NO;
         [self.view addSubview:_donutChart];
         
@@ -157,7 +174,7 @@
     if(!self._barChart){
         _barChart = [[ShinobiChart alloc] initWithFrame:self.view.bounds];
         
-        _barChart.hidden =YES;
+        _barChart.hidden =NO;
         [self updateBarTitle:title];
         _barChart.autoresizingMask =  ~UIViewAutoresizingNone;
         _barChart.BackgroundColor = [UIColor clearColor];
@@ -186,6 +203,10 @@
         [xAxis setRangeWithMinimum:@0.5 andMaximum:@15];
         xAxis.rangePaddingHigh = @1.0;
 
+        xAxis.style.majorGridLineStyle.lineWidth = @1;
+        //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        xAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+        xAxis.style.majorGridLineStyle.showMajorGridLines = YES;
 
         
         xAxis.allowPanningOutOfDefaultRange =YES   ;
@@ -196,8 +217,13 @@
         yAxis.enableGestureZooming = NO;
         yAxis.enableGesturePanning = YES;
         
+        yAxis.style.majorGridLineStyle.lineWidth = @1;
+        //xAxis.style.majorGridLineStyle.lineColor = [UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0];
+        yAxis.style.majorGridLineStyle.lineColor = [UIColor blackColor];
+        yAxis.style.majorGridLineStyle.showMajorGridLines = YES;
+        
         _barChart.yAxis = yAxis;
-
+        _barChart.delegate = self;
         
         [self.view addSubview:_barChart];
         
@@ -336,10 +362,15 @@
 
     columnDataSource = [[ColumnChartDataSource alloc]initWithData:_diccionario displayReporte:@"totalInvertido"];
     pieDataSource = [[PieChartDataSource alloc] initWithData:_diccionario displayReporte:@"totalInvertido"];
-    [self prepareColumnChartWithTitle:@"totalInvertido"];
+    [self prepareBarChartWithTitle:@"totalInvertido"];
     [self preparePieChartWithTitle:@"totalInvertido"];
     [self prepareDonutChartWithTitle:@"totalInvertido"];
 
+    lineView = [[LineView alloc] init];
+    [lineView setUserInteractionEnabled:NO];
+    [lineView setBackgroundColor:[UIColor clearColor]];
+    [_donutChart addSubview:lineView];
+    
 }
 
 - (void)didReceiveMemoryWarning {
@@ -354,6 +385,88 @@
     if(_donutChart) [self updateDonutTitle:title];
     if(_barChart)[self updateBarTitle:title];
 
+}
+
+
+//-(void)sChart:(ShinobiChart *)chart alterDataPointLabel:(SChartDataPointLabel *)label forDataPoint:(SChartDataPoint *)datapoint inSeries:(SChartSeries *)series
+//{
+//    //Do some additional label styling
+//    label.layer.cornerRadius = 10;
+//    label.backgroundColor = [UIColor colorWithWhite:.8 alpha:1];
+//    label.textAlignment = NSTextAlignmentCenter;
+//}
+
+#define EXTRUSION 90
+- (void)sChart:(ShinobiChart *)chart alterLabel:(UILabel *)label forDatapoint:(SChartRadialDataPoint *)datapoint atSliceIndex:(NSInteger)index inRadialSeries:(SChartRadialSeries *)series {
+    
+    if (chart == _pieChart) {
+        label.adjustsFontSizeToFitWidth = YES;
+        if (datapoint.value.floatValue < 5.f) {
+            label.text = @"";
+            
+        }  else if (datapoint.value.floatValue < 15.f) {
+            label.adjustsFontSizeToFitWidth = YES;
+            CGRect f = label.frame;
+            f.size.width = 35.f;
+            label.frame = f;
+        }
+    } else
+    if( chart == _donutChart){
+        SChartDonutSeries *pieSeries = (SChartDonutSeries *)series;
+        
+        //get our radial point from our datasource method
+        
+        // three points:
+        CGPoint pieCenter;      // chart center for trig calculations
+        CGPoint oldLabelCenter; // original label center
+        CGPoint labelCenter;    // new label center
+        CGPoint endOfLine;     // we want our line to finish just short of our label
+        
+        pieCenter = [pieSeries getDonutCenter];
+        oldLabelCenter = labelCenter = [pieSeries getSliceCenter:index];
+        
+        // find the angle of the slice, and add on a little to the label's center
+        float xChange, yChange;
+        
+        xChange = pieCenter.x - labelCenter.x;
+        yChange = pieCenter.y - labelCenter.y;
+        
+        float angle = atan2f(xChange, yChange) + M_PI / 2.f;
+        // we do the M_PI / 2 adjustment because of how the pie is drawn internally
+        
+        labelCenter.x = oldLabelCenter.x + EXTRUSION * cosf(angle);
+        labelCenter.y = oldLabelCenter.y - EXTRUSION * sinf(angle);
+        
+        endOfLine.x = oldLabelCenter.x + (EXTRUSION-30.f) * cosf(angle);
+        endOfLine.y = oldLabelCenter.y - (EXTRUSION-30.f) * sinf(angle);
+        
+        self.reporteSeleccionado = @"totalInvertido";
+        
+
+        [label setText:[NSString stringWithFormat:@"%@ , %@", datapoint.xValue,datapoint.yValue]];
+        label.textColor = [UIColor blackColor];
+        [label sizeToFit];
+        [label setCenter:labelCenter]; // this must be after sizeToFit
+        [label setHidden:NO];
+        
+        // connect our old label point to our new label
+        [lineView addPointPair:oldLabelCenter second:endOfLine forLabel:label];
+    }
+
+}
+
+- (void) sChartRenderStarted:(ShinobiChart *)chart withFullRedraw:(BOOL)fullRedraw {
+    // position our view over the top of the GL canvas
+    CGRect glFrame = chart.canvas.glView.frame;
+    glFrame.origin.y = chart.canvas.frame.origin.y;
+    [lineView setFrame:glFrame];
+    // remove the old point-pairs from the line view
+    [lineView reset];
+}
+
+- (void)sChartDidFinishLoadingData:(ShinobiChart *)chart {
+    NSNumber * padding = @(chart.yAxis.dataRange.span.doubleValue * 0.05);
+    chart.yAxis.rangePaddingHigh = padding;
 }
 
 @end

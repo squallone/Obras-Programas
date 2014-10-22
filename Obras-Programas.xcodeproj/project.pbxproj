@@ -257,6 +257,7 @@
 		ABFCC51819C2E0460074CA01 /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC51719C2E0460074CA01 /* libsqlite3.0.dylib */; };
 		ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC54D19C2E43F0074CA01 /* MainViewController.m */; };
 		ABFCC55019C2E5990074CA01 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC54F19C2E5990074CA01 /* MapKit.framework */; };
+		EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB21B4FB19F6174D00F70F6A /* LineView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -709,6 +710,8 @@
 		ABFCC54C19C2E43F0074CA01 /* MainViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MainViewController.h; sourceTree = "<group>"; };
 		ABFCC54D19C2E43F0074CA01 /* MainViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MainViewController.m; sourceTree = "<group>"; };
 		ABFCC54F19C2E5990074CA01 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
+		EB21B4FA19F6174D00F70F6A /* LineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineView.h; sourceTree = "<group>"; };
+		EB21B4FB19F6174D00F70F6A /* LineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1105,6 +1108,8 @@
 		ABC993FB19F195180041B6B5 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				EB21B4FA19F6174D00F70F6A /* LineView.h */,
+				EB21B4FB19F6174D00F70F6A /* LineView.m */,
 				ABC993F219F1950E0041B6B5 /* GridViewController.h */,
 				ABC993F319F1950E0041B6B5 /* GridViewController.m */,
 				ABC993F419F1950E0041B6B5 /* ChartsViewController.h */,
@@ -1728,10 +1733,11 @@
 				TargetAttributes = {
 					ABFCC45519C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
+						DevelopmentTeam = D7K92GRWLG;
 					};
 					ABFCC46E19C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 4V49N9D3N7;
+						DevelopmentTeam = D7K92GRWLG;
 					};
 				};
 			};
@@ -1943,6 +1949,7 @@
 				ABFCC51519C2DE450074CA01 /* Offline.m in Sources */,
 				AB36C62A19D6074500B77B83 /* MTLReflection.m in Sources */,
 				AB36C63419D60BBB00B77B83 /* Inaugurador.m in Sources */,
+				EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */,
 				AB36C62B19D6074500B77B83 /* MTLValueTransformer.m in Sources */,
 				ABBDAACD19F72FFA00290B96 /* SDWebImageManager.m in Sources */,
 				ABBDAAC719F72FFA00290B96 /* NSData+ImageContentType.m in Sources */,
@@ -2139,7 +2146,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: JUAN MARTINEZ MIRANDA (3NZELD4GQG)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2149,7 +2156,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c8661f86-73b6-41f5-9b5a-51649c9d79ab";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -2158,8 +2165,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2169,7 +2176,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c8661f86-73b6-41f5-9b5a-51649c9d79ab";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
