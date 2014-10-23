@@ -168,6 +168,7 @@
 @property int numTotalPages;
 @property int numCurrentPage;
 @property BOOL isFromMainQuery;
+@property BOOL isProgramsSelected;
 @property BOOL isPrograms;
 
 @end
@@ -857,6 +858,7 @@
     _numTotalPages = 0;
     _numCurrentPage = 0;
     _isFromMainQuery = YES;
+    _isPrograms = _isProgramsSelected ? YES : NO;
     _tableViewData = [NSMutableArray array];
     [self perfomQueryWithParameters];
 }
@@ -1053,7 +1055,7 @@ const int numResultsPerPage = 200;
            
         }
         
-        if (!_isPrograms) {
+        if (!_isProgramsSelected) {
             [parameters setObject:parameterValue forKey:kParamTipoDeObra];
         }else{
             [parameters setObject:@"1" forKey:@"consultaProgramas"];
@@ -1300,7 +1302,7 @@ const int numResultsPerPage = 200;
 }
 
 -(void)setupTitle:(NSArray *)data {
-    _isPrograms = NO;
+    _isProgramsSelected = NO;
     
     //Guardamos los datos para hacer la busqeuda por obras o programas
     
@@ -1311,7 +1313,7 @@ const int numResultsPerPage = 200;
         [self changeTitleNavigationBar:tipo.nombreTipoObra];
         if ([tipo.nombreTipoObra isEqualToString:@"PROGRAMAS"]) {
             //Habilitamos la busqueda para programas
-            _isPrograms = YES;
+            _isProgramsSelected = YES;
             //Limpiamos las busquedas
             [self cleanQueryAndHideHUD:YES];
             
@@ -1405,7 +1407,7 @@ const int numResultsPerPage = 200;
 
 -(void)disableOrEnableButtonsDependOnTypeSearch{
     
-    if (_isPrograms) {
+    if (_isProgramsSelected) {
         _btnStartDate.enabled = NO;
         _btnEndDate.enabled = NO;
         _btnInaugurated.enabled = NO;
@@ -1438,7 +1440,7 @@ const int numResultsPerPage = 200;
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (_isPrograms) {
+    if (_isProgramsSelected) {
         Programa *programa = _tableViewData[indexPath.row];
         
         static NSString *CellIdentifier = @"Cell";
@@ -1501,7 +1503,7 @@ const int numResultsPerPage = 200;
             [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:@"Guardando..." delay:0];
             NSIndexPath *cellIndexPath = [_tableView indexPathForCell:cell];
             NSString *message = @"";
-            if (_isPrograms) {
+            if (_isProgramsSelected) {
                 Programa *programa = _tableViewData[cellIndexPath.row];
                 [DBHelper savePrograma:programa];
                 message = [NSString stringWithFormat:@"Programa guardado\n%@", programa.idPrograma];
