@@ -45,4 +45,9 @@
 @property (nonatomic, strong) NSString *poblacionObjetivo;
 @property (nonatomic, strong) NSString *municipio;
 
++ (NSDictionary *)JSONKeyPathsByPropertyKey;
+
+
+
+
 @end

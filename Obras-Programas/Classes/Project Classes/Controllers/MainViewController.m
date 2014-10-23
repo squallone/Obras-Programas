@@ -18,6 +18,7 @@
 #import "Inversion.h"
 #import "TipoObraPrograma.h"
 #import "Obra.h"
+#import "Programa.h"
 #import "Inaugurador.h"
 #import "Consulta.h"
 #import "MDSpreadView.h"
@@ -167,6 +168,7 @@
 @property int numTotalPages;
 @property int numCurrentPage;
 @property BOOL isFromMainQuery;
+@property BOOL isPrograms;
 
 @end
 
@@ -260,7 +262,7 @@
     popupMenu.highlightedColor = [[UIColor colorWithRed:0 green:0.478 blue:1.0 alpha:1.0] colorWithAlphaComponent:0.8];
     self.popupMenu = popupMenu;
     
-    QBPopupMenuItem *item10 = [QBPopupMenuItem itemWithTitle:@"Limpiar consulta" target:self action:@selector(cleanQuery:)];
+    QBPopupMenuItem *item10 = [QBPopupMenuItem itemWithTitle:@"Limpiar consulta" target:self action:@selector(cleanQueryAndHideHUD:)];
     QBPopupMenuItem *item11 = [QBPopupMenuItem itemWithTitle:@"Ver detalle consulta" target:self action:@selector(displayQueryDetail:)];
     
     NSArray *itemsMoreButton = @[item10, item11];
@@ -657,11 +659,14 @@
  
 }
 
--(void)cleanQuery:(id)sender{
+-(void)cleanQueryAndHideHUD:(BOOL)option{
     
     /* Load Saved Selections */
-    [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
-
+    
+    if (!option) {
+       [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
+    }
+    
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Dependencia];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Estado];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Impacto];
@@ -670,15 +675,43 @@
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Nombre_Inaugura];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Inaugurada];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Suscpetible];
+    
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreStartIniDate];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreStartEndDate];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreEndIniDate];
+    [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreEndEndDate];
+
+
+    _lblStartIniDate.text = @"";
+    _lblStartEndDate.text = @"";
+    _lblEndIniDate.text   = @"";
+    _lblEndEndDate.text   = @"";
     self.txtRangoMaximo.text    = @"";
     self.txtRangoMinimo.text    = @"";
     self.txtDenominacion.text   = @"";
     self.txtIDObraPrograma.text = @"";
+
+    
     _numCurrentPage = 0;
     _numTotalPages = 0;
     
     [self changeAllBackgrounds];
-    [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:@"Se han limpiado\nlos campos de\nbúsqueda" delay:1.5];
+    
+    if (!option) {
+        [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:@"Se han limpiado\nlos campos de\nbúsqueda" delay:1.5];
+    }
+}
+
+-(void)cleandDataForTableViewAndReport{
+    
+    _tableViewData = [NSMutableArray array];
+    _stateReportData        =  [NSMutableArray array];
+    _dependenciesReportData = [NSMutableArray array];
+    _general = nil;
+    [_tableView reloadData];
+    [_pullToRefreshManager tableViewReloadFinished];
+    [self displayPinsMapView];
+    [_spreadView reloadData];
 }
 
 -(void)displayQueryDetail:(id)sender{
@@ -1006,7 +1039,7 @@ const int numResultsPerPage = 200;
     }
     
     /* Tipo de Obra */
-    
+
     if (_worksProgramsSavedData.count > 0) {
         
         for (int i=0; i<[_worksProgramsSavedData count]; i++) {
@@ -1019,11 +1052,18 @@ const int numResultsPerPage = 200;
             }
            
         }
-        [parameters setObject:parameterValue forKey:kParamTipoDeObra];
+        
+        if (!_isPrograms) {
+            [parameters setObject:parameterValue forKey:kParamTipoDeObra];
+        }else{
+            [parameters setObject:@"1" forKey:@"consultaProgramas"];
+
+        }
     }
     
     /* Depedencias */
-    
+    parameterValue = @"";
+
     if (_dependenciesSavedData.count > 0) {
         
         for (int i=0; i<[_dependenciesSavedData count]; i++) {
@@ -1260,19 +1300,29 @@ const int numResultsPerPage = 200;
 }
 
 -(void)setupTitle:(NSArray *)data {
+    _isPrograms = NO;
+    
+    //Guardamos los datos para hacer la busqeuda por obras o programas
     
     if (data.count== 0) {
         [self changeTitleNavigationBar:@"OBRAS TOTALES"];
     }else if (data.count == 1){
         TipoObraPrograma *tipo = data[0];
         [self changeTitleNavigationBar:tipo.nombreTipoObra];
+        if ([tipo.nombreTipoObra isEqualToString:@"PROGRAMAS"]) {
+            //Habilitamos la busqueda para programas
+            _isPrograms = YES;
+            //Limpiamos las busquedas
+            [self cleanQueryAndHideHUD:YES];
+            
+            //Limpiamos datos
+            //[self cleandDataForTableViewAndReport];
+        }
     }else{
-            //            NSString *titulo = @"";
-            //            for (TipoObraPrograma *tipo in data) {
-            //                titulo = [titulo stringByAppendingString:[NSString stringWithFormat:@"%@ - ", tipo.nombreTipoObra]];
-            //            }
         [self changeTitleNavigationBar:@"OBRAS"];
     }
+    
+    [self disableOrEnableButtonsDependOnTypeSearch];
 }
 
 -(void)savedDataForSelections:(NSArray *)data andTypeOfFieldButton:(MainSearchFields)field{
@@ -1352,6 +1402,28 @@ const int numResultsPerPage = 200;
     }
 }
 
+
+-(void)disableOrEnableButtonsDependOnTypeSearch{
+    
+    if (_isPrograms) {
+        _btnStartDate.enabled = NO;
+        _btnEndDate.enabled = NO;
+        _btnInaugurated.enabled = NO;
+        _btnInaugurator.enabled = NO;
+        _btnSusceptible.enabled = NO;
+        _btnImpact.enabled = NO;
+    }else{
+        _btnStartDate.enabled = YES;
+        _btnEndDate.enabled = YES;
+        _btnInaugurated.enabled = YES;
+        _btnInaugurator.enabled = YES;
+        _btnSusceptible.enabled = YES;
+        _btnImpact.enabled = YES;
+
+    }
+    
+    
+}
 #pragma mark - UITableView  DataSource
 
 -(CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath{
@@ -1366,21 +1438,41 @@ const int numResultsPerPage = 200;
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    Obra *obra = _tableViewData[indexPath.row];
-    
-    static NSString *CellIdentifier = @"Cell";
-    
-    ObraProgramaCell *cell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
-    cell.lblDenominacion.text   = obra.denominacion;
-    cell.lblIdObraPrograma.text = obra.idObra;
-    cell.lblEstado.text         = obra.estado.nombreEstado;
-    [cell.logoImageView setImageWithURL:obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    //SWTableViewCel
-    
-    cell.rightUtilityButtons = [self rightButtons];
-    cell.delegate = self;
-    cell.backgroundColor = [UIColor clearColor];
-    return cell;
+    if (_isPrograms) {
+        Programa *programa = _tableViewData[indexPath.row];
+        
+        static NSString *CellIdentifier = @"Cell";
+        
+        ObraProgramaCell *cell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        cell.lblDenominacion.text   = programa.nombrePrograma;
+        cell.lblIdObraPrograma.text = programa.idPrograma;
+        cell.lblEstado.text         = programa.estado.nombreEstado;
+        [cell.logoImageView setImageWithURL:programa.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        //SWTableViewCel
+        
+        cell.rightUtilityButtons = [self rightButtons];
+        cell.delegate = self;
+        cell.backgroundColor = [UIColor clearColor];
+        return cell;
+
+    }else{
+        Obra *obra = _tableViewData[indexPath.row];
+        
+        static NSString *CellIdentifier = @"Cell";
+        
+        ObraProgramaCell *cell = [_tableView dequeueReusableCellWithIdentifier:CellIdentifier forIndexPath:indexPath];
+        cell.lblDenominacion.text   = obra.denominacion;
+        cell.lblIdObraPrograma.text = obra.idObra;
+        cell.lblEstado.text         = obra.estado.nombreEstado;
+        [cell.logoImageView setImageWithURL:obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        //SWTableViewCel
+        
+        cell.rightUtilityButtons = [self rightButtons];
+        cell.delegate = self;
+        cell.backgroundColor = [UIColor clearColor];
+        return cell;
+
+    }
 }
 
 #pragma mark - UITableView  Delegate
@@ -1523,7 +1615,6 @@ const int numResultsPerPage = 200;
         }
         return cell;
     }
-    
 }
 
 - (id)spreadView:(MDSpreadView *)aSpreadView titleForHeaderInRowSection:(NSInteger)section forColumnAtIndexPath:(MDIndexPath *)columnPath
@@ -1538,9 +1629,19 @@ const int numResultsPerPage = 200;
     if (columnPath.row == 0) {
         return @"Total";
     }else if (columnPath.row == 1){
-        return [NSString stringWithFormat:@"%@", _general.numeroObras];
+        
+        if (_general.numeroObras == nil) {
+            return @"";
+        }else{
+            return [NSString stringWithFormat:@"%@", _general.numeroObras];
+
+        }
     }else {
-        return [NSString stringWithFormat:@"%@", [_currencyFormatter stringFromNumber:_general.totalInvertido]];
+        if (_general.totalInvertido == nil) {
+            return @"";
+        }else{
+            return [NSString stringWithFormat:@"%@", [_currencyFormatter stringFromNumber:_general.totalInvertido]];
+        }
     }
 }
 #pragma mark - Sorting

@@ -12,7 +12,6 @@
 
 @implementation Obra
 
-
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     return @{

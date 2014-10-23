@@ -130,6 +130,7 @@ NSString * const kKeyDbMunicipio                = @"municipio";
 //General Response
 
 NSString * const kKeyListaObras                 = @"listaObras";
+NSString * const kKeyListaProgramas             = @"listaProgramas";
 NSString * const kKeyListaReporteEstado         = @"listaReporteEstado";
 NSString * const kKeyListaReporteDependencia    = @"listaReporteDependencia";
 NSString * const kKeyListaReporteGeneral        = @"listaReporteGeneral";

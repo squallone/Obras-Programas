@@ -145,6 +145,7 @@ extern NSString * const kKeyDbMunicipio;
 
 extern NSString * const kKeyListaObras;
 extern NSString * const kKeyListaReporteEstado;
+extern NSString * const kKeyListaProgramas;
 extern NSString * const kKeyListaReporteDependencia;
 extern NSString * const kKeyListaReporteGeneral;
 

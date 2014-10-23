@@ -145,6 +145,8 @@
 		ABBDAAD619F72FFA00290B96 /* UIView+WebCacheOperation.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAAA919F72FFA00290B96 /* UIView+WebCacheOperation.m */; };
 		ABBDAAD719F72FFA00290B96 /* MWPhotoBrowser.bundle in Resources */ = {isa = PBXBuildFile; fileRef = ABBDAAAA19F72FFA00290B96 /* MWPhotoBrowser.bundle */; };
 		ABBDAAD919F7355200290B96 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ABBDAAD819F7355200290B96 /* no_image.jpg */; };
+		ABBDAADC19F843B900290B96 /* PoblacionObjetivo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAADB19F843B900290B96 /* PoblacionObjetivo.m */; };
+		ABBDAADF19F844ED00290B96 /* TipoApoyo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAADE19F844ED00290B96 /* TipoApoyo.m */; };
 		ABBE071519E123A200F1BFFC /* Inversion.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE071419E123A200F1BFFC /* Inversion.m */; };
 		ABC993F819F1950E0041B6B5 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC993F319F1950E0041B6B5 /* GridViewController.m */; };
 		ABC993F919F1950E0041B6B5 /* ChartsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC993F519F1950E0041B6B5 /* ChartsViewController.m */; };
@@ -513,6 +515,10 @@
 		ABBDAAA919F72FFA00290B96 /* UIView+WebCacheOperation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIView+WebCacheOperation.m"; sourceTree = "<group>"; };
 		ABBDAAAA19F72FFA00290B96 /* MWPhotoBrowser.bundle */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.plug-in"; path = MWPhotoBrowser.bundle; sourceTree = "<group>"; };
 		ABBDAAD819F7355200290B96 /* no_image.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = no_image.jpg; sourceTree = "<group>"; };
+		ABBDAADA19F843B900290B96 /* PoblacionObjetivo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PoblacionObjetivo.h; sourceTree = "<group>"; };
+		ABBDAADB19F843B900290B96 /* PoblacionObjetivo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoblacionObjetivo.m; sourceTree = "<group>"; };
+		ABBDAADD19F844ED00290B96 /* TipoApoyo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipoApoyo.h; sourceTree = "<group>"; };
+		ABBDAADE19F844ED00290B96 /* TipoApoyo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipoApoyo.m; sourceTree = "<group>"; };
 		ABBE071319E123A200F1BFFC /* Inversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inversion.h; sourceTree = "<group>"; };
 		ABBE071419E123A200F1BFFC /* Inversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inversion.m; sourceTree = "<group>"; };
 		ABC993F219F1950E0041B6B5 /* GridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridViewController.h; sourceTree = "<group>"; };
@@ -1601,6 +1607,10 @@
 				AB91255019D4CB2600151A47 /* Programa.m */,
 				AB36C64819D667C800B77B83 /* TipoObraPrograma.h */,
 				AB36C64919D667C800B77B83 /* TipoObraPrograma.m */,
+				ABBDAADA19F843B900290B96 /* PoblacionObjetivo.h */,
+				ABBDAADB19F843B900290B96 /* PoblacionObjetivo.m */,
+				ABBDAADD19F844ED00290B96 /* TipoApoyo.h */,
+				ABBDAADE19F844ED00290B96 /* TipoApoyo.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1925,6 +1935,7 @@
 				ABFCC4E419C2DDA10074CA01 /* AppDelegate.m in Sources */,
 				AB36C62919D6074500B77B83 /* MTLModel.m in Sources */,
 				AB36C62719D6074500B77B83 /* MTLManagedObjectAdapter.m in Sources */,
+				ABBDAADF19F844ED00290B96 /* TipoApoyo.m in Sources */,
 				ABE1584C19E104C80004F691 /* PMThemeShadow.m in Sources */,
 				ABE1584A19E104C80004F691 /* PMSelectionView.m in Sources */,
 				ABBDAAB519F72FFA00290B96 /* README.mdown in Sources */,
@@ -1996,6 +2007,7 @@
 				ABFCC4F419C2DDA10074CA01 /* UIRefreshControl+AFNetworking.m in Sources */,
 				ABBDAAC119F72FFA00290B96 /* PSTGridLayoutRow.m in Sources */,
 				ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */,
+				ABBDAADC19F843B900290B96 /* PoblacionObjetivo.m in Sources */,
 				ABA8306119F705440032EA3D /* MNMBottomPullToRefreshView.m in Sources */,
 				AB36C64319D663E700B77B83 /* NSUserDefaults+RMSaveCustomObject.m in Sources */,
 				ABCFFFF919D9474D002124B5 /* M13ProgressHUD.m in Sources */,

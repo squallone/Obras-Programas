@@ -19,6 +19,7 @@
 #import "ListaReporteDependencia.h"
 #import "ListaReporteEstado.h"
 #import "ListaReporteGeneral.h"
+#import "Programa.h"
 
 //Parametro que usa el Servlet para saber si la peticion proviene del movil
 
@@ -59,6 +60,8 @@
         
         NSArray *JSONResponse = responseObject;
         //Estados
+        
+        
         if ([servletName isEqualToString:kServletEstados]) {
             
             NSArray *statesData = [self deserializeStatesFromJSON:JSONResponse];
@@ -133,8 +136,12 @@
                 
                 //Resultado de las obras
                 NSArray *JSONListaObras = JSONResponseDic[kKeyListaObras];
-                JSONListaObras = [self deserializeWorksFromJSON:JSONListaObras];
+                if (!JSONListaObras) {
+                    JSONListaObras = JSONResponseDic[kKeyListaProgramas];
+                }
                 
+                JSONListaObras = [self deserializeWorksFromJSON:JSONListaObras];
+
                 //Resultado de listaReporteGeneral
                 
                 NSArray *JSONListaReporteGeneral= JSONResponseDic[kKeyListaReporteGeneral];
@@ -183,7 +190,7 @@
 - (NSArray *)deserializeWorksFromJSON:(NSArray *)worksJSON
 {
     NSError *error;
-    NSArray *works = [MTLJSONAdapter modelsOfClass:[Obra class] fromJSONArray:worksJSON error:&error];
+    NSArray *works = [MTLJSONAdapter modelsOfClass:[Programa class] fromJSONArray:worksJSON error:&error];
     if (error) {
         NSLog(@"Couldn't convert Obras JSON to Obra models: %@", error);
         return nil;
