@@ -1820,16 +1820,18 @@ const int numResultsPerPage = 200;
     
     if (_isPrograms) {
        Programa *programa =  (Programa *)sender;
+        if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
+            FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
+            fichaTecnicaViewController.programa = programa;
+        }
     }else{
-       Obra *obra =  (Obra *)sender;
-
-    }
-    
-    if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
+        if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
         FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
         fichaTecnicaViewController.obra = (Obra *)sender;
-        
-    }else if ([segue.identifier isEqualToString:@"showGrafica"]) {
+        }
+    }
+    
+    if ([segue.identifier isEqualToString:@"showGrafica"]) {
             GraficasViewController *graficasViewController = segue.destinationViewController;
             graficasViewController.stateReportData = _stateReportData;
             graficasViewController.dependenciesReportData = _dependenciesReportData;

@@ -49,14 +49,19 @@
     if ([segueName isEqualToString: @"firstColumnSegue"]) {
         _firstColumn = (FirstColumnTableViewController*) [segue destinationViewController];
         _firstColumn.obra = _obra;
+        _firstColumn.programa = self.programa;
     }else
     if ([segueName isEqualToString: @"secondColumnSegue"]) {
         _secondColumn = (SecondColumnTableViewController*) [segue destinationViewController];
         _secondColumn.obra = _obra;
+        _secondColumn.programa = self.programa;
+
     }else
     if ([segueName isEqualToString: @"thirdColumnSegue"]) {
         _thirdColumn = (ThirdColumnTableViewController*) [segue destinationViewController];
         _thirdColumn.obra = _obra;
+        _secondColumn.programa = self.programa;
+
     }
 }
 

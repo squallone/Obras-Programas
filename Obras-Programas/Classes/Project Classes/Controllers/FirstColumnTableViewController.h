@@ -8,8 +8,11 @@
 
 #import <UIKit/UIKit.h>
 @class Obra;
+@class Programa;
 
 @interface FirstColumnTableViewController : UITableViewController
 
 @property (strong,nonatomic) Obra *obra;
+@property (strong,nonatomic) Programa *programa;
+
 @end
