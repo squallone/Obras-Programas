@@ -136,12 +136,15 @@
                 
                 //Resultado de las obras
                 NSArray *JSONListaObras = JSONResponseDic[kKeyListaObras];
+                
                 if (!JSONListaObras) {
                     JSONListaObras = JSONResponseDic[kKeyListaProgramas];
-                }
-                
-                JSONListaObras = [self deserializeWorksFromJSON:JSONListaObras];
+                    JSONListaObras = [self deserializeProgramsFromJSON:JSONListaObras];
 
+                }else{
+                    JSONListaObras = [self deserializeWorksFromJSON:JSONListaObras];
+                }
+            
                 //Resultado de listaReporteGeneral
                 
                 NSArray *JSONListaReporteGeneral= JSONResponseDic[kKeyListaReporteGeneral];
@@ -190,6 +193,18 @@
 - (NSArray *)deserializeWorksFromJSON:(NSArray *)worksJSON
 {
     NSError *error;
+    NSArray *works = [MTLJSONAdapter modelsOfClass:[Obra class] fromJSONArray:worksJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Obras JSON to Obra models: %@", error);
+        return nil;
+    }
+    
+    return works;
+}
+
+- (NSArray *)deserializeProgramsFromJSON:(NSArray *)worksJSON
+{
+    NSError *error;
     NSArray *works = [MTLJSONAdapter modelsOfClass:[Programa class] fromJSONArray:worksJSON error:&error];
     if (error) {
         NSLog(@"Couldn't convert Obras JSON to Obra models: %@", error);
@@ -198,6 +213,7 @@
     
     return works;
 }
+
 
 
 - (NSArray *)deserializeStatesFromJSON:(NSArray *)statesJSON
