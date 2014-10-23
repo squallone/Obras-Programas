@@ -8,9 +8,10 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreData/CoreData.h>
+#import "Obra.h"
 
 @interface BmObras : NSManagedObject
 
-@property (nonatomic, retain) id obraData;
+@property (nonatomic, retain) Obra *obraData;
 
 @end

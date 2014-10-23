@@ -147,6 +147,7 @@
 		ABBDAAD919F7355200290B96 /* no_image.jpg in Resources */ = {isa = PBXBuildFile; fileRef = ABBDAAD819F7355200290B96 /* no_image.jpg */; };
 		ABBDAADC19F843B900290B96 /* PoblacionObjetivo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAADB19F843B900290B96 /* PoblacionObjetivo.m */; };
 		ABBDAADF19F844ED00290B96 /* TipoApoyo.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAADE19F844ED00290B96 /* TipoApoyo.m */; };
+		ABBDAAE219F89A0C00290B96 /* BmProgramas.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAAE119F89A0C00290B96 /* BmProgramas.m */; };
 		ABBE071519E123A200F1BFFC /* Inversion.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBE071419E123A200F1BFFC /* Inversion.m */; };
 		ABC993F819F1950E0041B6B5 /* GridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC993F319F1950E0041B6B5 /* GridViewController.m */; };
 		ABC993F919F1950E0041B6B5 /* ChartsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC993F519F1950E0041B6B5 /* ChartsViewController.m */; };
@@ -519,6 +520,8 @@
 		ABBDAADB19F843B900290B96 /* PoblacionObjetivo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PoblacionObjetivo.m; sourceTree = "<group>"; };
 		ABBDAADD19F844ED00290B96 /* TipoApoyo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TipoApoyo.h; sourceTree = "<group>"; };
 		ABBDAADE19F844ED00290B96 /* TipoApoyo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = TipoApoyo.m; sourceTree = "<group>"; };
+		ABBDAAE019F89A0C00290B96 /* BmProgramas.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = BmProgramas.h; path = "../../../Core Data/BmProgramas.h"; sourceTree = "<group>"; };
+		ABBDAAE119F89A0C00290B96 /* BmProgramas.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = BmProgramas.m; path = "../../../Core Data/BmProgramas.m"; sourceTree = "<group>"; };
 		ABBE071319E123A200F1BFFC /* Inversion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Inversion.h; sourceTree = "<group>"; };
 		ABBE071419E123A200F1BFFC /* Inversion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Inversion.m; sourceTree = "<group>"; };
 		ABC993F219F1950E0041B6B5 /* GridViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GridViewController.h; sourceTree = "<group>"; };
@@ -1227,6 +1230,8 @@
 		ABD705B219EB7E1000790837 /* Core Data */ = {
 			isa = PBXGroup;
 			children = (
+				ABBDAAE019F89A0C00290B96 /* BmProgramas.h */,
+				ABBDAAE119F89A0C00290B96 /* BmProgramas.m */,
 				ABD211F119EB5DC300A10AF1 /* BmConsultas.h */,
 				ABD211F219EB5DC300A10AF1 /* BmConsultas.m */,
 				ABCDCDC119E911B400C6AACC /* BmObras.h */,
@@ -1743,11 +1748,11 @@
 				TargetAttributes = {
 					ABFCC45519C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = D7K92GRWLG;
+						DevelopmentTeam = KJ2FN7GT6G;
 					};
 					ABFCC46E19C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = D7K92GRWLG;
+						DevelopmentTeam = 4V49N9D3N7;
 					};
 				};
 			};
@@ -1884,6 +1889,7 @@
 				ABBDAAB719F72FFA00290B96 /* PSTCollectionView.m in Sources */,
 				AB5004A819E20C7F003392E8 /* ObraProgramaCell.m in Sources */,
 				ABCDCD6419E88BDB00C6AACC /* ListaReporteGeneral.m in Sources */,
+				ABBDAAE219F89A0C00290B96 /* BmProgramas.m in Sources */,
 				ABBDAACF19F72FFA00290B96 /* UIButton+WebCache.m in Sources */,
 				ABFCC4F019C2DDA10074CA01 /* UIAlertView+AFNetworking.m in Sources */,
 				AB36C62619D6074500B77B83 /* MTLJSONAdapter.m in Sources */,
@@ -2157,8 +2163,8 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "iPhone Developer: JUAN MARTINEZ MIRANDA (3NZELD4GQG)";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: JUAN MARTINEZ MIRANDA (3NZELD4GQG)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
@@ -2168,7 +2174,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c8661f86-73b6-41f5-9b5a-51649c9d79ab";
 			};
 			name = Debug;
 		};
@@ -2177,7 +2183,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2188,7 +2194,7 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "c8661f86-73b6-41f5-9b5a-51649c9d79ab";
 			};
 			name = Release;
 		};

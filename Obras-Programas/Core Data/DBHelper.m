@@ -11,7 +11,7 @@
 
 @implementation DBHelper
 
-+(void)saveObra:(id)obra{
++(void)saveObra:(Obra *)obra{
     
     NSManagedObjectContext *context =  [kAppDelegate managedObjectContext];
     NSManagedObject *newContact;

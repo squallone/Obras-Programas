@@ -12,7 +12,7 @@
 
 @interface DBHelper : NSObject
 
-+(void)saveObra:(id)obra;
++(void)saveObra:(Obra *)obra;
 +(NSArray *)getAllObras;
 +(void)saveConsulta:(Consulta *)consulta;
 +(NSArray *)getAllQueriesSaved;

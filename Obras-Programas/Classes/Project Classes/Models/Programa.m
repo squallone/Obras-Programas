@@ -8,19 +8,20 @@
 
 #import "Programa.h"
 #import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
-
+#import "Clasificacion.h"
 @implementation Programa
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
     [super JSONKeyPathsByPropertyKey];
     return @{
+             @"clasificaciones"         :kKeyDbClasificacion,
              @"tipoApoyo"           :@"tipoApoyo",
              @"idPrograma"          :@"idPrograma",
              @"anoPrograma"         :@"anoPrograma",
              @"absoluto"            :@"absoluto",
              @"lineaBase"           :@"lineaBase",
-             @"poblacion"           :@"poblacionObjetivoPrograma",
+             @"poblacion"           :@"poblacionObjetivoProgramas",
              @"metaBeneficiarios"   :@"metaBeneficiarios",
              @"montoDeApoyo"        :@"montoDeApoyo",
              @"nombrePrograma"      :@"nombrePrograma",
@@ -40,6 +41,11 @@
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[PoblacionObjetivo class]];
 }
 
++ (NSValueTransformer *)clasificacionesJSONTransformer
+{
+    // tell Mantle to populate appActions property with an array of ChoosyAppAction objects
+    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[Clasificacion class]];
+}
 
 
 @end

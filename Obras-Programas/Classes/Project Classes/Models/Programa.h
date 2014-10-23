@@ -24,5 +24,6 @@
 @property (nonatomic, strong) TipoApoyo *tipoApoyo;
 @property (nonatomic, strong) NSString *porcentual;
 @property (nonatomic, strong) NSString *totalMunicipios;
+@property (nonatomic, strong) NSArray *clasificaciones;
 
 @end
