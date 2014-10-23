@@ -660,6 +660,27 @@
  
 }
 
+-(void)displayQueryDetail:(id)sender{
+    
+    ConsultasGuardadasTableViewController *consultasGuardasViewController  = [[ConsultasGuardadasTableViewController alloc]initWithStyle:UITableViewStylePlain];
+    consultasGuardasViewController.consulta = [self initializeConsulta];
+    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:consultasGuardasViewController];
+    
+    MZFormSheetController *formSheet = [[MZFormSheetController alloc] initWithViewController:nav];
+    formSheet.presentedFormSheetSize = CGSizeMake(500, 500);
+    formSheet.shadowRadius = 2.0;
+    formSheet.shadowOpacity = 0.3;
+    formSheet.cornerRadius = 15.0;
+    formSheet.shouldDismissOnBackgroundViewTap = YES;
+    formSheet.shouldCenterVertically = YES;
+    formSheet.movementWhenKeyboardAppears = MZFormSheetWhenKeyboardAppearsCenterVertically;
+    formSheet.willPresentCompletionHandler = ^(UIViewController *presentedFSViewController) {};
+    formSheet.transitionStyle = MZFormSheetTransitionStyleDropDown;
+    [self mz_presentFormSheetController:formSheet animated:YES completionHandler:nil];
+}
+
+#pragma mark - Clean Parameters
+
 -(void)cleanQueryAndHideHUD:(BOOL)option{
     
     /* Load Saved Selections */
@@ -692,7 +713,6 @@
     self.txtDenominacion.text   = @"";
     self.txtIDObraPrograma.text = @"";
 
-    
     _numCurrentPage = 0;
     _numTotalPages = 0;
     
@@ -713,25 +733,6 @@
     [_pullToRefreshManager tableViewReloadFinished];
     [self displayPinsMapView];
     [_spreadView reloadData];
-}
-
--(void)displayQueryDetail:(id)sender{
-    
-    ConsultasGuardadasTableViewController *consultasGuardasViewController  = [[ConsultasGuardadasTableViewController alloc]initWithStyle:UITableViewStylePlain];
-    consultasGuardasViewController.consulta = [self initializeConsulta];
-    UINavigationController *nav = [[UINavigationController alloc]initWithRootViewController:consultasGuardasViewController];
-    
-    MZFormSheetController *formSheet = [[MZFormSheetController alloc] initWithViewController:nav];
-    formSheet.presentedFormSheetSize = CGSizeMake(500, 500);
-    formSheet.shadowRadius = 2.0;
-    formSheet.shadowOpacity = 0.3;
-    formSheet.cornerRadius = 15.0;
-    formSheet.shouldDismissOnBackgroundViewTap = YES;
-    formSheet.shouldCenterVertically = YES;
-    formSheet.movementWhenKeyboardAppears = MZFormSheetWhenKeyboardAppearsCenterVertically;
-    formSheet.willPresentCompletionHandler = ^(UIViewController *presentedFSViewController) {};
-    formSheet.transitionStyle = MZFormSheetTransitionStyleDropDown;
-    [self mz_presentFormSheetController:formSheet animated:YES completionHandler:nil];
 }
 
 #pragma mark - Calendar
@@ -1308,6 +1309,9 @@ const int numResultsPerPage = 200;
     
     if (data.count== 0) {
         [self changeTitleNavigationBar:@"OBRAS TOTALES"];
+        if (_tableViewData.count > 0 && _isPrograms) {
+            [self cleandDataForTableViewAndReport];
+        }
     }else if (data.count == 1){
         TipoObraPrograma *tipo = data[0];
         [self changeTitleNavigationBar:tipo.nombreTipoObra];
@@ -1315,13 +1319,24 @@ const int numResultsPerPage = 200;
             //Habilitamos la busqueda para programas
             _isProgramsSelected = YES;
             //Limpiamos las busquedas
-            [self cleanQueryAndHideHUD:YES];
             
             //Limpiamos datos
-            //[self cleandDataForTableViewAndReport];
+            if (_tableViewData.count > 0 && !_isPrograms) {
+                [self cleandDataForTableViewAndReport];
+                [self cleanQueryAndHideHUD:YES];
+
+            }
+        }else {
+            if (_tableViewData.count > 0 && _isPrograms) {
+                [self cleandDataForTableViewAndReport];
+            }
         }
     }else{
         [self changeTitleNavigationBar:@"OBRAS"];
+        //Limpiamos datos
+        if (_tableViewData.count > 0 && _isPrograms) {
+            [self cleandDataForTableViewAndReport];
+        }
     }
     
     [self disableOrEnableButtonsDependOnTypeSearch];
@@ -1440,7 +1455,7 @@ const int numResultsPerPage = 200;
 
 -(UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    if (_isProgramsSelected) {
+    if (_isPrograms) {
         Programa *programa = _tableViewData[indexPath.row];
         
         static NSString *CellIdentifier = @"Cell";

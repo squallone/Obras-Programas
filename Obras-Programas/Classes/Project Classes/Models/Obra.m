@@ -8,6 +8,7 @@
 
 #import "Obra.h"
 #import "Clasificacion.h"
+#import "MTLValueTransformer.h"
 #import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
 
 @implementation Obra
@@ -43,6 +44,57 @@
              @"poblacionObjetivo"       :kKeyDbPoblacionObjetivo,
              @"municipio"               :kKeyDbMunicipio
              };
+}
+
++ (NSValueTransformer *)fotoAntesURLJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        NSURL *imageURL = nil;
+        
+        if (![str isEqualToString:@"null"]) {
+            NSString *imageStrURL = [NSString stringWithFormat:@"%@%@%@", kAppURL, kAppImagenesObras, str];
+            imageURL = [NSURL URLWithString:imageStrURL];
+        }
+        
+        return imageURL;
+        
+    } reverseBlock:^(NSDate *date) {
+        return @"";
+    }];
+}
+
++ (NSValueTransformer *)fotoDuranteURLJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        NSURL *imageURL = nil;
+        
+        if (![str isEqualToString:@"null"]) {
+            NSString *imageStrURL = [NSString stringWithFormat:@"%@%@%@", kAppURL, kAppImagenesObras, str];
+            imageURL = [NSURL URLWithString:imageStrURL];
+        }
+        
+        return imageURL;
+        
+    } reverseBlock:^(NSDate *date) {
+        return @"";
+    }];
+}
+
++ (NSValueTransformer *)fotoDespuesURLJSONTransformer
+{
+    return [MTLValueTransformer reversibleTransformerWithForwardBlock:^(NSString *str) {
+        NSURL *imageURL = nil;
+        
+        if (![str isEqualToString:@"null"]) {
+            NSString *imageStrURL = [NSString stringWithFormat:@"%@%@%@", kAppURL, kAppImagenesObras, str];
+            imageURL = [NSURL URLWithString:imageStrURL];
+        }
+        
+        return imageURL;
+        
+    } reverseBlock:^(NSDate *date) {
+        return @"";
+    }];
 }
 
 + (NSValueTransformer *)clasificacionesJSONTransformer
