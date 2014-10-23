@@ -1748,11 +1748,11 @@
 				TargetAttributes = {
 					ABFCC45519C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = KJ2FN7GT6G;
+						DevelopmentTeam = D7K92GRWLG;
 					};
 					ABFCC46E19C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 4V49N9D3N7;
+						DevelopmentTeam = D7K92GRWLG;
 					};
 				};
 			};
@@ -2163,27 +2163,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Developer: JUAN MARTINEZ MIRANDA (3NZELD4GQG)";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer: JUAN MARTINEZ MIRANDA (3NZELD4GQG)";
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
-				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
-				INFOPLIST_FILE = "Obras-Programas/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c8661f86-73b6-41f5-9b5a-51649c9d79ab";
-			};
-			name = Debug;
-		};
-		ABFCC47B19C2DB530074CA01 /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -2194,7 +2174,27 @@
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c8661f86-73b6-41f5-9b5a-51649c9d79ab";
+				PROVISIONING_PROFILE = "";
+			};
+			name = Debug;
+		};
+		ABFCC47B19C2DB530074CA01 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(DEVELOPER_FRAMEWORKS_DIR)",
+				);
+				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
+				INFOPLIST_FILE = "Obras-Programas/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
