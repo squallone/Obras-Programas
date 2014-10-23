@@ -1510,11 +1510,8 @@ const int numResultsPerPage = 200;
                 [DBHelper saveObra:obra];
                 NSString *message = [NSString stringWithFormat:@"Obra guardada\n%@", obra.idObra];
                 [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:message delay:1.5];
-
             }
             
-            
-
             break;
 
         }

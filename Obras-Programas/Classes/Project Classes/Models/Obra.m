@@ -8,10 +8,10 @@
 
 #import "Obra.h"
 #import "Clasificacion.h"
-#include "Inversion.h"
 #import "NSValueTransformer+MTLPredefinedTransformerAdditions.h"
 
 @implementation Obra
+
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey
 {
@@ -43,12 +43,6 @@
              @"poblacionObjetivo"       :kKeyDbPoblacionObjetivo,
              @"municipio"               :kKeyDbMunicipio
              };
-}
-
-+ (NSValueTransformer *)inversionesJSONTransformer
-{
-    // tell Mantle to populate appActions property with an array of ChoosyAppAction objects
-    return [NSValueTransformer mtl_JSONArrayTransformerWithModelClass:[Inversion class]];
 }
 
 + (NSValueTransformer *)clasificacionesJSONTransformer
