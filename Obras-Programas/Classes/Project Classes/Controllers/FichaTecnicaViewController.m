@@ -77,6 +77,8 @@
         _secondColumn = (SecondColumnTableViewController*) [segue destinationViewController];
         _secondColumn.obra = _obra;
         _secondColumn.programa = self.programa;
+        _secondColumn.inversionesData = _inversionesData;
+        _secondColumn.clasificacionesData = _clasificacionesData;
 
     }else
     if ([segueName isEqualToString: @"thirdColumnSegue"]) {

@@ -16,5 +16,6 @@
 
 @property (nonatomic, strong) NSMutableArray *stateReportData;
 @property (nonatomic, strong) NSMutableArray *dependenciesReportData;
+
 @property ChartsViewController *chartController;
 @end

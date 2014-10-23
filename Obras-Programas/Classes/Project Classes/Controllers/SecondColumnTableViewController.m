@@ -121,9 +121,13 @@
                 imagenPrivada.hidden= YES;
                 imagenOtros.hidden=YES;
                 
-                Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
-                NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
-                NSArray *items = @[@"Federal", @"Estatal", @"Municipal",@"Social",@"Privada",@"Otro"];
+                NSMutableArray *items = [[NSMutableArray alloc] init];
+
+
+                for (Inversion* inversion in _inversionesData) {
+                    [items addObject:inversion.nombre];
+                }
+                
                 
                 for (Inversion *inversion in self.obra.inversiones) {
                     NSString *stringInversion = [inversion valueForKey:@"nombreTipoInversion"];
@@ -204,14 +208,14 @@
                 imagenCNCH.hidden= YES;
                 imagenOtros.hidden=YES;
                 
-                Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
-                NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
-                NSArray *items = @[@"Compromiso de Gobierno"
-                                   , @"Plan Nuevo Guerrero",
-                                   @"Plan Michoacán",
-                                   @"Plan Nacional de Infraestructura",
-                                   @"Cruzada Nacional Contra el Hambre",
-                                   @"Otro"];
+
+                NSMutableArray *items = [[NSMutableArray alloc] init];
+                
+                
+                for (Clasificacion* clasificacion in _clasificacionesData) {
+                    [items addObject:clasificacion.nombreTipoClasificacion];
+                }
+                
                 
                 for (Clasificacion *clasificacion in self.obra.clasificaciones) {
                     NSString *stringInversion = [clasificacion valueForKey:@"nombreTipoClasificacion"];
@@ -320,13 +324,13 @@
             imagenCNCH.hidden= YES;
             imagenOtros.hidden=YES;
             
-
-            NSArray *items = @[@"Compromiso de Gobierno"
-                               , @"Plan Nuevo Guerrero",
-                               @"Plan Michoacán",
-                               @"Plan Nacional de Infraestructura",
-                               @"Cruzada Nacional Contra el Hambre",
-                               @"Otro"];
+            NSMutableArray *items = [[NSMutableArray alloc] init];
+            
+            
+            for (Clasificacion* clasificacion in _clasificacionesData) {
+                [items addObject:clasificacion.nombreTipoClasificacion];
+            }
+            
             
             for (Clasificacion *clasificacion in self.programa.clasificaciones) {
                 NSString *stringInversion = [clasificacion valueForKey:@"nombreTipoClasificacion"];

@@ -12,5 +12,8 @@
 @interface FichaTecnicaViewController : UIViewController <UIScrollViewDelegate>
 @property (strong,nonatomic) Obra *  obra;
 @property (strong,nonatomic) Programa *programa;
+@property (nonatomic, strong) NSArray *inversionesData;
+@property (nonatomic, strong) NSArray *clasificacionesData;
+
 
 @end

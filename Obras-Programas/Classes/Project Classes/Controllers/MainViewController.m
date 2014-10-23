@@ -1914,11 +1914,15 @@ const int numResultsPerPage = 200;
         if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
             FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
             fichaTecnicaViewController.programa = programa;
+            fichaTecnicaViewController.inversionesData = _invesmentsData;
+            fichaTecnicaViewController.clasificacionesData = _clasificationsData;
         }
     }else{
         if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
         FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
         fichaTecnicaViewController.obra = (Obra *)sender;
+        fichaTecnicaViewController.inversionesData = _invesmentsData;
+        fichaTecnicaViewController.clasificacionesData = _clasificationsData;
         }
     }
     
@@ -1926,6 +1930,8 @@ const int numResultsPerPage = 200;
             GraficasViewController *graficasViewController = segue.destinationViewController;
             graficasViewController.stateReportData = _stateReportData;
             graficasViewController.dependenciesReportData = _dependenciesReportData;
+
+        
     }
 }
 
