@@ -20,9 +20,10 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imagenLogo;
 @property (weak, nonatomic) IBOutlet UIImageView *imagenLogoDependencia;
 
-@property (weak, nonatomic) IBOutlet UIImageView *imagenAntes;
-@property (weak, nonatomic) IBOutlet UIImageView *imagenDurante;
-@property (weak, nonatomic) IBOutlet UIImageView *imagenDespues;
+@property (strong, nonatomic) IBOutlet UIImageView *imagenAntes;
+@property (strong, nonatomic) IBOutlet UIImageView *imagenDurante;
+@property (strong, nonatomic) IBOutlet UIImageView *imagenDespues;
+
 
 
 
@@ -33,12 +34,15 @@
 
 @end
 
+
+
 @implementation FichaTecnicaViewController
 @synthesize obra = _obra;
 @synthesize firstColumn = _firstColumn;
 @synthesize secondColumn = _secondColumn;
 @synthesize thirdColumn = _thirdColumn;
 @synthesize imagesContainer = scrollView;
+
 
 
 - (void)viewDidLoad {
@@ -50,6 +54,9 @@
 
     }
     [self setupScrollView];
+    
+
+    
     // Do any additional setup after loading the view.
 }
 
@@ -82,27 +89,38 @@
 
 
 -(void) setupScrollView {
-    // Adjust scroll view content size, set background colour and turn on paging
-    [_imagenAntes setImageWithURL:self.obra.fotoAntesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    
-    [_imagenDurante setImageWithURL:self.obra.fotoDuranteURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    
-    [_imagenDespues setImageWithURL:self.obra.fotoDespuesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-    
-    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width * 12,
-                                        scrollView.frame.size.height);
-    scrollView.pagingEnabled=YES;
-    scrollView.backgroundColor = [UIColor blackColor];
-    
-    // Generate content for our scroll view using the frame height and width as the reference point
-    
-    
-    [scrollView addSubview:_imagenAntes];
-    [scrollView addSubview:_imagenDurante];
-    [scrollView addSubview:_imagenDespues];
-    
-    
+    //add the scrollview to the view
+    scrollView = [[UIScrollView alloc] initWithFrame:scrollView.frame];
+
+    scrollView.delegate = self;
+    scrollView.pagingEnabled = YES;
+    [scrollView setAlwaysBounceVertical:NO];
+    scrollView.backgroundColor = [UIColor clearColor];
+    //setup internal views
+    NSInteger numberOfViews = 3;
+    for (int i = 0; i < numberOfViews; i++) {
+        CGFloat xOrigin = i * scrollView.frame.size.width;
+        UIImageView *image = [[UIImageView alloc] initWithFrame:
+                              CGRectMake(xOrigin, 0,
+                                         scrollView.frame.size.width,
+                                         scrollView.frame.size.height)];
+        
+        if(i==0)[image setImageWithURL:self.obra.fotoAntesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        else if (i==1)[image setImageWithURL:self.obra.fotoDuranteURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        else if (i==2)[image setImageWithURL:self.obra.fotoDespuesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+
+        image.contentMode = UIViewContentModeScaleAspectFit;
+        [scrollView addSubview:image];
+    }
+    //set the scroll view content size
+    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width *
+                                             numberOfViews,
+                                             scrollView.frame.size.height);
+    //add the scrollview to this view
+    [self.view addSubview:scrollView];
 }
+
+
 
 
 #pragma mark - Navigation

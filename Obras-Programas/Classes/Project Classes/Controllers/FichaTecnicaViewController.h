@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 @class Obra;
 @class Programa;
-@interface FichaTecnicaViewController : UIViewController
+@interface FichaTecnicaViewController : UIViewController <UIScrollViewDelegate>
 @property (strong,nonatomic) Obra *  obra;
 @property (strong,nonatomic) Programa *programa;
 
