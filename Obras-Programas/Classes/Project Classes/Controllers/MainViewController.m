@@ -1500,18 +1500,18 @@ const int numResultsPerPage = 200;
         {
             [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:@"Guardando..." delay:0];
             NSIndexPath *cellIndexPath = [_tableView indexPathForCell:cell];
-            
-            id registro = _tableViewData[cellIndexPath.row];
-            
+            NSString *message = @"";
             if (_isPrograms) {
-                
+                Programa *programa = _tableViewData[cellIndexPath.row];
+                [DBHelper savePrograma:programa];
+                message = [NSString stringWithFormat:@"Programa guardado\n%@", programa.idPrograma];
             }else{
-                Obra *obra = (Obra *)registro;
+                Obra *obra = _tableViewData[cellIndexPath.row];
                 [DBHelper saveObra:obra];
-                NSString *message = [NSString stringWithFormat:@"Obra guardada\n%@", obra.idObra];
-                [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:message delay:1.5];
+                message = [NSString stringWithFormat:@"Obra guardada\n%@", obra.idObra];
             }
-            
+            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:message delay:1.5];
+
             break;
 
         }

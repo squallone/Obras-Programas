@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import "Obra.h"
+#import "Programa.h"
 #import "Consulta.h"
 
 @interface DBHelper : NSObject
@@ -16,5 +17,8 @@
 +(NSArray *)getAllObras;
 +(void)saveConsulta:(Consulta *)consulta;
 +(NSArray *)getAllQueriesSaved;
+
++(void)savePrograma:(Programa *)obra;
++(NSArray *)getAllProgramas;
 
 @end

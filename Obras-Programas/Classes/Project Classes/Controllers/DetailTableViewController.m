@@ -8,6 +8,7 @@
 
 #import "DetailTableViewController.h"
 #import "Obra.h"
+#import "Programa.h"
 #import "Consulta.h"
 #import "FichaTecnicaViewController.h"
 
@@ -43,22 +44,27 @@
         
         CGFloat largestLabelWidth = 0;
         _labelSize = _option == o_Consultas ? 17.0 : 14.5;
-        for (id objectModel in self.dataSource) {
-            
-            NSDictionary *dicData = [self textToDisplay:objectModel];
-            NSString *title = dicData[@"title"];
-            
-            //Verifica el tamaño del texto usado la fuente del textLabel por defecto del UITableViewCell
-            
-            CGSize labelSize = [title sizeWithAttributes:
-                                @{NSFontAttributeName:
-                                      [UIFont fontWithName:@"HelveticaNeue-Light" size:_labelSize]}];
-            
-            if (labelSize.width > largestLabelWidth) {
-                largestLabelWidth = labelSize.width;
+        
+        if (_option == o_Consultas) {
+            for (id objectModel in self.dataSource) {
+                
+                NSDictionary *dicData = [self textToDisplay:objectModel];
+                NSString *title = dicData[@"title"];
+                
+                //Verifica el tamaño del texto usado la fuente del textLabel por defecto del UITableViewCell
+                
+                CGSize labelSize = [title sizeWithAttributes:
+                                    @{NSFontAttributeName:
+                                          [UIFont fontWithName:@"HelveticaNeue-Light" size:_labelSize]}];
+                
+                if (labelSize.width > largestLabelWidth) {
+                    largestLabelWidth = labelSize.width;
+                }
             }
+        }else if (_option == o_Favoritos){
+            
         }
-        //Agrega un pequeño padding al ancho
+               //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 90;
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
@@ -145,6 +151,8 @@
         subtitle    = @"Fecha";
         
     }else if(_option == o_Favoritos){
+        
+        
         Obra *obra = (Obra *)objectModel;
         title = obra.denominacion;
         subtitle = obra.idObra;

@@ -46,6 +46,41 @@
     return results;
 }
 
++(void)savePrograma:(Programa *)programa{
+    
+    NSManagedObjectContext *context =  [kAppDelegate managedObjectContext];
+    NSManagedObject *newContact;
+    
+    newContact = [NSEntityDescription insertNewObjectForEntityForName:@"BmProgramas" inManagedObjectContext:context];
+    [newContact setValue:programa forKey:@"programaData"];
+    
+    // Save the context.
+    NSError *error = nil;
+    if (![context save:&error]) {
+        NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+        [kAppDelegate notShowActivityIndicator:M13ProgressViewActionFailure whithMessage:@"Programa no guardado\nintentalo de nuevo" delay:1.0];
+    }
+}
+
++(NSArray *)getAllProgramas{
+    
+    NSManagedObjectContext *context =  [kAppDelegate managedObjectContext];
+    
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"BmProgramas" inManagedObjectContext:context];
+    [fetchRequest setEntity:entity];
+    NSError *error;
+    
+    NSArray *obras = [context executeFetchRequest:fetchRequest error:&error];
+    NSMutableArray *results = [NSMutableArray new];
+    
+    for (int i=0; i<[obras count]; i++) {
+        NSManagedObject *managedObject = [obras objectAtIndex:i];
+        [results addObject:[managedObject valueForKey:@"programaData"]];
+    }
+    return results;
+}
+
 +(void)saveConsulta:(Consulta *)consulta{
     
     NSManagedObjectContext *context =  [kAppDelegate managedObjectContext];

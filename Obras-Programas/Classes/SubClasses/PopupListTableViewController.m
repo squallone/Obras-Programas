@@ -198,6 +198,8 @@ const NSInteger rowHeight = 45;
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSMutableArray *obrasAndProgramsData = [NSMutableArray array];
+
     //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
     if (!_isMenu) {
        
@@ -285,10 +287,15 @@ const NSInteger rowHeight = 45;
                                  cancelButtonTitle:@"Aceptar"
                                  otherButtonTitles:nil, nil]show];
                 return;
-            }        }else if (indexPath.row == 1){
-            dataSource =  [DBHelper getAllObras];
+            }
+        }else if (indexPath.row == 1){
+            NSArray *dataSourceObras =  [DBHelper getAllObras];
+            [obrasAndProgramsData addObject:dataSourceObras];
+            NSArray *dataSourceProgramas =  [DBHelper getAllProgramas];
+            [obrasAndProgramsData addObject:dataSourceProgramas];
+
             option = o_Favoritos;
-            if (dataSource.count == 0) {
+            if (dataSourceProgramas.count == 0 && dataSourceObras.count == 0) {
                 [[[UIAlertView alloc]initWithTitle:@"No hay registros"
                                            message:@"Aún no tienes registros guardados"
                                           delegate:nil
@@ -301,7 +308,7 @@ const NSInteger rowHeight = 45;
             return;
         }
         
-        DetailTableViewController *detailViewController = [[DetailTableViewController alloc]initWithDataSource:dataSource menuOption:option];
+        DetailTableViewController *detailViewController = [[DetailTableViewController alloc]initWithDataSource:obrasAndProgramsData menuOption:option];
         detailViewController.title = value;
         [self.navigationController pushViewController:detailViewController animated:YES];   
     }
