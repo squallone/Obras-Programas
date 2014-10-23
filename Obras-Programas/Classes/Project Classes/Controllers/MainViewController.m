@@ -1501,11 +1501,19 @@ const int numResultsPerPage = 200;
             [kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:@"Guardando..." delay:0];
             NSIndexPath *cellIndexPath = [_tableView indexPathForCell:cell];
             
-            Obra *obra = _tableViewData[cellIndexPath.row];
-            [DBHelper saveObra:obra];
+            id registro = _tableViewData[cellIndexPath.row];
             
-            NSString *message = [NSString stringWithFormat:@"Obra guardada\n%@", obra.idObra];
-            [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:message delay:1.5];
+            if (_isPrograms) {
+                
+            }else{
+                Obra *obra = (Obra *)registro;
+                [DBHelper saveObra:obra];
+                NSString *message = [NSString stringWithFormat:@"Obra guardada\n%@", obra.idObra];
+                [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:message delay:1.5];
+
+            }
+            
+            
 
             break;
 
@@ -1817,7 +1825,6 @@ const int numResultsPerPage = 200;
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    
     if (_isPrograms) {
        Programa *programa =  (Programa *)sender;
     }else{
@@ -1833,12 +1840,12 @@ const int numResultsPerPage = 200;
             GraficasViewController *graficasViewController = segue.destinationViewController;
             graficasViewController.stateReportData = _stateReportData;
             graficasViewController.dependenciesReportData = _dependenciesReportData;
-        }
+    }
 }
 
 -(void)showFichaTecnica:(NSNotification *)notification{
    
-    Obra *obra = [notification object];
+    Obra *obra = (Obra *)[notification object];
     [self performSegueWithIdentifier:@"showFichaTecnica" sender:obra];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
