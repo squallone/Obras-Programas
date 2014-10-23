@@ -225,11 +225,13 @@ willDisplayHeaderView : (UIView*) view
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row==7) {
-        return 58;
+    if(!self.isPrograms){
+        if (indexPath.row==7) {
+            return 58;
+        }
+        else return 44;
     }
-    else return 44;
+    else return 58;
     
 }
 
