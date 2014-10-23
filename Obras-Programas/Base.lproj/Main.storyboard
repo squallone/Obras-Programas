@@ -42,21 +42,6 @@
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWn-Hs-zqZ">
-                                <rect key="frame" x="16" y="228" width="79" height="27"/>
-                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
-                                <state key="normal" title="Ordenar">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                </state>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="sortSearch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0HD-WZ-mmD"/>
-                                </connections>
-                            </button>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2V9-7B-bro" userLabel="Buttons Consultar - Guardar">
                                 <rect key="frame" x="0.0" y="164" width="265" height="60"/>
                                 <subviews>
@@ -399,8 +384,8 @@
                                     <action selector="hideReporteView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="g5H-FQ-5VQ"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ocultar lista" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mev-DQ-T0b">
-                                <rect key="frame" x="759" y="232" width="92" height="21"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Ocultar reporte" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mev-DQ-T0b">
+                                <rect key="frame" x="779" y="232" width="104" height="21"/>
                                 <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="14"/>
                                 <color key="textColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -452,6 +437,21 @@
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="pV5-Ql-qYF"/>
                                 </connections>
                             </tableView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="rWn-Hs-zqZ">
+                                <rect key="frame" x="16" y="228" width="79" height="27"/>
+                                <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <fontDescription key="fontDescription" name="HelveticaNeue-Light" family="Helvetica Neue" pointSize="13"/>
+                                <state key="normal" title="Ordenar">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                    <color key="titleShadowColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="string" keyPath="layer.cornerRadius" value="10"/>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="sortSearch:" destination="BYZ-38-t0r" eventType="touchUpInside" id="0HD-WZ-mmD"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
@@ -467,6 +467,7 @@
                         <outlet property="btnInaugurator" destination="03d-WZ-WM0" id="cWH-nD-r55"/>
                         <outlet property="btnQuery" destination="Hjl-r0-WKS" id="FFN-sE-6Xt"/>
                         <outlet property="btnSaveQuery" destination="tmg-VW-qO0" id="Uqt-bR-Wxr"/>
+                        <outlet property="btnSortSearch" destination="rWn-Hs-zqZ" id="Rhy-p0-Me2"/>
                         <outlet property="btnStartDate" destination="n3s-NB-6be" id="9iW-yR-GdJ"/>
                         <outlet property="btnStates" destination="MDx-ef-QoZ" id="Qfv-78-3O8"/>
                         <outlet property="btnSusceptible" destination="Vte-m4-h6U" id="XXb-vR-E2a"/>
@@ -475,6 +476,8 @@
                         <outlet property="buttonsView" destination="14g-2F-FcP" id="aTT-Lh-szG"/>
                         <outlet property="lblEndEndDate" destination="D2h-WH-8pt" id="gq5-Q2-1Hg"/>
                         <outlet property="lblEndIniDate" destination="Jnr-Nf-vSW" id="gtm-7H-g3T"/>
+                        <outlet property="lblLista" destination="Nqx-sO-YjO" id="aw8-TA-RNe"/>
+                        <outlet property="lblReporte" destination="mev-DQ-T0b" id="l4z-bO-wDu"/>
                         <outlet property="lblStartEndDate" destination="LuG-dy-Gk5" id="7wS-9Q-LV8"/>
                         <outlet property="lblStartIniDate" destination="A1B-M4-Rf7" id="ZmA-yZ-Xok"/>
                         <outlet property="mapView" destination="qmI-lD-eeX" id="ggw-KS-SYJ"/>

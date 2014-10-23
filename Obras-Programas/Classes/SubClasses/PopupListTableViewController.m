@@ -57,7 +57,7 @@ const NSInteger rowHeight = 45;
         self.field          = field;
         
         self.clearsSelectionOnViewWillAppear = NO;
-        self.tableView.allowsMultipleSelection = _isMenu ? NO : YES;
+        self.tableView.allowsMultipleSelection = _isMenu || _field == e_Sort_Result ? NO : YES;
         
         NSInteger rowsCount = [self.dataSource count];
         NSInteger totalRowsHeight = (rowsCount * rowHeight);
@@ -125,7 +125,7 @@ const NSInteger rowHeight = 45;
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return _isMenu ? self.dataSource.count : self.dataSource.count+1;
+    return _isMenu || _field == e_Sort_Result ? self.dataSource.count : self.dataSource.count+1;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
@@ -133,7 +133,7 @@ const NSInteger rowHeight = 45;
     id objecModel = nil;
     NSString *value = @"";
 
-    if (_isMenu) {
+    if (_isMenu || _field == e_Sort_Result) {
        objecModel  = [self.dataSource objectAtIndex:indexPath.row];
     }else if (indexPath.row != 0) {
             objecModel  = [self.dataSource objectAtIndex:indexPath.row-1];
@@ -163,7 +163,7 @@ const NSInteger rowHeight = 45;
         }
         cell.textLabel.text = value;
         
-    }else{
+    }else if(!_isMenu && _field != e_Sort_Result){
         if (indexPath.row != 0) {
             cell.textLabel.text = value;
             if (_cleanSelection == t_DeleteAllWithoutTodo) {
@@ -188,6 +188,8 @@ const NSInteger rowHeight = 45;
                 cell.accessoryType = UITableViewCellAccessoryNone;
             }
         }
+    }else {
+        cell.textLabel.text = value;
     }
     
     cell.textLabel.font = [UIFont fontWithName:@"HelveticaNeue-Light" size:16.0];
@@ -201,7 +203,7 @@ const NSInteger rowHeight = 45;
     NSMutableArray *obrasAndProgramsData = [NSMutableArray array];
 
     //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
-    if (!_isMenu) {
+    if (!_isMenu && _field != e_Sort_Result) {
        
         if (indexPath.row !=0) {
             
@@ -243,12 +245,8 @@ const NSInteger rowHeight = 45;
                     id dataForSelectedRow = [self.dataSource objectAtIndex:_dataSource.count-1];
                     
                     [_dataSelected removeObject:dataForSelectedRow];
-
                 }
     
-                if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
-                    [_delegate popupListView:self dataForSingleSelectedRow:dataForSelectedRow];
-                }
                 [_dataSelected addObject:dataForSelectedRow];
 
             }
@@ -272,13 +270,14 @@ const NSInteger rowHeight = 45;
                 [self.tableView reloadData];
             }
      
-    }else{
+    }else if (_isMenu ){
     /* MENU */
         NSString *value  = [self.dataSource objectAtIndex:indexPath.row];
         NSArray *dataSource = [NSArray array];
         MenuOptions option;
         if (indexPath.row == 0) {
             dataSource =  [DBHelper getAllQueriesSaved];
+            obrasAndProgramsData = [dataSource mutableCopy];
             option = o_Consultas;
             if (dataSource.count == 0) {
                 [[[UIAlertView alloc]initWithTitle:@"No hay consultas"
@@ -311,6 +310,12 @@ const NSInteger rowHeight = 45;
         DetailTableViewController *detailViewController = [[DetailTableViewController alloc]initWithDataSource:obrasAndProgramsData menuOption:option];
         detailViewController.title = value;
         [self.navigationController pushViewController:detailViewController animated:YES];   
+    }else if (_field == e_Sort_Result){
+        NSString *value  = [self.dataSource objectAtIndex:indexPath.row];
+        if ([_delegate respondsToSelector:@selector(popupListView:dataForSingleSelectedRow:)]) {
+            [_delegate popupListView:self dataForSingleSelectedRow:value];
+        }
+        
     }
     NSLog(@"add %@", _dataSelected);
 }
@@ -319,7 +324,7 @@ const NSInteger rowHeight = 45;
 
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     
-    if (!_isMenu) {
+    if (!_isMenu && _field != e_Sort_Result) {
         if (indexPath.row !=0) {
             id dataForSelectedRow = [self.dataSource objectAtIndex:indexPath.row-1];
             [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];

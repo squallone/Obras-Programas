@@ -72,12 +72,15 @@
 @property (weak, nonatomic) IBOutlet UIButton *btnInaugurator;
 @property (weak, nonatomic) IBOutlet UIButton *btnSusceptible;
 @property (weak, nonatomic) IBOutlet UIButton *btnInaugurada;
+@property (weak, nonatomic) IBOutlet UIButton *btnSortSearch;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblStartIniDate;
 @property (weak, nonatomic) IBOutlet UILabel *lblStartEndDate;
 
 @property (weak, nonatomic) IBOutlet UILabel *lblEndIniDate;
 @property (weak, nonatomic) IBOutlet UILabel *lblEndEndDate;
+@property (weak, nonatomic) IBOutlet UILabel *lblLista;
+@property (weak, nonatomic) IBOutlet UILabel *lblReporte;
 
 @property (strong, nonatomic) UIBarButtonItem *menuBarBtn;
 @property (strong, nonatomic) UIButton *btnWorksPrograms;
@@ -170,6 +173,7 @@
 @property BOOL isFromMainQuery;
 @property BOOL isProgramsSelected;
 @property BOOL isPrograms;
+@property BOOL isProgramsNotification;
 
 @end
 
@@ -522,9 +526,9 @@
 
 - (IBAction)sortSearch:(id)sender {
     
-    NSArray *sort = @[@"Nombre (Asc)", @"Nombre (Desc)", @"Estado (Asc)", @"Estado (Desc)"];
+    NSArray *sort = @[@"Nombre (Ascendente)", @"Nombre (Descendente)", @"Estado (Ascendente)", @"Estado (Descendente)"];
     
-    [self displayItemsOnButton:sender
+    [self displayItemsOnButton:_btnSortSearch
                 withDataSource:sort
         withDataToShowCheckBox:nil
                isBarButtonItem:NO
@@ -782,23 +786,22 @@
     
     if (_btnCalendarSelected == _btnStartDate) {
         _lblStartIniDate.text = @"";
-        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_lblStartIniDate.text forKey:kKeyStoreStartIniDate];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreStartIniDate];
 
     }else if (_btnCalendarSelected == _btnEndDate){
         _lblEndIniDate.text = @"";
-        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_lblEndIniDate.text forKey:kKeyStoreEndIniDate];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreEndIniDate];
     }
 }
 
 -(void)deleteEndDate:(id)sender{
     if (_btnCalendarSelected == _btnStartDate) {
         _lblStartEndDate.text = @"";
-        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_lblStartEndDate.text forKey:kKeyStoreStartEndDate];
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreStartEndDate];
 
     }else if (_btnCalendarSelected == _btnEndDate){
         _lblEndEndDate.text = @"";
-        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_lblEndEndDate.text forKey:kKeyStoreEndEndDate];
-
+        [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreEndEndDate];
     }
 }
 
@@ -896,6 +899,7 @@ const int numResultsPerPage = 200;
     
     /* Animaciones para el TableView */
     if (_tableView.isHidden) {
+        _lblLista.text = @"Ocultar lista";
         _tableView.hidden = NO;
         _transition.subtype = kCATransitionFromLeft;
         [_tableView.layer addAnimation:_transition forKey:nil];
@@ -904,6 +908,7 @@ const int numResultsPerPage = 200;
     /* Animaciones para el Report View */
     
     if (_reportView.isHidden) {
+        _lblReporte.text = @"Ocultar reporte";
         _reportView.hidden = NO;
         _transition.subtype = kCATransitionFromRight;
         [_reportView.layer addAnimation:_transition forKey:nil];
@@ -969,8 +974,8 @@ const int numResultsPerPage = 200;
 
 - (IBAction)performSaveQuery:(id)sender {
 
-    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Guardando consulta"
-                                                   message:@"Ingresa el nombre de la consulta"
+    UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Guardar consulta"
+                                                   message:@"Pro favor ingresa el nombre de la consulta"
                                                   delegate:self
                                          cancelButtonTitle:@"Aceptar"
                                          otherButtonTitles:@"Cancelar", nil];
@@ -1199,6 +1204,49 @@ const int numResultsPerPage = 200;
         [parameters setObject:dateStr forKey:kParamFechaFinSegunda];
     }
     
+    /* Inagurada */
+    
+    parameterValue = @"";
+    
+    if (_inauguratorOptionSavedData.count > 0) {
+        
+        for (int i=0; i<[_inauguratorOptionSavedData count]; i++) {
+            NSString *value = _inauguratorOptionSavedData[i];
+            if ([value isEqualToString:@"Si"]) {
+                value = @"1";
+            }else if ([value isEqualToString:@"No"]){
+                value = @"0";
+            }
+            parameterValue = [parameterValue stringByAppendingString:value];
+            if (i!=_inauguratorOptionSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamInaugurada];
+    }
+    
+    /* Inagurada */
+    
+    parameterValue = @"";
+    
+    if (_susceptibleOptionSavedData.count > 0) {
+        
+        for (int i=0; i<[_susceptibleOptionSavedData count]; i++) {
+            NSString *value = _susceptibleOptionSavedData[i];
+            if ([value isEqualToString:@"Si"]) {
+                value = @"1";
+            }else if ([value isEqualToString:@"No"]){
+                value = @"0";
+            }
+            parameterValue = [parameterValue stringByAppendingString:value];
+            if (i!=_susceptibleOptionSavedData.count-1) {
+                parameterValue = [parameterValue stringByAppendingString:@","];
+            }
+        }
+        [parameters setObject:parameterValue forKey:kParamSusceptible];
+    }
+
+    
     return parameters;
 }
 
@@ -1280,7 +1328,7 @@ const int numResultsPerPage = 200;
         _popOverView = [[UIPopoverController alloc]initWithContentViewController:nav];
         if (isBarButton) {
             [_popOverView presentPopoverFromBarButtonItem:(UIBarButtonItem *)sender permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
-        }else if(aSearchField == e_Tipo){
+        }else if(aSearchField == e_Tipo || aSearchField == e_Sort_Result){
             [_popOverView presentPopoverFromRect:button.frame inView:self.view permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
         }else{
             [_popOverView presentPopoverFromRect:button.frame inView:_buttonsView permittedArrowDirections:UIPopoverArrowDirectionAny animated:YES];
@@ -1309,9 +1357,10 @@ const int numResultsPerPage = 200;
     
     if (data.count== 0) {
         [self changeTitleNavigationBar:@"OBRAS TOTALES"];
-        if (_tableViewData.count > 0 && _isPrograms) {
+        if ((_tableViewData.count > 0 && _isPrograms) || _isProgramsSelected) {
             [self cleandDataForTableViewAndReport];
-        }
+            [self cleanQueryAndHideHUD:YES];
+                 }
     }else if (data.count == 1){
         TipoObraPrograma *tipo = data[0];
         [self changeTitleNavigationBar:tipo.nombreTipoObra];
@@ -1321,21 +1370,36 @@ const int numResultsPerPage = 200;
             //Limpiamos las busquedas
             
             //Limpiamos datos
-            if (_tableViewData.count > 0 && !_isPrograms) {
+            if ((_tableViewData.count > 0 && !_isPrograms) || !_isProgramsSelected) {
                 [self cleandDataForTableViewAndReport];
                 [self cleanQueryAndHideHUD:YES];
 
             }
         }else {
-            if (_tableViewData.count > 0 && _isPrograms) {
+            if ((_tableViewData.count > 0 && _isPrograms) || _isProgramsSelected) {
                 [self cleandDataForTableViewAndReport];
+                [self cleanQueryAndHideHUD:YES];
             }
         }
     }else{
         [self changeTitleNavigationBar:@"OBRAS"];
         //Limpiamos datos
-        if (_tableViewData.count > 0 && _isPrograms) {
+        if ((_tableViewData.count > 0 && _isPrograms) || _isProgramsSelected) {
+            
+//            
+//            UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Tu consulta se limpiara"
+//                                                           message:@"Para buscar Obras es necesario limpiar la búsqueda de programas. ¿Deseas guardarla?"
+//                                                          delegate:nil
+//                                                 cancelButtonTitle:@"Guardar"
+//                                                 otherButtonTitles:@"Omitir", nil];
+//            
+//            [alert show];
+//
+//            
+//            
             [self cleandDataForTableViewAndReport];
+            [self cleanQueryAndHideHUD:YES];
+
         }
     }
     
@@ -1504,7 +1568,7 @@ const int numResultsPerPage = 200;
 {
     NSMutableArray *rightUtilityButtons = [NSMutableArray new];
     [rightUtilityButtons sw_addUtilityButtonWithColor:[UIColor darkGrayColor]
-                                                title:@"Guardar Obra"];
+                                                title:@"Guardar"];
    
     return rightUtilityButtons;
 }
@@ -1786,10 +1850,12 @@ const int numResultsPerPage = 200;
     
     if ([_tableView isHidden]) {
         _tableView.hidden = NO;
+        _lblLista.text = @"Ocultar lista";
         _transition.subtype = kCATransitionFromLeft;
         
     }else{
         _tableView.hidden = YES;
+        _lblLista.text = @"Mostrar lista";
         _transition.subtype = kCATransitionFromRight;
     }
     /* Add animation */
@@ -1802,10 +1868,14 @@ const int numResultsPerPage = 200;
     
     if ([_reportView isHidden]) {
         _reportView.hidden = NO;
+        _lblReporte.text = @"Ocultar reporte";
+
         _transition.subtype = kCATransitionFromRight;
         
     }else{
         _reportView.hidden = YES;
+        _lblReporte.text = @"Mostrar reporte";
+
         _transition.subtype = kCATransitionFromLeft;
     }
     /* Add animation */
@@ -1822,9 +1892,9 @@ const int numResultsPerPage = 200;
 - (BOOL)shouldPerformSegueWithIdentifier:(NSString *)identifier sender:(id)sender
 {
     if (_stateReportData.count ==0) {
-        UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"Error"
-                                                         message:@"Para consultar la gráfica primero tienes que consultar un reporte."
-                                                        delegate:self
+        UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"No puedes visualizar la gráfica"
+                                                         message:@"Para consultar la gráfica necesitas realizar un consulta que tenga resultados"
+                                                        delegate:nil
                                                cancelButtonTitle:@"Aceptar"
                                                otherButtonTitles: nil];
         [alert show];
@@ -1839,7 +1909,7 @@ const int numResultsPerPage = 200;
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
-    if (_isPrograms) {
+    if (_isPrograms || _isProgramsNotification) {
        Programa *programa =  (Programa *)sender;
         if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
             FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
@@ -1861,7 +1931,14 @@ const int numResultsPerPage = 200;
 
 -(void)showFichaTecnica:(NSNotification *)notification{
    
-    Obra *obra = (Obra *)[notification object];
+    id obra = [notification object];
+    
+    if ([obra isKindOfClass:[Programa class]]) {
+        _isProgramsNotification = YES;
+    }else if ([obra isKindOfClass:[Obra class]]){
+        _isProgramsNotification = NO;
+    }
+    
     [self performSegueWithIdentifier:@"showFichaTecnica" sender:obra];
     [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
