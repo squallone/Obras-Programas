@@ -13,6 +13,7 @@
 #import "ThirdColumnTableViewController.h"
 #import "SDWebImageManager.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "Programa.h"
 
 @interface FichaTecnicaViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imagenBanner;
@@ -33,7 +34,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [_imagenLogoDependencia setImageWithURL:self.obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if (_obra !=nil) {
+        [_imagenLogoDependencia setImageWithURL:self.obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }else{
+        [_imagenLogoDependencia setImageWithURL:self.programa.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+
+    }
 
     // Do any additional setup after loading the view.
 }
@@ -60,7 +66,7 @@
     if ([segueName isEqualToString: @"thirdColumnSegue"]) {
         _thirdColumn = (ThirdColumnTableViewController*) [segue destinationViewController];
         _thirdColumn.obra = _obra;
-        _secondColumn.programa = self.programa;
+        _thirdColumn.programa = self.programa;
 
     }
 }

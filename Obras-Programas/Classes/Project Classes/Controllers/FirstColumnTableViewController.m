@@ -220,6 +220,7 @@ willDisplayHeaderView : (UIView*) view
         
     }
    
+    if(indexPath.row !=7) [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
 
     return cell;
 }
@@ -231,7 +232,7 @@ willDisplayHeaderView : (UIView*) view
         }
         else return 44;
     }
-    else return 58;
+    else return 56.25;
     
 }
 

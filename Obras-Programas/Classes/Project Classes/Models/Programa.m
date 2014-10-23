@@ -20,7 +20,7 @@
              @"anoPrograma"         :@"anoPrograma",
              @"absoluto"            :@"absoluto",
              @"lineaBase"           :@"lineaBase",
-             @"poblacion"           :@"poblacionObjetivoPrograma",
+             @"poblacion"           :@"poblacionObjetivoProgramas",
              @"metaBeneficiarios"   :@"metaBeneficiarios",
              @"montoDeApoyo"        :@"montoDeApoyo",
              @"nombrePrograma"      :@"nombrePrograma",
