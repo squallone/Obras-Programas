@@ -8,25 +8,30 @@
 
 #import "ThirdColumnTableViewController.h"
 #import "Obra.h"
+#import "Programa.h"
 #define DESCRIPCION 0
 #define INAUGURACION 1
 #define OBSERVACIONES 2
 
+#define OBSERVACIONESPROGRAMAS 0
+#define METAS 1
 @interface ThirdColumnTableViewController ()
-
+@property BOOL isPrograms;
 @end
 
 @implementation ThirdColumnTableViewController
 @synthesize obra = _obra;
+@synthesize programa = _programa;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    if(self.obra!=nil){
+        self.isPrograms = NO;
+    }else{
+        self.isPrograms=YES;
+    }
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -38,19 +43,32 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 3;
+    if(!self.isPrograms){
+        return 3;
+
+    }else return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (section == DESCRIPCION) {
-        return 1;
+    if(!self.isPrograms){
+        if (section == DESCRIPCION) {
+            return 1;
+        }
+        else if(section == INAUGURACION){
+            return 3;
+        }
+        else if(section==OBSERVACIONES){
+            return 1;
+        }
+    }else{
+        if(section==OBSERVACIONESPROGRAMAS){
+            return 1;
+        }
+        else if(section==METAS){
+            return 4;
+        }
     }
-    else if(section == INAUGURACION){
-        return 3;
-    }
-    else if(section==OBSERVACIONES){
-        return 1;
-    }
+
         // Return the number of rows in the section.
         return 0;
 }
@@ -58,54 +76,95 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell;
     
-    if(indexPath.section==DESCRIPCION){
-        if(indexPath.row==0){
-            cell = [tableView dequeueReusableCellWithIdentifier:@"DescripcionCell" forIndexPath:indexPath];
-            UITextView *textView = (UITextView*)[cell.contentView viewWithTag:101];
-            textView.text = _obra.descripcion;
-
-        }
-    }
-    
-    if(indexPath.section==INAUGURACION){
-        if (indexPath.row==0) {
-            cell = [tableView dequeueReusableCellWithIdentifier:@"CellCheck" forIndexPath:indexPath];
-            cell.textLabel.text = @"Inaugurada";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            if([_obra.inaugurada isEqualToString:@"1"]){
-                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+    if(!self.isPrograms){
+        if(indexPath.section==DESCRIPCION){
+            if(indexPath.row==0){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"DescripcionCell" forIndexPath:indexPath];
+                UITextView *textView = (UITextView*)[cell.contentView viewWithTag:101];
+                textView.text = _obra.descripcion;
+                
             }
-        }else
-            if(indexPath.row==1){
+        }
+        
+        if(indexPath.section==INAUGURACION){
+            if (indexPath.row==0) {
                 cell = [tableView dequeueReusableCellWithIdentifier:@"CellCheck" forIndexPath:indexPath];
-                cell.textLabel.text = @"Susceptible de inaugurar";
+                cell.textLabel.text = @"Inaugurada";
                 cell.accessoryType = UITableViewCellAccessoryNone;
-                if([_obra.susceptibleInauguracion isEqualToString:@"1"]){
+                if([_obra.inaugurada isEqualToString:@"1"]){
                     [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
                 }
+            }else
+                if(indexPath.row==1){
+                    cell = [tableView dequeueReusableCellWithIdentifier:@"CellCheck" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Susceptible de inaugurar";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    if([_obra.susceptibleInauguracion isEqualToString:@"1"]){
+                        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                    }
+                }
+                else if (indexPath.row==2){
+                    cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Inaugurador";
+                    cell.detailTextLabel.text = _obra.inaugurador.nombreCargoInaugura;
+                    [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                    
+                }
+        }
+        
+        if(indexPath.section==OBSERVACIONES){
+            if(indexPath.row==0){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"DescripcionCell" forIndexPath:indexPath];
+                UITextView *textView = (UITextView*)[cell.contentView viewWithTag:101];
+                textView.text = _obra.observaciones;
             }
-            else if (indexPath.row==2){
-                cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-                cell.textLabel.text = @"Inaugurador";
-                cell.detailTextLabel.text = _obra.inaugurador.nombreCargoInaugura;
-                [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-
-            }
-    }
-    
-    if(indexPath.section==OBSERVACIONES){
-        if(indexPath.row==0){
+            
+            
+        }
+        
+        else cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+        [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+        
+        
+    }else{
+        if (indexPath.section==OBSERVACIONESPROGRAMAS){
             cell = [tableView dequeueReusableCellWithIdentifier:@"DescripcionCell" forIndexPath:indexPath];
             UITextView *textView = (UITextView*)[cell.contentView viewWithTag:101];
-            textView.text = _obra.observaciones;
+            textView.text = _programa.observaciones;
+        }else if(indexPath.section==METAS){
+            if (indexPath.row==0){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Meta Programada";
+                cell.detailTextLabel.text = _programa.metaBeneficiarios;
+                [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                
+            }
+            if (indexPath.row==1){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Linea Base";
+                cell.detailTextLabel.text = _programa.lineaBase;
+                [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                
+            }
+            if (indexPath.row==2){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Absoluto";
+                cell.detailTextLabel.text = _programa.absoluto;
+                [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                
+            }
+            if (indexPath.row==3){
+                cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Porcentual";
+                cell.detailTextLabel.text = _programa.porcentual;
+                [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+                
+            }
+
+
         }
-
-
+        
     }
-    
-    else cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-
     
 
     
@@ -117,31 +176,52 @@
 
 - (NSString*)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-    // set title of section here
     
-    if (section == DESCRIPCION) {
-        return @"Descripción";
+    if(!self.isPrograms){
+        // set title of section here
+        
+        if (section == DESCRIPCION) {
+            return @"Descripción";
+        }
+        else if(section == INAUGURACION){
+            return @"Inauguración";
+        }
+        
+        else if(section==OBSERVACIONES){
+            return @"Observaciones";
+        }
     }
-    else if(section == INAUGURACION){
-        return @"Inauguración";
+    else{
+        if(section == OBSERVACIONESPROGRAMAS){
+            return @"Observaciones";
+        }
+        
+        else if(section==METAS){
+            return @"Metas";
+        }
+        
     }
-
-    else if(section==OBSERVACIONES){
-        return @"Observaciones";
-    }else
         // Return the number of rows in the section.
         return @"";
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.section == DESCRIPCION & indexPath.row==0) {
-        return 148;
-    }else if(indexPath.section == OBSERVACIONES){
-        return 116;
+    if(!self.isPrograms){
+        if (indexPath.section == DESCRIPCION & indexPath.row==0) {
+            return 148;
+        }else if(indexPath.section == OBSERVACIONES){
+            return 116;
+        }
+        else return 44;
     }
-    else return 44;
+    else{
+        if(indexPath.section == OBSERVACIONESPROGRAMAS){
+            return 148;
+        }else return 44;
+        
+    }
+    return 0;
     
 }
 

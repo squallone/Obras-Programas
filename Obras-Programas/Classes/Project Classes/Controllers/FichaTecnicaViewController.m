@@ -13,6 +13,7 @@
 #import "ThirdColumnTableViewController.h"
 #import "SDWebImageManager.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "Programa.h"
 
 @interface FichaTecnicaViewController ()
 @property (weak, nonatomic) IBOutlet UIImageView *imagenBanner;
@@ -33,7 +34,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [_imagenLogoDependencia setImageWithURL:self.obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    if (_obra !=nil) {
+        [_imagenLogoDependencia setImageWithURL:self.obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    }else{
+        [_imagenLogoDependencia setImageWithURL:self.programa.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+
+    }
 
     // Do any additional setup after loading the view.
 }
@@ -49,14 +55,19 @@
     if ([segueName isEqualToString: @"firstColumnSegue"]) {
         _firstColumn = (FirstColumnTableViewController*) [segue destinationViewController];
         _firstColumn.obra = _obra;
+        _firstColumn.programa = self.programa;
     }else
     if ([segueName isEqualToString: @"secondColumnSegue"]) {
         _secondColumn = (SecondColumnTableViewController*) [segue destinationViewController];
         _secondColumn.obra = _obra;
+        _secondColumn.programa = self.programa;
+
     }else
     if ([segueName isEqualToString: @"thirdColumnSegue"]) {
         _thirdColumn = (ThirdColumnTableViewController*) [segue destinationViewController];
         _thirdColumn.obra = _obra;
+        _thirdColumn.programa = self.programa;
+
     }
 }
 

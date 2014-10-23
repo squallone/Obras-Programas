@@ -10,6 +10,7 @@
 #import "Obra.h"
 #import "Inversion.h"
 #import "Clasificacion.h"
+#import "Programa.h"
 #define INVERSION 0
 #define POBLACION 1
 #define CLASIFICACION 2
@@ -30,6 +31,8 @@
 
 
 @interface SecondColumnTableViewController ()
+@property BOOL isPrograms;
+
 
 @end
 
@@ -39,11 +42,12 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
+    if(self.obra!=nil){
+        self.isPrograms = NO;
+    }else{
+        self.isPrograms=YES;
+    }
     
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,17 +63,29 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    NSLog(@"%ld",(long)section);
-    if (section == INVERSION) {
-        return 2;
+    if (!self.isPrograms) {
+        if (section == INVERSION) {
+            return 2;
+        }
+        else if(section == POBLACION){
+            return 3;
+        }
+        else if(section == CLASIFICACION){
+            return 1;
+        }
     }
-    else if(section == POBLACION){
-        return 3;
+
+    else{
+        if (section == INVERSION) {
+            return 3;
+        }
+        else if(section == POBLACION){
+            return 2;
+        }
+        else if(section == CLASIFICACION){
+            return 1;
+        }
     }
-    else if(section == CLASIFICACION){
-        return 1;
-    }
-    else
     // Return the number of rows in the section.
     return 0;
 }
@@ -78,53 +94,259 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     UITableViewCell *cell ;
     NSNumberFormatter * f = [[NSNumberFormatter alloc] init];
-
+    
     [f setNumberStyle:NSNumberFormatterCurrencyStyle];
-    
-    NSNumber *number = [NSNumber numberWithFloat:[self.obra.inversionTotal floatValue]];
+    if (!self.isPrograms) {
+        
 
-    
-    if (indexPath.section == INVERSION) {
-        if(indexPath.row ==0){
-            cell =  [tableView dequeueReusableCellWithIdentifier:@"InversionCell" forIndexPath:indexPath];
-            UIImageView *imagenFederal = (UIImageView*)[cell.contentView viewWithTag:FEDERAL];
-            UIImageView *imagenEstatal = (UIImageView*)[cell.contentView viewWithTag:ESTATAL];
-            UIImageView *imagenMunicipal = (UIImageView*)[cell.contentView viewWithTag:MUNICIPAL];
-            UIImageView *imagenSocial = (UIImageView*)[cell.contentView viewWithTag:SOCIAL];
-            UIImageView *imagenPrivada = (UIImageView*)[cell.contentView viewWithTag:PRIVADA];
-            UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTROS];
+        
+        NSNumber *number = [NSNumber numberWithFloat:[self.obra.inversionTotal floatValue]];
+        
+        
+        if (indexPath.section == INVERSION) {
+            if(indexPath.row ==0){
+                cell =  [tableView dequeueReusableCellWithIdentifier:@"InversionCell" forIndexPath:indexPath];
+                UIImageView *imagenFederal = (UIImageView*)[cell.contentView viewWithTag:FEDERAL];
+                UIImageView *imagenEstatal = (UIImageView*)[cell.contentView viewWithTag:ESTATAL];
+                UIImageView *imagenMunicipal = (UIImageView*)[cell.contentView viewWithTag:MUNICIPAL];
+                UIImageView *imagenSocial = (UIImageView*)[cell.contentView viewWithTag:SOCIAL];
+                UIImageView *imagenPrivada = (UIImageView*)[cell.contentView viewWithTag:PRIVADA];
+                UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTROS];
+                
+                
+                imagenFederal.hidden =YES;
+                imagenEstatal.hidden=YES;
+                imagenMunicipal.hidden=YES;
+                imagenSocial.hidden =YES;
+                imagenPrivada.hidden= YES;
+                imagenOtros.hidden=YES;
+                
+                Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
+                NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
+                NSArray *items = @[@"Federal", @"Estatal", @"Municipal",@"Social",@"Privada",@"Otro"];
+                
+                for (Inversion *inversion in self.obra.inversiones) {
+                    NSString *stringInversion = [inversion valueForKey:@"nombreTipoInversion"];
+                    int item = [items indexOfObject:stringInversion];
+                    
+                    switch (item) {
+                        case 0:
+                            imagenFederal.hidden = NO;
+                            break;
+                        case 1:
+                            imagenEstatal.hidden = NO;
+                            break;
+                        case 2:
+                            imagenMunicipal.hidden = NO;
+                            break;
+                        case 3:
+                            imagenSocial.hidden = NO;
+                            break;
+                        case 4:
+                            imagenPrivada.hidden = NO;
+                            break;
+                        case 5:
+                            imagenOtros.hidden = NO;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            }
+            else if(indexPath.row==1){
+                cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Inversión Total";
+                cell.detailTextLabel.text =  [NSString stringWithFormat:@"%@ %@", [f stringFromNumber:number], self.obra.tipoMoneda];
+                
+                
+            }
+        }else
+            
+            if(indexPath.section == POBLACION){
+                if(indexPath.row ==0){
+                    cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Población Objetivo";
+                    cell.detailTextLabel.text = self.obra.poblacionObjetivo;
+                }
+                else if (indexPath.row==1){
+                    cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Impacto";
+                    cell.detailTextLabel.text = self.obra.impacto.nombreImpacto;
+                }
+                else if (indexPath.row==2){
+                    cell =[tableView dequeueReusableCellWithIdentifier:@"CellCheck" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Señalización";
+                    cell.accessoryType = UITableViewCellAccessoryNone;
+                    
+                    if ([_obra.senalizacion  isEqual: @"1"]) {
+                        [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
+                    }
+                    
+                }
+            }
+            else if(indexPath.section == CLASIFICACION & indexPath.row==0){
+                cell =  [tableView dequeueReusableCellWithIdentifier:@"ClaisificacionCell" forIndexPath:indexPath];
+                
+                
+                
+                UIImageView *imagenGobierno = (UIImageView*)[cell.contentView viewWithTag:COMPROMISOGOBIERNO];
+                UIImageView *imagenGuerrero = (UIImageView*)[cell.contentView viewWithTag:PNG];
+                UIImageView *imagenMichoacan = (UIImageView*)[cell.contentView viewWithTag:PM];
+                UIImageView *imagenPNI = (UIImageView*)[cell.contentView viewWithTag:PNI];
+                UIImageView *imagenCNCH = (UIImageView*)[cell.contentView viewWithTag:CNCH];
+                UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTRACLASIFICACION];
+                
+                
+                imagenGobierno.hidden =YES;
+                imagenGuerrero.hidden=YES;
+                imagenMichoacan.hidden=YES;
+                imagenPNI.hidden =YES;
+                imagenCNCH.hidden= YES;
+                imagenOtros.hidden=YES;
+                
+                Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
+                NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
+                NSArray *items = @[@"Compromiso de Gobierno"
+                                   , @"Plan Nuevo Guerrero",
+                                   @"Plan Michoacán",
+                                   @"Plan Nacional de Infraestructura",
+                                   @"Cruzada Nacional Contra el Hambre",
+                                   @"Otro"];
+                
+                for (Clasificacion *clasificacion in self.obra.clasificaciones) {
+                    NSString *stringInversion = [clasificacion valueForKey:@"nombreTipoClasificacion"];
+                    int item = [items indexOfObject:stringInversion];
+                    
+                    switch (item) {
+                        case 0:
+                            imagenGobierno.hidden = NO;
+                            break;
+                        case 1:
+                            imagenGuerrero.hidden = NO;
+                            break;
+                        case 2:
+                            imagenMichoacan.hidden = NO;
+                            break;
+                        case 3:
+                            imagenPNI.hidden = NO;
+                            break;
+                        case 4:
+                            imagenCNCH.hidden = NO;
+                            break;
+                        case 5:
+                            imagenOtros.hidden = NO;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+             }
+            else cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+        
+        [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+    }else{ //Is program
+        if (indexPath.section == INVERSION) {
+            if(indexPath.row==0){
+                cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Tipo de Apoyo";
+                cell.detailTextLabel.text =  self.programa.tipoApoyo.nombreTipoApoyo;
+                cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+                
+            }else
+                if(indexPath.row==1){
+                    NSNumber *number = [NSNumber numberWithFloat:[self.programa.montoDeApoyo floatValue]];
+                    
+                    cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Monto de Apoyo";
+                    cell.detailTextLabel.text =  [NSString stringWithFormat:@"%@ ", [f stringFromNumber:number]];
+                    
+                }else
+                    if(indexPath.row==2){
+                        NSNumber *number = [NSNumber numberWithFloat:[self.programa.inversionTotal floatValue]];
+                        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                        cell.textLabel.text = @"Monto de Inversión";
+                        cell.detailTextLabel.text =  [NSString stringWithFormat:@"%@ %@", [f stringFromNumber:number], self.programa.tipoMoneda];
+                        
+                    }
+        
+        }else if(indexPath.section == POBLACION){
+            if(indexPath.row==0){
+                cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                cell.textLabel.text = @"Población Objetivo";
+                cell.detailTextLabel.lineBreakMode = NSLineBreakByClipping;
+                cell.detailTextLabel.numberOfLines = 2;
+                cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+                
+                
+                NSString *fullString = self.programa.poblacion.nombrePoblacionObjetivo;
+                NSString *prefix = nil;
+                
+                if ([fullString length] >= 80)
+                    prefix = [fullString substringToIndex:80];
+                else
+                    prefix = fullString;
+                
+                
+                cell.detailTextLabel.text = prefix;
+
+                
+                
+                
+                
+            }else
+                if(indexPath.row==1){
+                    cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+                    cell.textLabel.text = @"Total de Beneficiarios atendidos";
+                    cell.detailTextLabel.text =  self.programa.totalBeneficiarios;
+                    
+                }
+        }else if(indexPath.section == CLASIFICACION & indexPath.row==0){
+            cell =  [tableView dequeueReusableCellWithIdentifier:@"ClaisificacionCell" forIndexPath:indexPath];
             
             
-            imagenFederal.hidden =YES;
-            imagenEstatal.hidden=YES;
-            imagenMunicipal.hidden=YES;
-            imagenSocial.hidden =YES;
-            imagenPrivada.hidden= YES;
+            
+            UIImageView *imagenGobierno = (UIImageView*)[cell.contentView viewWithTag:COMPROMISOGOBIERNO];
+            UIImageView *imagenGuerrero = (UIImageView*)[cell.contentView viewWithTag:PNG];
+            UIImageView *imagenMichoacan = (UIImageView*)[cell.contentView viewWithTag:PM];
+            UIImageView *imagenPNI = (UIImageView*)[cell.contentView viewWithTag:PNI];
+            UIImageView *imagenCNCH = (UIImageView*)[cell.contentView viewWithTag:CNCH];
+            UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTRACLASIFICACION];
+            
+            
+            imagenGobierno.hidden =YES;
+            imagenGuerrero.hidden=YES;
+            imagenMichoacan.hidden=YES;
+            imagenPNI.hidden =YES;
+            imagenCNCH.hidden= YES;
             imagenOtros.hidden=YES;
             
-            Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
-            NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
-            NSArray *items = @[@"Federal", @"Estatal", @"Municipal",@"Social",@"Privada",@"Otro"];
 
-            for (Inversion *inversion in self.obra.inversiones) {
-                NSString *stringInversion = [inversion valueForKey:@"nombreTipoInversion"];
+            NSArray *items = @[@"Compromiso de Gobierno"
+                               , @"Plan Nuevo Guerrero",
+                               @"Plan Michoacán",
+                               @"Plan Nacional de Infraestructura",
+                               @"Cruzada Nacional Contra el Hambre",
+                               @"Otro"];
+            
+            for (Clasificacion *clasificacion in self.programa.clasificaciones) {
+                NSString *stringInversion = [clasificacion valueForKey:@"nombreTipoClasificacion"];
                 int item = [items indexOfObject:stringInversion];
                 
                 switch (item) {
                     case 0:
-                        imagenFederal.hidden = NO;
+                        imagenGobierno.hidden = NO;
                         break;
                     case 1:
-                        imagenEstatal.hidden = NO;
+                        imagenGuerrero.hidden = NO;
                         break;
                     case 2:
-                        imagenMunicipal.hidden = NO;
+                        imagenMichoacan.hidden = NO;
                         break;
                     case 3:
-                        imagenSocial.hidden = NO;
+                        imagenPNI.hidden = NO;
                         break;
                     case 4:
-                        imagenPrivada.hidden = NO;
+                        imagenCNCH.hidden = NO;
                         break;
                     case 5:
                         imagenOtros.hidden = NO;
@@ -134,120 +356,31 @@
                 }
             }
         }
-        else if(indexPath.row==1){
-            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-            cell.textLabel.text = @"Inversión Total";
-            cell.detailTextLabel.text =  [NSString stringWithFormat:@"%@ %@", [f stringFromNumber:number], self.obra.tipoMoneda];
-
-
-        }
-    }else
-        
-    if(indexPath.section == POBLACION){
-        if(indexPath.row ==0){
-            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-            cell.textLabel.text = @"Población Objetivo";
-            cell.detailTextLabel.text = self.obra.poblacionObjetivo;
-        }
-        else if (indexPath.row==1){
-            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-            cell.textLabel.text = @"Impacto";
-            cell.detailTextLabel.text = self.obra.impacto.nombreImpacto;
-        }
-        else if (indexPath.row==2){
-            cell =[tableView dequeueReusableCellWithIdentifier:@"CellCheck" forIndexPath:indexPath];
-            cell.textLabel.text = @"Señalización";
-            cell.accessoryType = UITableViewCellAccessoryNone;
-
-            if ([_obra.senalizacion  isEqual: @"1"]) {
-                [cell setAccessoryType:UITableViewCellAccessoryCheckmark];
-            }
-
-        }
+    [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
     }
-    else if(indexPath.section == CLASIFICACION & indexPath.row==0){
-        cell =  [tableView dequeueReusableCellWithIdentifier:@"ClaisificacionCell" forIndexPath:indexPath];
-        
-        
-        
-        UIImageView *imagenGobierno = (UIImageView*)[cell.contentView viewWithTag:COMPROMISOGOBIERNO];
-        UIImageView *imagenGuerrero = (UIImageView*)[cell.contentView viewWithTag:PNG];
-        UIImageView *imagenMichoacan = (UIImageView*)[cell.contentView viewWithTag:PM];
-        UIImageView *imagenPNI = (UIImageView*)[cell.contentView viewWithTag:PNI];
-        UIImageView *imagenCNCH = (UIImageView*)[cell.contentView viewWithTag:CNCH];
-        UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTRACLASIFICACION];
-        
-        
-        imagenGobierno.hidden =YES;
-        imagenGuerrero.hidden=YES;
-        imagenMichoacan.hidden=YES;
-        imagenPNI.hidden =YES;
-        imagenCNCH.hidden= YES;
-        imagenOtros.hidden=YES;
-        
-        Inversion * inversion = (Inversion*)[self.obra.inversiones firstObject];
-        NSLog(@"%@",[inversion valueForKey:@"nombreTipoInversion"]);
-        NSArray *items = @[@"Compromiso de Gobierno"
-                           , @"Plan Nuevo Guerrero",
-                           @"Plan Michoacán",
-                           @"Plan Nacional de Infraestructura",
-                           @"Cruzada Nacional Contra el Hambre",
-                           @"Otro"];
-        
-        for (Clasificacion *clasificacion in self.obra.clasificaciones) {
-            NSString *stringInversion = [clasificacion valueForKey:@"nombreTipoClasificacion"];
-            int item = [items indexOfObject:stringInversion];
-            
-            switch (item) {
-                case 0:
-                    imagenGobierno.hidden = NO;
-                    break;
-                case 1:
-                    imagenGuerrero.hidden = NO;
-                    break;
-                case 2:
-                    imagenMichoacan.hidden = NO;
-                    break;
-                case 3:
-                    imagenPNI.hidden = NO;
-                    break;
-                case 4:
-                    imagenCNCH.hidden = NO;
-                    break;
-                case 5:
-                    imagenOtros.hidden = NO;
-                    break;
-                default:
-                    break;
-            }
-        }
-
-        
-        
-        
-        
-
-    }
-    
-    
-    
-    else cell = [tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-    
-     [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-
-    
     // Configure the cell...
     
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.section == INVERSION & indexPath.row==0) {
-        return 104;
-    }else if(indexPath.section == CLASIFICACION & indexPath.row==0) return 172;
-    
-    else return 44;
+    if(!self.isPrograms){
+        if (indexPath.section == INVERSION & indexPath.row==0) {
+            return 104;
+        }else if(indexPath.section == CLASIFICACION & indexPath.row==0) return 172;
+        
+        else return 44;
+    }
+    else {
+        if (indexPath.section == INVERSION) {
+            return 49;
+        }else if (indexPath.section == POBLACION){
+            return 66;
+        }
+        else if(indexPath.section == CLASIFICACION & indexPath.row==0) return 172;
+        else return 44;
+    }
+    return 44;
     
 }
 

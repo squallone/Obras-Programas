@@ -9,10 +9,10 @@
 #import "FirstColumnTableViewController.h"
 #import "FichaTecnicaViewController.h"
 #import "Obra.h"
-
+#import "Programa.h"
 @interface FirstColumnTableViewController ()
 @property (strong, nonatomic) IBOutlet UITableView *firstColumn;
-
+@property BOOL isPrograms;
 @end
 
 @implementation FirstColumnTableViewController
@@ -21,7 +21,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
 
-    
+    if(self.obra!=nil){
+        self.isPrograms = NO;
+    }else{
+        self.isPrograms=YES;
+    }
     
     // Uncomment the following line to preserve selection between presentations.
     // self.clearsSelectionOnViewWillAppear = NO;
@@ -44,6 +48,10 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
+    if(self.isPrograms){
+        return 7;
+    }
+    else
     return 9;
 }
 
@@ -59,102 +67,172 @@ willDisplayHeaderView : (UIView*) view
     
     UITableViewCell *cell;
     
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
-    [dateFormatter setDateStyle:NSDateFormatterFullStyle];
-    NSLog(@"System time: %@", [self.obra.fechaInicio description]);
-    
-    
-    // Configure the cell...
-    if(indexPath.row == 0){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Identificador de Obra";
-        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-        cell.detailTextLabel.text = self.obra.idObra;
+    if(!self.isPrograms){
+        NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+        [dateFormatter setDateStyle:NSDateFormatterFullStyle];
+        NSLog(@"System time: %@", [self.obra.fechaInicio description]);
+        
+        
+        // Configure the cell...
+        if(indexPath.row == 0){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Identificador de Obra";
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            cell.detailTextLabel.text = self.obra.idObra;
+            
+        }else if(indexPath.row == 1){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Denominación";
+            cell.detailTextLabel.lineBreakMode = NSLineBreakByClipping;
+            cell.detailTextLabel.numberOfLines = 2;
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            
+            
+            NSString *fullString = self.obra.denominacion;
+            NSString *prefix = nil;
+            
+            if ([fullString length] >= 80)
+                prefix = [fullString substringToIndex:80];
+            else
+                prefix = fullString;
+            
+            
+            cell.detailTextLabel.text = prefix;
+        }
+        else    if(indexPath.row == 2){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Dependencia/Secretaría";
+            
+            
+            
+            cell.detailTextLabel.text = self.obra.dependencia.nombreDependencia;
+            
+        }
+        else    if(indexPath.row == 3){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Estado";
+            cell.detailTextLabel.text = self.obra.estado.nombreEstado;
+            
+        }
+        else    if(indexPath.row == 4){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Municipio";
+            cell.detailTextLabel.text = self.obra.municipio;
+            
+        }
+        else    if(indexPath.row == 5){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Tipo de Obra";
+            cell.detailTextLabel.text = self.obra.tipoObra.nombreTipoObra;
+            
+        }
+        else    if(indexPath.row == 6){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Avance";
+            cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %%",self.obra.porcentajeAvance];
+            
+            
+        }
+        else    if(indexPath.row == 7){
+            cell = [tableView dequeueReusableCellWithIdentifier:@"CellFecha" forIndexPath:indexPath];
+            UILabel *labelInicio = (UILabel*)[cell.contentView viewWithTag:1];
+            labelInicio.text = [self.obra.fechaInicio description];
+            
+            UILabel *labelFinal = (UILabel*)[cell.contentView viewWithTag:2];
+            labelFinal.text = [self.obra.fechaTermino description];
+            
+            [labelInicio setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+            [labelFinal setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+            
+        }
+        else    if(indexPath.row == 8){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Última modificación";
+            cell.detailTextLabel.text = [self.obra.fechaModificacion description];
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            
+        }
+        
+        if(indexPath.row !=7) [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+    }else{ // IS PROGRAMS
+        
+        // Configure the cell...
+        if(indexPath.row == 0){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Identificador del Programa";
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            cell.detailTextLabel.text = self.programa.idPrograma;
+            
+        }else if(indexPath.row == 1){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Nombre del Programa";
+            cell.detailTextLabel.lineBreakMode = NSLineBreakByClipping;
+            cell.detailTextLabel.numberOfLines = 2;
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            
+            
+            NSString *fullString = self.programa.nombrePrograma;
+            NSString *prefix = nil;
+            
+            if ([fullString length] >= 80)
+                prefix = [fullString substringToIndex:80];
+            else
+                prefix = fullString;
+            
+            
+            cell.detailTextLabel.text = prefix;
+        }
+        else    if(indexPath.row == 2){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Dependencia/Organismo";
+            
+            
+            
+            cell.detailTextLabel.text = self.programa.dependencia.nombreDependencia;
+            
+        }
+        else    if(indexPath.row == 3){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Estado";
+            cell.detailTextLabel.text = self.programa.estado.nombreEstado;
+            
+        }
+        else    if(indexPath.row == 4){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Año del Programa";
+            cell.detailTextLabel.text = self.programa.anoPrograma;
+            
+        }
+        else    if(indexPath.row == 5){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Municipios Beneficiados";
+            cell.detailTextLabel.text = self.programa.totalMunicipios;
+            
+        }
+        else    if(indexPath.row == 6){
+            cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
+            cell.textLabel.text = @"Última modificación";
+            cell.detailTextLabel.text = [self.programa.fechaModificacion description];
+            cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
+            
+        }
 
-    }else if(indexPath.row == 1){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Denominación";
-        cell.detailTextLabel.lineBreakMode = NSLineBreakByClipping;
-        cell.detailTextLabel.numberOfLines = 2;
-        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
         
-        
-        NSString *fullString = self.obra.denominacion;
-        NSString *prefix = nil;
-        
-        if ([fullString length] >= 80)
-            prefix = [fullString substringToIndex:80];
-        else
-            prefix = fullString;
-        
-        
-        cell.detailTextLabel.text = prefix;
     }
-    else    if(indexPath.row == 2){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Dependencia/Secretaría";
-        
-        
-        
-        cell.detailTextLabel.text = self.obra.dependencia.nombreDependencia;
-
-    }
-    else    if(indexPath.row == 3){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Estado";
-        cell.detailTextLabel.text = self.obra.estado.nombreEstado;
-
-    }
-    else    if(indexPath.row == 4){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Municipio";
-        cell.detailTextLabel.text = self.obra.municipio;
-
-    }
-    else    if(indexPath.row == 5){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Tipo de Obra";
-        cell.detailTextLabel.text = self.obra.tipoObra.nombreTipoObra;
-
-    }
-    else    if(indexPath.row == 6){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Avance";
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%@ %%",self.obra.porcentajeAvance];
-       
-
-    }
-    else    if(indexPath.row == 7){
-        cell = [tableView dequeueReusableCellWithIdentifier:@"CellFecha" forIndexPath:indexPath];
-        UILabel *labelInicio = (UILabel*)[cell.contentView viewWithTag:1];
-        labelInicio.text = [self.obra.fechaInicio description];
-        
-        UILabel *labelFinal = (UILabel*)[cell.contentView viewWithTag:2];
-        labelFinal.text = [self.obra.fechaTermino description];
-        
-        [labelInicio setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-        [labelFinal setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
-
-    }
-    else    if(indexPath.row == 8){
-        cell =[tableView dequeueReusableCellWithIdentifier:@"Cell" forIndexPath:indexPath];
-        cell.textLabel.text = @"Última modificación";
-        cell.detailTextLabel.text = [self.obra.fechaModificacion description];
-        cell.detailTextLabel.adjustsFontSizeToFitWidth = YES;
-
-    }
-    
+   
     if(indexPath.row !=7) [cell.detailTextLabel setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
 
     return cell;
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (indexPath.row==7) {
-        return 58;
+    if(!self.isPrograms){
+        if (indexPath.row==7) {
+            return 58;
+        }
+        else return 44;
     }
-    else return 44;
+    else return 56.25;
     
 }
 

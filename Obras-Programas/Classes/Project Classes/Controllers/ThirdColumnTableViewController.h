@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 @class Obra;
+@class Programa;
 @interface ThirdColumnTableViewController : UITableViewController
 @property (strong,nonatomic) Obra *obra;
+@property (strong,nonatomic) Programa *programa;
+
 @end
