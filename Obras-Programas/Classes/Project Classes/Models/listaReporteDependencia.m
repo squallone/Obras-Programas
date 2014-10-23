@@ -22,7 +22,7 @@
              };
 }
 
-+ (NSValueTransformer *)estadoJSONTransformer {
++ (NSValueTransformer *)dependenciaJSONTransformer {
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[Dependencia class]];
 }
 

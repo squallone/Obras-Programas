@@ -1479,8 +1479,8 @@ const int numResultsPerPage = 200;
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
-    Obra *obra = _tableViewData[indexPath.row];
-    [self performSegueWithIdentifier:@"showFichaTecnica" sender:obra];
+    id registro = _tableViewData[indexPath.row];
+    [self performSegueWithIdentifier:@"showFichaTecnica" sender:registro];
 }
 
 - (NSArray *)rightButtons
@@ -1607,7 +1607,7 @@ const int numResultsPerPage = 200;
         }
         
         if (columnPath.row == 0) {
-            cell.textLabel.text = @"Dependencia";
+            cell.textLabel.text = reporte.dependencia.nombreDependencia;
         }else if (columnPath.row == 1){
             cell.textLabel.text = [NSString stringWithFormat:@"%@", reporte.numeroObras];
         }else if (columnPath.row == 2){
@@ -1817,6 +1817,14 @@ const int numResultsPerPage = 200;
     // Get the new view controller using [segue destinationViewController].
     // Pass the selected object to the new view controller.
     
+    
+    if (_isPrograms) {
+       Programa *programa =  (Programa *)sender;
+    }else{
+       Obra *obra =  (Obra *)sender;
+
+    }
+    
     if ([segue.identifier isEqualToString:@"showFichaTecnica"]) {
         FichaTecnicaViewController *fichaTecnicaViewController = segue.destinationViewController;
         fichaTecnicaViewController.obra = (Obra *)sender;
@@ -1824,23 +1832,9 @@ const int numResultsPerPage = 200;
     }else if ([segue.identifier isEqualToString:@"showGrafica"]) {
             GraficasViewController *graficasViewController = segue.destinationViewController;
             graficasViewController.stateReportData = _stateReportData;
-            
-            #warning La lista de reporte de dependencias no tiene el atributo de los nombres sustituir reporteDependenciaarr por _dependenciesReportData
-            ListaReporteDependencia *reporteDependencia = [[ListaReporteDependencia alloc] init];
-            Dependencia *dependencia = [Dependencia new];
-            dependencia.nombreDependencia = @"CFE";
-            dependencia.idDependencia = @"1";
-            reporteDependencia.dependencia =dependencia;
-            reporteDependencia.totalInvertido = @"100";
-            reporteDependencia.numeroObras = @"50";
-            
-            NSMutableArray *reporteDependenciaarr = [NSMutableArray new];
-            [reporteDependenciaarr addObject:reporteDependencia];
-            
-            graficasViewController.dependenciesReportData = reporteDependenciaarr;
+            graficasViewController.dependenciesReportData = _dependenciesReportData;
         }
 }
-
 
 -(void)showFichaTecnica:(NSNotification *)notification{
    
