@@ -877,6 +877,13 @@ const int numResultsPerPage = 200;
     [parameters setObject:[NSString stringWithFormat:@"%d", _numCurrentPage * numResultsPerPage]  forKey:kParamLimiteMin];
     if (_isFromMainQuery)[kAppDelegate showActivityIndicator:M13ProgressViewActionNone whithMessage:kHUDMsgLoading delay:0];
     [_jsonClient performPOSTRequestWithParameters:parameters toServlet:kServletBuscar withOptions:@"obras"];
+    
+    [_searchBar resignFirstResponder];
+    [self.txtRangoMaximo resignFirstResponder];
+    [self.txtRangoMinimo resignFirstResponder];
+    [self.txtDenominacion resignFirstResponder];
+    [self.txtIDObraPrograma resignFirstResponder];
+    _searchBar.text = @"";
 }
 
 #pragma mark - Resultado Busquedas
@@ -1038,16 +1045,8 @@ const int numResultsPerPage = 200;
     NSMutableDictionary *parameters = [NSMutableDictionary dictionary];
     NSString *parameterValue = @"";
     
-    if (self.txtDenominacion.text.length>0) {
-        [parameters setObject:self.txtDenominacion.text forKey:kParamDenominacion];
-    }
-    
-    if (self.txtIDObraPrograma.text.length>0) {
-        [parameters setObject:self.txtIDObraPrograma.text forKey:kParamIdObra];
-    }
-    
     /* Tipo de Obra */
-
+    
     if (_worksProgramsSavedData.count > 0) {
         
         for (int i=0; i<[_worksProgramsSavedData count]; i++) {
@@ -1058,194 +1057,218 @@ const int numResultsPerPage = 200;
                     parameterValue = [parameterValue stringByAppendingString:@","];
                 }
             }
-           
+            
         }
         
         if (!_isProgramsSelected) {
             [parameters setObject:parameterValue forKey:kParamTipoDeObra];
         }else{
             [parameters setObject:@"1" forKey:@"consultaProgramas"];
+            
+        }
+    }
+    
+    if (_searchBar.text.length > 0) {
+        [parameters setObject:_searchBar.text forKey:kParamBusquedaRapida];
+
+    }else{
+        if (self.txtDenominacion.text.length>0) {
+            if (_isProgramsSelected) {
+                [parameters setObject:self.txtDenominacion.text forKey:@"nombrePrograma"];
+            }else{
+                [parameters setObject:self.txtDenominacion.text forKey:kParamDenominacion];
+            }
+        }
+        
+        if (self.txtIDObraPrograma.text.length>0) {
+            if (_isProgramsSelected) {
+                [parameters setObject:self.txtIDObraPrograma.text forKey:kParamIdPrograma];
+            }else{
+                [parameters setObject:self.txtIDObraPrograma.text forKey:kParamIdObra];
+            }
 
         }
-    }
-    
-    /* Depedencias */
-    parameterValue = @"";
+        
+        
+        /* Depedencias */
+        parameterValue = @"";
+        
+        if (_dependenciesSavedData.count > 0) {
+            
+            for (int i=0; i<[_dependenciesSavedData count]; i++) {
+                Dependencia *dependencia = _dependenciesSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:dependencia.idDependencia];
+                if (i!=_dependenciesSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamDependencia];
+        }
+        
+        /* Estados */
+        
+        parameterValue = @"";
+        
+        if (_statesSavedData.count > 0) {
+            
+            for (int i=0; i<[_statesSavedData count]; i++) {
+                Estado *estado = _statesSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:estado.idEstado];
+                if (i!=_statesSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamEstado];
+        }
+        
+        /* Rango de inversion*/
+        
+        if (_txtRangoMinimo.text.length >0) {
+            [parameters setObject:[self changeFormatStringToNSNumber:_txtRangoMinimo.text] forKey:kParamInversionMinima];
+            
+            if (_txtRangoMaximo.text.length == 0) {
+                NSNumber *maxFloat = [NSNumber numberWithFloat:MAXFLOAT];
+                [parameters setObject:maxFloat forKey:kParamImversionMaxima];
+            }
+        }
+        
+        if (_txtRangoMaximo.text.length > 0){
+            [parameters setObject:[self changeFormatStringToNSNumber:_txtRangoMaximo.text] forKey:kParamImversionMaxima];
+            
+            if (_txtRangoMinimo.text.length == 0) {
+                NSNumber *minFloat = [NSNumber numberWithFloat:0];
+                [parameters setObject:minFloat forKey:kParamInversionMinima];
+            }
+        }
+        
+        /* Tipo de inversión */
+        
+        parameterValue = @"";
+        
+        if (_invesmentsSavedData.count > 0) {
+            
+            for (int i=0; i<[_invesmentsSavedData count]; i++) {
+                Inversion *inversion = _invesmentsSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:inversion.idTipoInversion];
+                if (i!=_invesmentsSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamTipoDeInversion];
+        }
+        
+        /* Impacto */
+        
+        parameterValue = @"";
+        
+        if (_impactsSavedData.count > 0) {
+            
+            for (int i=0; i<[_impactsSavedData count]; i++) {
+                Impacto *impacto = _impactsSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:impacto.idImpacto];
+                if (i!=_impactsSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamImpacto];
+        }
+        
+        /* Clasificaciones */
+        
+        parameterValue = @"";
+        
+        if (_clasificationsSavedData.count > 0) {
+            
+            for (int i=0; i<[_clasificationsSavedData count]; i++) {
+                Clasificacion *clasificacion = _clasificationsSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:clasificacion.idTipoClasificacion];
+                if (i!=_clasificationsSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamClasificacion];
+        }
+        
+        /* Inaguradores */
+        
+        parameterValue = @"";
+        
+        if (_inauguratorSavedData.count > 0) {
+            
+            for (int i=0; i<[_inauguratorSavedData count]; i++) {
+                Inaugurador *inaugurador = _inauguratorSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:inaugurador.idCargoInaugura];
+                if (i!=_inauguratorSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamInaugurador];
+        }
+        
+        /* Fechas */
+        
+        if (_lblStartIniDate.text.length>0) {
+            NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicio];
+            [parameters setObject:dateStr forKey:kParamFechaInicio];
+        }
+        if (_lblStartEndDate.text.length>0) {
+            NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicioSegunda];
+            
+            [parameters setObject:dateStr forKey:kParamFechaInicioSegunda];
+        }
+        if (_lblEndIniDate.text.length>0) {
+            NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaFin];
+            [parameters setObject:dateStr forKey:kParamFechaFin];
+        }
+        if (_lblEndEndDate.text.length>0) {
+            NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaFinSegunda];
+            [parameters setObject:dateStr forKey:kParamFechaFinSegunda];
+        }
+        
+        /* Inagurada */
+        
+        parameterValue = @"";
+        
+        if (_inauguratorOptionSavedData.count > 0) {
+            
+            for (int i=0; i<[_inauguratorOptionSavedData count]; i++) {
+                NSString *value = _inauguratorOptionSavedData[i];
+                if ([value isEqualToString:@"Si"]) {
+                    value = @"1";
+                }else if ([value isEqualToString:@"No"]){
+                    value = @"0";
+                }
+                parameterValue = [parameterValue stringByAppendingString:value];
+                if (i!=_inauguratorOptionSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamInaugurada];
+        }
+        
+        /* Inagurada */
+        
+        parameterValue = @"";
+        
+        if (_susceptibleOptionSavedData.count > 0) {
+            
+            for (int i=0; i<[_susceptibleOptionSavedData count]; i++) {
+                NSString *value = _susceptibleOptionSavedData[i];
+                if ([value isEqualToString:@"Si"]) {
+                    value = @"1";
+                }else if ([value isEqualToString:@"No"]){
+                    value = @"0";
+                }
+                parameterValue = [parameterValue stringByAppendingString:value];
+                if (i!=_susceptibleOptionSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamSusceptible];
+        }
 
-    if (_dependenciesSavedData.count > 0) {
-        
-        for (int i=0; i<[_dependenciesSavedData count]; i++) {
-            Dependencia *dependencia = _dependenciesSavedData[i];
-            parameterValue = [parameterValue stringByAppendingString:dependencia.idDependencia];
-            if (i!=_dependenciesSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamDependencia];
     }
     
-    /* Estados */
-    
-    parameterValue = @"";
-    
-    if (_statesSavedData.count > 0) {
-        
-        for (int i=0; i<[_statesSavedData count]; i++) {
-            Estado *estado = _statesSavedData[i];
-            parameterValue = [parameterValue stringByAppendingString:estado.idEstado];
-            if (i!=_statesSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamEstado];
-    }
-    
-    /* Rango de inversion*/
-    
-    if (_txtRangoMinimo.text.length >0) {
-        [parameters setObject:[self changeFormatStringToNSNumber:_txtRangoMinimo.text] forKey:kParamInversionMinima];
-        
-        if (_txtRangoMaximo.text.length == 0) {
-            NSNumber *maxFloat = [NSNumber numberWithFloat:MAXFLOAT];
-            [parameters setObject:maxFloat forKey:kParamImversionMaxima];
-        }
-    }
-    
-    if (_txtRangoMaximo.text.length > 0){
-        [parameters setObject:[self changeFormatStringToNSNumber:_txtRangoMaximo.text] forKey:kParamImversionMaxima];
-
-        if (_txtRangoMinimo.text.length == 0) {
-            NSNumber *minFloat = [NSNumber numberWithFloat:0];
-            [parameters setObject:minFloat forKey:kParamInversionMinima];
-        }
-    }
-    
-    /* Tipo de inversión */
-    
-    parameterValue = @"";
-    
-    if (_invesmentsSavedData.count > 0) {
-        
-        for (int i=0; i<[_invesmentsSavedData count]; i++) {
-            Inversion *inversion = _invesmentsSavedData[i];
-            parameterValue = [parameterValue stringByAppendingString:inversion.idTipoInversion];
-            if (i!=_invesmentsSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamTipoDeInversion];
-    }
-    
-    /* Impacto */
-    
-    parameterValue = @"";
-    
-    if (_impactsSavedData.count > 0) {
-        
-        for (int i=0; i<[_impactsSavedData count]; i++) {
-            Impacto *impacto = _impactsSavedData[i];
-            parameterValue = [parameterValue stringByAppendingString:impacto.idImpacto];
-            if (i!=_impactsSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamImpacto];
-    }
-    
-    /* Clasificaciones */
-    
-    parameterValue = @"";
-    
-    if (_clasificationsSavedData.count > 0) {
-        
-        for (int i=0; i<[_clasificationsSavedData count]; i++) {
-            Clasificacion *clasificacion = _clasificationsSavedData[i];
-            parameterValue = [parameterValue stringByAppendingString:clasificacion.idTipoClasificacion];
-            if (i!=_clasificationsSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamClasificacion];
-    }
-    
-    /* Inaguradores */
-    
-    parameterValue = @"";
-    
-    if (_inauguratorSavedData.count > 0) {
-        
-        for (int i=0; i<[_inauguratorSavedData count]; i++) {
-            Inaugurador *inaugurador = _inauguratorSavedData[i];
-            parameterValue = [parameterValue stringByAppendingString:inaugurador.idCargoInaugura];
-            if (i!=_inauguratorSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamInaugurador];
-    }
-    
-    /* Fechas */
-    
-    if (_lblStartIniDate.text.length>0) {
-        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicio];
-        [parameters setObject:dateStr forKey:kParamFechaInicio];
-    }
-    if (_lblStartEndDate.text.length>0) {
-        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicioSegunda];
-
-        [parameters setObject:dateStr forKey:kParamFechaInicioSegunda];
-    }
-    if (_lblEndIniDate.text.length>0) {
-        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaFin];
-        [parameters setObject:dateStr forKey:kParamFechaFin];
-    }
-    if (_lblEndEndDate.text.length>0) {
-        NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaFinSegunda];
-        [parameters setObject:dateStr forKey:kParamFechaFinSegunda];
-    }
-    
-    /* Inagurada */
-    
-    parameterValue = @"";
-    
-    if (_inauguratorOptionSavedData.count > 0) {
-        
-        for (int i=0; i<[_inauguratorOptionSavedData count]; i++) {
-            NSString *value = _inauguratorOptionSavedData[i];
-            if ([value isEqualToString:@"Si"]) {
-                value = @"1";
-            }else if ([value isEqualToString:@"No"]){
-                value = @"0";
-            }
-            parameterValue = [parameterValue stringByAppendingString:value];
-            if (i!=_inauguratorOptionSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamInaugurada];
-    }
-    
-    /* Inagurada */
-    
-    parameterValue = @"";
-    
-    if (_susceptibleOptionSavedData.count > 0) {
-        
-        for (int i=0; i<[_susceptibleOptionSavedData count]; i++) {
-            NSString *value = _susceptibleOptionSavedData[i];
-            if ([value isEqualToString:@"Si"]) {
-                value = @"1";
-            }else if ([value isEqualToString:@"No"]){
-                value = @"0";
-            }
-            parameterValue = [parameterValue stringByAppendingString:value];
-            if (i!=_susceptibleOptionSavedData.count-1) {
-                parameterValue = [parameterValue stringByAppendingString:@","];
-            }
-        }
-        [parameters setObject:parameterValue forKey:kParamSusceptible];
-    }
-
     
     return parameters;
 }
@@ -1768,12 +1791,25 @@ const int numResultsPerPage = 200;
 
 -(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
     
+    [self performQuery:nil];
     [_searchBar setShowsCancelButton:NO animated:YES];
+    _searchBar.text = @"";
     [_searchBar resignFirstResponder];
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
     
+    if (searchText.length==0) {
+        [_searchBar resignFirstResponder];
+
+    }
+}
+
+-(void)searchBarTextDidEndEditing:(UISearchBar *)searchBar{
+    
+    if (searchBar.text.length==0) {
+        [_searchBar resignFirstResponder];
+    }
 }
 
 #pragma mark - UITextField Delegate

@@ -142,7 +142,7 @@ NSString * const kKeyListaReporteGeneral        = @"listaReporteGeneral";
 
 NSString * const kParamDenominacion         = @"denominacion";
 NSString * const kParamIdObra               = @"idObra";
-NSString * const kParamIdPrograma           = @"idObra";
+NSString * const kParamIdPrograma           = @"idPrograma";
 NSString * const kParamBusquedaRapida       = @"busquedaRapida";
 NSString * const kParamTipoDeObra           = @"tipoDeObra";
 NSString * const kParamDependencia          = @"dependencia";
