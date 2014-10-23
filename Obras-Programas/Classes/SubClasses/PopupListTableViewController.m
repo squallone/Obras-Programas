@@ -116,8 +116,10 @@ const NSInteger rowHeight = 45;
 
 -(void)viewWillDisappear:(BOOL)animated{
     
-    if ([_delegate respondsToSelector:@selector(popupListView:dataForMultipleSelectedRows:)]) {
-        [_delegate popupListView:self dataForMultipleSelectedRows:_dataSelected];
+    if(!_isMenu && _field != e_Sort_Result){
+        if ([_delegate respondsToSelector:@selector(popupListView:dataForMultipleSelectedRows:)]) {
+            [_delegate popupListView:self dataForMultipleSelectedRows:_dataSelected];
+        }
     }
 }
 

@@ -1383,7 +1383,7 @@ const int numResultsPerPage = 200;
         if ((_tableViewData.count > 0 && _isPrograms) || _isProgramsSelected) {
             [self cleandDataForTableViewAndReport];
             [self cleanQueryAndHideHUD:YES];
-                 }
+        }
     }else if (data.count == 1){
         TipoObraPrograma *tipo = data[0];
         [self changeTitleNavigationBar:tipo.nombreTipoObra];
