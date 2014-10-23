@@ -261,6 +261,8 @@
 		ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC54D19C2E43F0074CA01 /* MainViewController.m */; };
 		ABFCC55019C2E5990074CA01 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC54F19C2E5990074CA01 /* MapKit.framework */; };
 		EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB21B4FB19F6174D00F70F6A /* LineView.m */; };
+		EBF594EF19F8BAB90068E51E /* image_1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EBF594ED19F8BAB90068E51E /* image_1.jpeg */; };
+		EBF594F019F8BAB90068E51E /* image_2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EBF594EE19F8BAB90068E51E /* image_2.jpeg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -721,6 +723,8 @@
 		ABFCC54F19C2E5990074CA01 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		EB21B4FA19F6174D00F70F6A /* LineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineView.h; sourceTree = "<group>"; };
 		EB21B4FB19F6174D00F70F6A /* LineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineView.m; sourceTree = "<group>"; };
+		EBF594ED19F8BAB90068E51E /* image_1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_1.jpeg; sourceTree = "<group>"; };
+		EBF594EE19F8BAB90068E51E /* image_2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_2.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1666,6 +1670,8 @@
 		ABFCC4E319C2DDA10074CA01 /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				EBF594ED19F8BAB90068E51E /* image_1.jpeg */,
+				EBF594EE19F8BAB90068E51E /* image_2.jpeg */,
 				ABBDAAD819F7355200290B96 /* no_image.jpg */,
 				ABD3D6FC19EB9C690006BEA2 /* checked.png */,
 				ABD3D6FD19EB9C690006BEA2 /* logoPresidencia.png */,
@@ -1788,6 +1794,7 @@
 				ABAC4F2D19E25F48002B15B5 /* MDSpreadViewCornerTopLeft.png in Resources */,
 				ABAC4F2E19E25F48002B15B5 /* MDSpreadViewCornerTopLeft@2x.png in Resources */,
 				ABAC4F2819E25F48002B15B5 /* MDSpreadViewCornerBottomLeftSelected@2x.png in Resources */,
+				EBF594EF19F8BAB90068E51E /* image_1.jpeg in Resources */,
 				ABFCC46519C2DB530074CA01 /* Main.storyboard in Resources */,
 				ABAC4F1A19E25F48002B15B5 /* MDSpreadViewCell@2x.png in Resources */,
 				ABFCC50F19C2DDA10074CA01 /* TSMessagesDefaultDesign.json in Resources */,
@@ -1848,6 +1855,7 @@
 				ABD3D70019EB9C690006BEA2 /* logoPresidencia.png in Resources */,
 				ABAC4F3719E25F48002B15B5 /* MDSpreadViewRowHeaderBottomSelected.png in Resources */,
 				ABAC4F2619E25F48002B15B5 /* MDSpreadViewCornerBottomLeft@2x.png in Resources */,
+				EBF594F019F8BAB90068E51E /* image_2.jpeg in Resources */,
 				ABFCC50319C2DDA10074CA01 /* NotificationBackgroundMessage.png in Resources */,
 				ABAC4F1B19E25F48002B15B5 /* MDSpreadViewCellSelected.png in Resources */,
 				ABAC4F3C19E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected@2x.png in Resources */,

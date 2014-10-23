@@ -19,9 +19,17 @@
 @property (weak, nonatomic) IBOutlet UIImageView *imagenBanner;
 @property (weak, nonatomic) IBOutlet UIImageView *imagenLogo;
 @property (weak, nonatomic) IBOutlet UIImageView *imagenLogoDependencia;
+
+@property (weak, nonatomic) IBOutlet UIImageView *imagenAntes;
+@property (weak, nonatomic) IBOutlet UIImageView *imagenDurante;
+@property (weak, nonatomic) IBOutlet UIImageView *imagenDespues;
+
+
+
 @property FirstColumnTableViewController *firstColumn;
 @property SecondColumnTableViewController *secondColumn;
 @property ThirdColumnTableViewController *thirdColumn;
+@property (strong , nonatomic) IBOutlet UIScrollView *imagesContainer;
 
 @end
 
@@ -30,6 +38,7 @@
 @synthesize firstColumn = _firstColumn;
 @synthesize secondColumn = _secondColumn;
 @synthesize thirdColumn = _thirdColumn;
+@synthesize imagesContainer = scrollView;
 
 
 - (void)viewDidLoad {
@@ -40,7 +49,7 @@
         [_imagenLogoDependencia setImageWithURL:self.programa.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
 
     }
-
+    [self setupScrollView];
     // Do any additional setup after loading the view.
 }
 
@@ -71,6 +80,29 @@
     }
 }
 
+
+-(void) setupScrollView {
+    // Adjust scroll view content size, set background colour and turn on paging
+    [_imagenAntes setImageWithURL:self.obra.fotoAntesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    
+    [_imagenDurante setImageWithURL:self.obra.fotoDuranteURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    
+    [_imagenDespues setImageWithURL:self.obra.fotoDespuesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+    
+    scrollView.contentSize = CGSizeMake(scrollView.frame.size.width * 12,
+                                        scrollView.frame.size.height);
+    scrollView.pagingEnabled=YES;
+    scrollView.backgroundColor = [UIColor blackColor];
+    
+    // Generate content for our scroll view using the frame height and width as the reference point
+    
+    
+    [scrollView addSubview:_imagenAntes];
+    [scrollView addSubview:_imagenDurante];
+    [scrollView addSubview:_imagenDespues];
+    
+    
+}
 
 
 #pragma mark - Navigation
