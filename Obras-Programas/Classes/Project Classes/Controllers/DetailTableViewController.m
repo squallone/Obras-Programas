@@ -30,41 +30,64 @@
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
         
         _option = option;
+        self.dataSource     = dataSource;
+
         /* Initialize instance variables */
         self.navigationController.navigationBar.hidden = NO;
-
-        self.dataSource     = dataSource;
-        
         self.clearsSelectionOnViewWillAppear = NO;
         
-        NSInteger rowsCount = [self.dataSource count];
-        NSInteger totalRowsHeight = (rowsCount * 45);
+        NSInteger totalRowsHeight = 0;
         self.tableView.backgroundColor = [UIColor clearColor];
         //Calcula el ancho que debe tener la vista buscando que ancho de cada string se espera que sea
         
         CGFloat largestLabelWidth = 0;
         _labelSize = _option == o_Consultas ? 17.0 : 14.5;
         
+        UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:_labelSize];
+        
         if (_option == o_Consultas) {
-            for (id objectModel in self.dataSource) {
+            NSInteger rowsCount = [self.dataSource count];
+            totalRowsHeight  = (rowsCount * 45) + 45;
+            
+            for (Consulta *consulta in self.dataSource) {
                 
-                NSDictionary *dicData = [self textToDisplay:objectModel];
-                NSString *title = dicData[@"title"];
+                NSString *title = consulta.nombreConsulta;
                 
-                //Verifica el tamaño del texto usado la fuente del textLabel por defecto del UITableViewCell
-                
-                CGSize labelSize = [title sizeWithAttributes:
-                                    @{NSFontAttributeName:
-                                          [UIFont fontWithName:@"HelveticaNeue-Light" size:_labelSize]}];
-                
+                CGSize labelSize = [title sizeWithAttributes:  @{NSFontAttributeName:font}];
                 if (labelSize.width > largestLabelWidth) {
                     largestLabelWidth = labelSize.width;
                 }
+                
+                largestLabelWidth = largestLabelWidth + 20;
             }
         }else if (_option == o_Favoritos){
             
+            for (NSArray *obrasProgramas in _dataSource) {
+                NSInteger rowsCount = [obrasProgramas count];
+                totalRowsHeight = totalRowsHeight + (rowsCount * 45);
+            }
+            totalRowsHeight = totalRowsHeight + 100;
+            NSArray *obras = _dataSource[0];
+            for (Obra *obra in obras) {
+                
+                NSString *title = obra.denominacion;
+                CGSize labelSize = [title sizeWithAttributes: @{NSFontAttributeName: font}];
+                
+                if (labelSize.width > largestLabelWidth) {
+                    largestLabelWidth = largestLabelWidth + labelSize.width;
+                }
+            }
+
+            NSArray *programas = _dataSource[1];
+            for (Programa *programa in programas) {
+                NSString *title = programa.nombrePrograma;
+                CGSize labelSize = [title sizeWithAttributes: @{NSFontAttributeName:font}];
+                if (labelSize.width > largestLabelWidth) {
+                    largestLabelWidth = largestLabelWidth + labelSize.width;
+                }
+            }
         }
-               //Agrega un pequeño padding al ancho
+        //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 90;
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
@@ -90,28 +113,53 @@
 
 #pragma mark - Table view data source
 
+
+
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    return 1;
+    if (_option == o_Consultas) {
+        return 1;
+    }else{
+        return _dataSource.count;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
-    return _dataSource.count;
+    
+    if (_option == o_Consultas) {
+        return _dataSource.count;
+    }else{
+        if (section == 0) {
+            return [_dataSource[0] count];
+            
+        }else if (section == 1){
+            return [_dataSource[1] count];
+        }
+        return 0;
+
+    }
 }
 
+-(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+    
+    if (_option == o_Consultas) {
+        return @"";
+    }else{
+        if (section==0) {
+            return @"Obras";
+        }else{
+            return @"Programas";
+        }
+    }
+}
+   
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
-    id objectModel = _dataSource[indexPath.row];
-    
-    NSDictionary *dicData = [self textToDisplay:objectModel];
-    NSString *title = dicData[@"title"];
-    NSString *subtitle = dicData[@"subtitle"];
-    
+
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
@@ -119,46 +167,56 @@
         cell.backgroundColor = [UIColor clearColor];
     }
     
-    cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, title];
-    cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", subtitle];
-    return cell;
+    if (_option == o_Consultas) {
+        
+        Consulta *consulta = _dataSource[indexPath.row];
+        
+        cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, consulta.nombreConsulta];
+        cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", [NSDate date]];
+        return cell;
+
+    }else{
+        NSArray *registros = _dataSource[indexPath.section];
+
+        if (indexPath.section == 0) {
+            
+            Obra *obra = registros[indexPath.row];
+            
+            cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, obra.denominacion];
+            cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", obra.idObra];
+            
+        }else if (indexPath.section == 1){
+
+            Programa *programa = registros[indexPath.row];
+            cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, programa.nombrePrograma];
+            cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", programa.idPrograma];
+        }
+        return cell;
+
+    }
 }
 
 #pragma mark - UITableView  Delegate
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+   
+    [self dismissViewControllerAnimated:YES completion:nil];
+
     if (_option == o_Consultas) {
         
     }else if (_option == o_Favoritos){
-        Obra *obra = _dataSource[indexPath.row];
-        [self dismissViewControllerAnimated:YES completion:nil];
-        [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:obra];
+        NSArray *registros = _dataSource[indexPath.section];
+
+        if (indexPath.section == 0) {
+            Obra *obra = registros[indexPath.row];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:obra];
+
+        }else if (indexPath.section == 1){
+            Programa *programa = registros[indexPath.row];
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:programa];
+        }
+
     }
-}
-
-#pragma mark - Segue
-
-
--(NSDictionary *)textToDisplay:(id)objectModel{
-    
-    NSString *title     = @"";
-    NSString *subtitle  = @"";
-    
-    if (_option == o_Consultas) {
-        
-        Consulta *consulta = (Consulta *)objectModel;
-        title       = consulta.nombreConsulta;
-        subtitle    = @"Fecha";
-        
-    }else if(_option == o_Favoritos){
-        
-        
-        Obra *obra = (Obra *)objectModel;
-        title = obra.denominacion;
-        subtitle = obra.idObra;
-    }
-    
-    return @{@"title": title, @"subtitle": subtitle};
 }
 
 @end

@@ -114,6 +114,8 @@
         [results addObject:[managedObject valueForKey:@"consultaData"]];
         
     }
+    
+    
     return results;
 }
 

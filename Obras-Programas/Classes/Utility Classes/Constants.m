@@ -25,6 +25,8 @@
 NSString * const kDbName = @"oyp";
 NSString * const kAppURL = kAppFullURL;
 NSString * const kAppImagenesDependencia =  @"imagenesDependencias/";
+NSString * const kAppImagenesObras       =  @"imagenesObras/";
+
 NSString * const kImageNamePlaceHolder = @"no_image.jpg";
 //              Servlets
 /******************************************************/
