@@ -61,6 +61,12 @@ NSString * const kKeyStoreEndEndDate            =  @"keed";
 NSString * const kKeyStoreInauguradaOption      =  @"kiopt";
 NSString * const kKeyStoreSusceptibleOption     =  @"ksopt";
 
+NSString * const kKeyStoreDenomination          =  @"kdnt";
+NSString * const kKeyStoreIDWorkOrProgram       =  @"kiwp";
+NSString * const kKeyStoreMaxRange              =  @"krgmx";
+NSString * const kKeyStoreMinRange              =  @"krgmn";
+
+NSString * const kKeyStoreProgramYear           =  @"kpgy";
 
 //              KEYS JSON
 /******************************************************/

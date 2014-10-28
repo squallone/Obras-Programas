@@ -113,8 +113,6 @@
 
 #pragma mark - Table view data source
 
-
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
     if (_option == o_Consultas) {
@@ -170,9 +168,8 @@
     if (_option == o_Consultas) {
         
         Consulta *consulta = _dataSource[indexPath.row];
-        
         cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, consulta.nombreConsulta];
-        cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", [NSDate date]];
+        cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", consulta.fechaCreacion];
         return cell;
 
     }else{
@@ -181,7 +178,6 @@
         if (indexPath.section == 0) {
             
             Obra *obra = registros[indexPath.row];
-            
             cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, obra.denominacion];
             cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", obra.idObra];
             
@@ -192,7 +188,6 @@
             cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", programa.idPrograma];
         }
         return cell;
-
     }
 }
 
@@ -203,19 +198,19 @@
     [self dismissViewControllerAnimated:YES completion:nil];
 
     if (_option == o_Consultas) {
-        
-    }else if (_option == o_Favoritos){
-        NSArray *registros = _dataSource[indexPath.section];
+        Consulta *consulta = _dataSource[indexPath.row];
+        [[NSNotificationCenter defaultCenter]postNotificationName:@"openQuery" object:consulta];
 
+    }else if (_option == o_Favoritos){
+
+        NSArray *registros = _dataSource[indexPath.section];
         if (indexPath.section == 0) {
             Obra *obra = registros[indexPath.row];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:obra];
-
         }else if (indexPath.section == 1){
             Programa *programa = registros[indexPath.row];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:programa];
         }
-
     }
 }
 

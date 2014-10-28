@@ -35,7 +35,6 @@ const NSString *kNombreDependencia;
         self.navigationController.navigationBar.hidden = NO;
         self.clearsSelectionOnViewWillAppear = NO;
         self.tableView.backgroundColor = [UIColor clearColor];
-
     }
     return self;
 }
@@ -83,19 +82,12 @@ const NSString *kNombreDependencia;
         [dataDic setObject:@"Inauguradores" forKey:kKeyNombre];
         [_datasource addObject:dataDic];
     }
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    
     return _datasource.count;
 }
 
@@ -109,7 +101,6 @@ const NSString *kNombreDependencia;
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
 
     NSDictionary *dicData = _datasource[section];
-    
     return dicData[kKeyNombre];
 }
 
@@ -117,10 +108,8 @@ const NSString *kNombreDependencia;
     
     NSDictionary *dicData = _datasource[indexPath.section];
     
-
     static NSString *CellIdentifier = @"Cell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    
     
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CellIdentifier];
@@ -154,9 +143,7 @@ const NSString *kNombreDependencia;
     }else if ([nombre isEqualToString:@"Inauguradores"]) {
         Inaugurador *inaugurador = dataSelected[indexPath.row];
         cell.textLabel.text = inaugurador.nombreCargoInaugura;
-        
     }
-    
     return cell;
 }
 

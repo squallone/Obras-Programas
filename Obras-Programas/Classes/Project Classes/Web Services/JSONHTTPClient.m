@@ -67,7 +67,6 @@
             NSArray *statesData = [self deserializeStatesFromJSON:JSONResponse];
             
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToStates:)]) {
-                
                 [self.delegate JSONHTTPClientDelegate:self didResponseToStates:statesData];
             }
         //Inauguradores
@@ -76,7 +75,6 @@
             NSArray *inaugurators = [self deserializeInauguratorsFromJSON:JSONResponse];
             
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToInaugurators:)]) {
-                
                 [self.delegate JSONHTTPClientDelegate:self didResponseToInaugurators:inaugurators];
             }
         //Impactos
@@ -85,7 +83,6 @@
             NSArray *impacts = [self deserializeImpactsFromJSON:JSONResponse];
 
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToImpacts:)]) {
-                
                 [self.delegate JSONHTTPClientDelegate:self didResponseToImpacts:impacts];
             }
             
@@ -95,7 +92,6 @@
             NSArray *clasifications = [self deserializeClasificationsFromJSON:JSONResponse];
             
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToClasifications:)]) {
-                
                 [self.delegate JSONHTTPClientDelegate:self didResponseToClasifications:clasifications];
             }
         // Dependencias
@@ -104,7 +100,6 @@
             NSArray *dependencies = [self deserializeDependenciesFromJSON:JSONResponse];
             
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToDependencies:)]) {
-                
                 [self.delegate JSONHTTPClientDelegate:self didResponseToDependencies:dependencies];
             }
         //Inversiones
@@ -114,17 +109,29 @@
             NSArray *invesments = [self deserializeInvesmentsFromJSON:JSONResponse];
             
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToTypesOfInvesments:)]) {
-                
                 [self.delegate JSONHTTPClientDelegate:self didResponseToTypesOfInvesments:invesments];
             }
         //Tipo Obras Programas
         }else if ([servletName isEqualToString:kServletConsultarTipoObraPrograma]){
             
-            NSArray *worksProgramas = [self deserializeWorksProgramsFromJSON:JSONResponse];
+            TipoObraPrograma *obrasTotales = [[TipoObraPrograma alloc]init];
+            obrasTotales.nombreTipoObra = @"OBRAS TOTALES";
             
+            TipoObraPrograma *programas = [[TipoObraPrograma alloc]init];
+            programas.nombreTipoObra = @"PROGRAMAS";
+            NSArray *works = [self deserializeWorksProgramsFromJSON:JSONResponse];
+
+            NSMutableArray *worksAndPrograms = [NSMutableArray array];
+            [worksAndPrograms addObject:obrasTotales];
+
+            for (TipoObraPrograma *obra in works) {
+                 [worksAndPrograms addObject:obra];
+            }
+            [worksAndPrograms addObject:programas];
+
+        
             if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToTypesOfWorksAndPrograms:)]) {
-                
-                [self.delegate JSONHTTPClientDelegate:self didResponseToTypesOfWorksAndPrograms:worksProgramas];
+                [self.delegate JSONHTTPClientDelegate:self didResponseToTypesOfWorksAndPrograms:worksAndPrograms];
             }
             
         //Buscar y Reportes

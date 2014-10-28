@@ -31,6 +31,6 @@
 @optional
 
 -(void)popupListView:(PopupListTableViewController *)popupListTableView dataForSingleSelectedRow:(NSString *)string;
--(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data;
+-(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data rowPressed:(BOOL)option;
 
 @end

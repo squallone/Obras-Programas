@@ -23,7 +23,8 @@ typedef NS_OPTIONS(NSInteger, MainSearchFields)
     e_Inaugurada      = 8,
     e_Suscpetible     = 9,
     e_RangoInversion  = 10,
-    e_Sort_Result     = 11
+    e_Sort_Result     = 11,
+    e_AnioPrograma    = 12
 };
 
 typedef NS_OPTIONS(NSInteger, MenuOptions)
@@ -85,6 +86,7 @@ extern NSString * const kKeyStoreEndIniDate;
 extern NSString * const kKeyStoreEndEndDate;
 extern NSString * const kKeyStoreInauguradaOption;
 extern NSString * const kKeyStoreSusceptibleOption;
+extern NSString * const kKeyStoreProgramYear;
 
 /////////////       Keys JSON
 /******************************************************/
@@ -143,6 +145,11 @@ extern NSString * const kKeyDbTipoMoneda;
 extern NSString * const kKeyDbInaugurada;
 extern NSString * const kKeyDbPoblacionObjetivo;
 extern NSString * const kKeyDbMunicipio;
+
+extern NSString * const kKeyStoreDenomination;
+extern NSString * const kKeyStoreIDWorkOrProgram;
+extern NSString * const kKeyStoreMaxRange;
+extern NSString * const kKeyStoreMinRange;
 
 extern NSString * const kKeyListaObras;
 extern NSString * const kKeyListaReporteEstado;
