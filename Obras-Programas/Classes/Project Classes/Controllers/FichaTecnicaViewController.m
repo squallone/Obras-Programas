@@ -89,7 +89,16 @@
     }
 }
 
+-(void)firstImagePressed{
+    NSLog(@"first");
+}
 
+-(void)secondImagePressed{
+    NSLog(@"Second");
+}
+-(void)thirdImagePressed{
+    NSLog(@"Third");
+}
 -(void) setupScrollView {
     //add the scrollview to the view
     scrollView = [[UIScrollView alloc] initWithFrame:scrollView.frame];
@@ -99,6 +108,9 @@
     [scrollView setAlwaysBounceVertical:NO];
     scrollView.backgroundColor = [UIColor clearColor];
     //setup internal views
+    
+    
+    
     NSInteger numberOfViews = 3;
     for (int i = 0; i < numberOfViews; i++) {
         CGFloat xOrigin = i * scrollView.frame.size.width;
@@ -107,10 +119,63 @@
                                          scrollView.frame.size.width,
                                          scrollView.frame.size.height)];
         
-        if(i==0)[image setImageWithURL:self.obra.fotoAntesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        else if (i==1)[image setImageWithURL:self.obra.fotoDuranteURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
-        else if (i==2)[image setImageWithURL:self.obra.fotoDespuesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+        
+        
+        if(i==0)
+        {
+            image.userInteractionEnabled =YES;
+            [image setImageWithURL:self.obra.fotoAntesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(firstImagePressed)];
+            [singleTap setNumberOfTapsRequired:1];
+            [image addGestureRecognizer:singleTap];
+            
+            UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 121, 300 , 20)];
+            lblTitle.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5f];
+            
+            lblTitle.text = @"Antes";
+            //[lblTitle setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+            [lblTitle setTextColor:[UIColor whiteColor]];
+            lblTitle.textAlignment = NSTextAlignmentCenter;
 
+            [image addSubview:lblTitle];
+
+        }
+        
+        else if (i==1){
+            image.userInteractionEnabled =YES;
+            [image setImageWithURL:self.obra.fotoDuranteURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(secondImagePressed)];
+            [singleTap setNumberOfTapsRequired:1];
+            [image addGestureRecognizer:singleTap];
+            
+            UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 121, 300 , 20)];
+            lblTitle.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5f];
+            
+            lblTitle.text = @"Durante";
+            //[lblTitle setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+            [lblTitle setTextColor:[UIColor whiteColor]];
+            lblTitle.textAlignment = NSTextAlignmentCenter;
+            
+            [image addSubview:lblTitle];
+
+        }
+        else if (i==2){
+            image.userInteractionEnabled =YES;
+            [image setImageWithURL:self.obra.fotoDespuesURL placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
+            UITapGestureRecognizer *singleTap =  [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(thirdImagePressed)];
+            [singleTap setNumberOfTapsRequired:1];
+            [image addGestureRecognizer:singleTap];
+            
+            UILabel *lblTitle = [[UILabel alloc] initWithFrame:CGRectMake(0, 121, 300 , 20)];
+            lblTitle.backgroundColor = [[UIColor grayColor] colorWithAlphaComponent:0.5f];
+            
+            lblTitle.text = @"Despues";
+            //[lblTitle setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
+            [lblTitle setTextColor:[UIColor whiteColor]];
+            lblTitle.textAlignment = NSTextAlignmentCenter;
+            
+            [image addSubview:lblTitle];
+        }
         image.contentMode = UIViewContentModeScaleAspectFit;
         [scrollView addSubview:image];
     }

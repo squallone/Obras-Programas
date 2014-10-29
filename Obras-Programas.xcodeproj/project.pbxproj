@@ -158,7 +158,6 @@
 		ABC9940C19F195360041B6B5 /* SecondColumnTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9940619F195360041B6B5 /* SecondColumnTableViewController.m */; };
 		ABC9940D19F195360041B6B5 /* FirstColumnTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9940819F195360041B6B5 /* FirstColumnTableViewController.m */; };
 		ABC9940E19F195360041B6B5 /* FichaTecnicaViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABC9940A19F195360041B6B5 /* FichaTecnicaViewController.m */; };
-		ABC9941219F195920041B6B5 /* ShinobiCharts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC9941119F195920041B6B5 /* ShinobiCharts.framework */; };
 		ABC9941419F195980041B6B5 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC9941319F195980041B6B5 /* QuartzCore.framework */; };
 		ABC9941619F1959F0041B6B5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC9941519F1959F0041B6B5 /* CoreGraphics.framework */; };
 		ABC9941819F195A50041B6B5 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABC9941719F195A50041B6B5 /* CoreText.framework */; };
@@ -261,6 +260,7 @@
 		ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC54D19C2E43F0074CA01 /* MainViewController.m */; };
 		ABFCC55019C2E5990074CA01 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC54F19C2E5990074CA01 /* MapKit.framework */; };
 		EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB21B4FB19F6174D00F70F6A /* LineView.m */; };
+		EBF19D4C1A00A28A0024DD94 /* ShinobiCharts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF19D4B1A00A28A0024DD94 /* ShinobiCharts.framework */; };
 		EBF594EF19F8BAB90068E51E /* image_1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EBF594ED19F8BAB90068E51E /* image_1.jpeg */; };
 		EBF594F019F8BAB90068E51E /* image_2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EBF594EE19F8BAB90068E51E /* image_2.jpeg */; };
 /* End PBXBuildFile section */
@@ -723,6 +723,7 @@
 		ABFCC54F19C2E5990074CA01 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		EB21B4FA19F6174D00F70F6A /* LineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineView.h; sourceTree = "<group>"; };
 		EB21B4FB19F6174D00F70F6A /* LineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineView.m; sourceTree = "<group>"; };
+		EBF19D4B1A00A28A0024DD94 /* ShinobiCharts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ShinobiCharts.framework; path = ../ShinobiCharts/ShinobiCharts.framework; sourceTree = "<group>"; };
 		EBF594ED19F8BAB90068E51E /* image_1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_1.jpeg; sourceTree = "<group>"; };
 		EBF594EE19F8BAB90068E51E /* image_2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_2.jpeg; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -732,12 +733,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EBF19D4C1A00A28A0024DD94 /* ShinobiCharts.framework in Frameworks */,
 				ABC9941C19F195C50041B6B5 /* OpenGLES.framework in Frameworks */,
 				ABC9941A19F195B40041B6B5 /* libc++.dylib in Frameworks */,
 				ABC9941819F195A50041B6B5 /* CoreText.framework in Frameworks */,
 				ABC9941619F1959F0041B6B5 /* CoreGraphics.framework in Frameworks */,
 				ABC9941419F195980041B6B5 /* QuartzCore.framework in Frameworks */,
-				ABC9941219F195920041B6B5 /* ShinobiCharts.framework in Frameworks */,
 				ABFCC55019C2E5990074CA01 /* MapKit.framework in Frameworks */,
 				ABFCC51819C2E0460074CA01 /* libsqlite3.0.dylib in Frameworks */,
 			);
@@ -1693,6 +1694,7 @@
 		ABFCC51919C2E0710074CA01 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBF19D4B1A00A28A0024DD94 /* ShinobiCharts.framework */,
 				ABC9941B19F195C50041B6B5 /* OpenGLES.framework */,
 				ABC9941919F195B40041B6B5 /* libc++.dylib */,
 				ABC9941719F195A50041B6B5 /* CoreText.framework */,
@@ -1754,7 +1756,7 @@
 				TargetAttributes = {
 					ABFCC45519C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
-						DevelopmentTeam = 4V49N9D3N7;
+						DevelopmentTeam = D7K92GRWLG;
 					};
 					ABFCC46E19C2DB530074CA01 = {
 						CreatedOnToolsVersion = 6.0;
@@ -2179,13 +2181,14 @@
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					/Users/Pedro/Desktop/ShinobiCharts,
 				);
 				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
 				INFOPLIST_FILE = "Obras-Programas/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c4831fcc-244a-4025-ad2a-210e5595ba7c";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Debug;
 		};
@@ -2194,19 +2197,20 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
-				CODE_SIGN_IDENTITY = "iPhone Distribution: SUBASTAS VENTURA SA DE CV";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution: SUBASTAS VENTURA SA DE CV";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				CODE_SIGN_RESOURCE_RULES_PATH = "$(SDKROOT)/ResourceRules.plist\n\n";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
+					/Users/Pedro/Desktop/ShinobiCharts,
 				);
 				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
 				INFOPLIST_FILE = "Obras-Programas/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 7.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "c4831fcc-244a-4025-ad2a-210e5595ba7c";
+				PROVISIONING_PROFILE = "";
 			};
 			name = Release;
 		};
