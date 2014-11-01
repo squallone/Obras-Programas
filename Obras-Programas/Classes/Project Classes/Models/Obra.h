@@ -14,7 +14,7 @@
 #import "Estado.h"
 #import "Impacto.h"
 #import "Inaugurador.h"
-
+#import "Subclasificacion.h"
 
 @interface Obra : MTLModel <MTLJSONSerializing>
 
@@ -44,6 +44,7 @@
 @property (nonatomic, strong) NSString *inaugurada;
 @property (nonatomic, strong) NSString *poblacionObjetivo;
 @property (nonatomic, strong) NSString *municipio;
+@property (nonatomic, strong) Subclasificacion *subclasificacion;
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey;
 

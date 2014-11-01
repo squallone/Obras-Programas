@@ -42,7 +42,8 @@
              @"tipoMoneda"              :kKeyDbTipoMoneda,
              @"inaugurada"              :kKeyDbInaugurada,
              @"poblacionObjetivo"       :kKeyDbPoblacionObjetivo,
-             @"municipio"               :kKeyDbMunicipio
+             @"municipio"               :kKeyDbMunicipio,
+             @"subclasificacion"        :@"subclasificacion"
              };
 }
 
@@ -122,6 +123,10 @@
 
 + (NSValueTransformer *)inauguradorJSONTransformer {
     return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[Inaugurador class]];
+}
+
++ (NSValueTransformer *)subclasificacionJSONTransformer {
+    return [NSValueTransformer mtl_JSONDictionaryTransformerWithModelClass:[Subclasificacion class]];
 }
 
 @end

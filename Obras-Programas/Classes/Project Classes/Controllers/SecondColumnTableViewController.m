@@ -202,7 +202,7 @@
                 UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTRACLASIFICACION];
                 UILabel *labelCompromisoGobierno = (UILabel*)[cell.contentView viewWithTag:LABELCOMPROMISOGOBIERNO];
                 
-                labelCompromisoGobierno.text = [NSString stringWithFormat:@"Compromiso De Gobierno: CG_OO1"];
+                labelCompromisoGobierno.text = [NSString stringWithFormat:@"Compromiso De Gobierno: %@", _obra.subclasificacion.nombreSubclasificacion];
                 labelCompromisoGobierno.adjustsFontSizeToFitWidth   = YES;
                 
                 

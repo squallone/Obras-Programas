@@ -14,8 +14,9 @@
 #import "SDWebImageManager.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
 #import "Programa.h"
+#import "MWPhotoBrowser.h"
 
-@interface FichaTecnicaViewController ()
+@interface FichaTecnicaViewController () <MWPhotoBrowserDelegate>
 @property (weak, nonatomic) IBOutlet UIImageView *imagenBanner;
 @property (weak, nonatomic) IBOutlet UIImageView *imagenLogo;
 @property (weak, nonatomic) IBOutlet UIImageView *imagenLogoDependencia;
@@ -24,6 +25,8 @@
 @property (strong, nonatomic) IBOutlet UIImageView *imagenDurante;
 @property (strong, nonatomic) IBOutlet UIImageView *imagenDespues;
 
+@property (nonatomic, strong) NSMutableArray *photosMW;
+@property (nonatomic, strong) MWPhotoBrowser *browser;
 
 
 
@@ -47,6 +50,8 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
+    _photosMW = [NSMutableArray array];
     if (_obra !=nil) {
         [_imagenLogoDependencia setImageWithURL:self.obra.dependencia.imagenDependencia placeholderImage:[UIImage imageNamed:kImageNamePlaceHolder] options:SDWebImageRefreshCached usingActivityIndicatorStyle:UIActivityIndicatorViewStyleGray];
     }else{
@@ -90,13 +95,18 @@
 
 -(void)firstImagePressed{
     NSLog(@"first");
+    [self presentGallery:0];
 }
 
 -(void)secondImagePressed{
     NSLog(@"Second");
+    [self presentGallery:1];
+
 }
 -(void)thirdImagePressed{
     NSLog(@"Third");
+    [self presentGallery:2];
+
 }
 -(void) setupScrollView {
     //add the scrollview to the view
@@ -137,6 +147,10 @@
             lblTitle.textAlignment = NSTextAlignmentCenter;
 
             [image addSubview:lblTitle];
+            
+            MWPhoto *photo = [MWPhoto photoWithURL:self.obra.fotoAntesURL];
+            photo.caption =  lblTitle.text;
+            [_photosMW addObject:photo];
 
         }
         
@@ -154,8 +168,11 @@
             //[lblTitle setTextColor:[UIColor colorWithRed:0.0 green:122.0/255.0 blue:1.0 alpha:1.0]];
             [lblTitle setTextColor:[UIColor whiteColor]];
             lblTitle.textAlignment = NSTextAlignmentCenter;
-            
             [image addSubview:lblTitle];
+            
+            MWPhoto *photo = [MWPhoto photoWithURL:self.obra.fotoDuranteURL];
+            photo.caption =  lblTitle.text;
+            [_photosMW addObject:photo];
 
         }
         else if (i==2){
@@ -174,6 +191,11 @@
             lblTitle.textAlignment = NSTextAlignmentCenter;
             
             [image addSubview:lblTitle];
+            
+            MWPhoto *photo = [MWPhoto photoWithURL:self.obra.fotoDespuesURL];
+            photo.caption =  lblTitle.text;
+            [_photosMW addObject:photo];
+
         }
         image.contentMode = UIViewContentModeScaleAspectFit;
         [scrollView addSubview:image];
@@ -187,6 +209,43 @@
 }
 
 
+-(void)presentGallery:(int)index{
+    /********** Photo Browser ***************/
+    
+    _browser = [[MWPhotoBrowser alloc] initWithDelegate:self];
+    _browser.displayActionButton = YES;
+    _browser.displayNavArrows = YES;
+    _browser.zoomPhotosToFill = YES;
+    _browser.enableGrid = YES;
+    _browser.startOnGrid = NO;
+    [_browser setCurrentPhotoIndex:index];
+    
+    UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:_browser];
+    nc.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+    
+    UIViewController *vc = [[[[UIApplication sharedApplication] delegate] window] rootViewController];
+    [vc presentViewController:nc animated:YES completion:nil];
+}
+
+#pragma mark - MWPhotoBrowserDelegate
+
+- (NSUInteger)numberOfPhotosInPhotoBrowser:(MWPhotoBrowser *)photoBrowser {
+    return self.photosMW.count;
+}
+
+- (MWPhoto *)photoBrowser:(MWPhotoBrowser *)photoBrowser photoAtIndex:(NSUInteger)index {
+    if (index < self.photosMW.count)
+        
+        return [self.photosMW objectAtIndex:index];
+    return nil;
+}
+
+- (id <MWPhoto>)photoBrowser:(MWPhotoBrowser *)photoBrowser thumbPhotoAtIndex:(NSUInteger)index {
+    if (index < self.photosMW.count)
+        
+        return [self.photosMW objectAtIndex:index];
+    return nil;
+}
 
 
 #pragma mark - Navigation

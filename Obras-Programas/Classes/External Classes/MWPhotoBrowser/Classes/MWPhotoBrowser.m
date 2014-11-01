@@ -1070,7 +1070,7 @@
             if (numberOfPhotos == 1) {
                 photosText = NSLocalizedString(@"slide", @"Used in the context: '1 photo'");
             } else {
-                photosText = NSLocalizedString(@"slides", @"Used in the context: '3 photos'");
+                photosText = NSLocalizedString(@"Fotografías", @"Used in the context: '3 photos'");
             }
             self.title = [NSString stringWithFormat:@"%lu %@", (unsigned long)numberOfPhotos, photosText];
         }
