@@ -261,7 +261,7 @@
 		ABFCC54E19C2E43F0074CA01 /* MainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABFCC54D19C2E43F0074CA01 /* MainViewController.m */; };
 		ABFCC55019C2E5990074CA01 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ABFCC54F19C2E5990074CA01 /* MapKit.framework */; };
 		EB21B4FC19F6174D00F70F6A /* LineView.m in Sources */ = {isa = PBXBuildFile; fileRef = EB21B4FB19F6174D00F70F6A /* LineView.m */; };
-		EBF19D4C1A00A28A0024DD94 /* ShinobiCharts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBF19D4B1A00A28A0024DD94 /* ShinobiCharts.framework */; };
+		EBB9982C1A04637500552695 /* ShinobiCharts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EBB9982B1A04637500552695 /* ShinobiCharts.framework */; };
 		EBF594EF19F8BAB90068E51E /* image_1.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EBF594ED19F8BAB90068E51E /* image_1.jpeg */; };
 		EBF594F019F8BAB90068E51E /* image_2.jpeg in Resources */ = {isa = PBXBuildFile; fileRef = EBF594EE19F8BAB90068E51E /* image_2.jpeg */; };
 /* End PBXBuildFile section */
@@ -726,6 +726,7 @@
 		ABFCC54F19C2E5990074CA01 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		EB21B4FA19F6174D00F70F6A /* LineView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LineView.h; sourceTree = "<group>"; };
 		EB21B4FB19F6174D00F70F6A /* LineView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LineView.m; sourceTree = "<group>"; };
+		EBB9982B1A04637500552695 /* ShinobiCharts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ShinobiCharts.framework; path = ../../../../Library/ShinobiCharts/ShinobiCharts.framework; sourceTree = "<group>"; };
 		EBF19D4B1A00A28A0024DD94 /* ShinobiCharts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ShinobiCharts.framework; path = ../ShinobiCharts/ShinobiCharts.framework; sourceTree = "<group>"; };
 		EBF594ED19F8BAB90068E51E /* image_1.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_1.jpeg; sourceTree = "<group>"; };
 		EBF594EE19F8BAB90068E51E /* image_2.jpeg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = image_2.jpeg; sourceTree = "<group>"; };
@@ -736,7 +737,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				EBF19D4C1A00A28A0024DD94 /* ShinobiCharts.framework in Frameworks */,
+				EBB9982C1A04637500552695 /* ShinobiCharts.framework in Frameworks */,
 				ABC9941C19F195C50041B6B5 /* OpenGLES.framework in Frameworks */,
 				ABC9941A19F195B40041B6B5 /* libc++.dylib in Frameworks */,
 				ABC9941819F195A50041B6B5 /* CoreText.framework in Frameworks */,
@@ -1699,6 +1700,7 @@
 		ABFCC51919C2E0710074CA01 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				EBB9982B1A04637500552695 /* ShinobiCharts.framework */,
 				EBF19D4B1A00A28A0024DD94 /* ShinobiCharts.framework */,
 				ABC9941B19F195C50041B6B5 /* OpenGLES.framework */,
 				ABC9941919F195B40041B6B5 /* libc++.dylib */,
@@ -2188,6 +2190,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					/Users/Pedro/Desktop/ShinobiCharts,
+					"$(LOCAL_LIBRARY_DIR)/ShinobiCharts",
 				);
 				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
 				INFOPLIST_FILE = "Obras-Programas/Info.plist";
@@ -2210,6 +2213,7 @@
 					"$(inherited)",
 					"$(DEVELOPER_FRAMEWORKS_DIR)",
 					/Users/Pedro/Desktop/ShinobiCharts,
+					"$(LOCAL_LIBRARY_DIR)/ShinobiCharts",
 				);
 				GCC_PREFIX_HEADER = "Obras-Programas/Obras-Programas-Prefix.pch";
 				INFOPLIST_FILE = "Obras-Programas/Info.plist";

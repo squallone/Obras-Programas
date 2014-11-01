@@ -29,6 +29,7 @@
 #define CNCH 205
 #define OTRACLASIFICACION 206
 
+#define LABELCOMPROMISOGOBIERNO 501
 
 @interface SecondColumnTableViewController ()
 @property BOOL isPrograms;
@@ -199,6 +200,10 @@
                 UIImageView *imagenPNI = (UIImageView*)[cell.contentView viewWithTag:PNI];
                 UIImageView *imagenCNCH = (UIImageView*)[cell.contentView viewWithTag:CNCH];
                 UIImageView *imagenOtros = (UIImageView*)[cell.contentView viewWithTag:OTRACLASIFICACION];
+                UILabel *labelCompromisoGobierno = (UILabel*)[cell.contentView viewWithTag:LABELCOMPROMISOGOBIERNO];
+                
+                labelCompromisoGobierno.text = [NSString stringWithFormat:@"Compromiso De Gobierno: CG_OO1"];
+                labelCompromisoGobierno.adjustsFontSizeToFitWidth   = YES;
                 
                 
                 imagenGobierno.hidden =YES;
