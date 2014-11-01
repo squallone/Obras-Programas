@@ -30,5 +30,6 @@
 @property (nonatomic, strong) NSArray * inauguradoresData;
 @property (nonatomic, strong) NSArray * susceptibleData;
 @property (nonatomic, strong) NSArray * inauguradaData;
+@property (nonatomic, strong) NSArray * anoProgramaData;
 
 @end

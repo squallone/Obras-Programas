@@ -20,6 +20,7 @@
 #import "ListaReporteEstado.h"
 #import "ListaReporteGeneral.h"
 #import "Programa.h"
+#import "Subclasificacion.h"
 
 //Parametro que usa el Servlet para saber si la peticion proviene del movil
 
@@ -135,6 +136,14 @@
             }
             
         //Buscar y Reportes
+        }else if ([servletName isEqualToString:kServletConsultarSubclasificacion]){
+            
+            NSArray *invesments = [self deserializeSubclasificationsFromJSON:JSONResponse];
+            
+            if ([self.delegate respondsToSelector:@selector(JSONHTTPClientDelegate:didResponseToSubclasifications:)]) {
+                [self.delegate JSONHTTPClientDelegate:self didResponseToSubclasifications:invesments];
+            }
+        
         }else if ([servletName isEqualToString:kServletBuscar]){
             
             NSDictionary *JSONResponseDic = responseObject;
@@ -344,6 +353,16 @@
     return programasObras;
 }
 
-
+- (NSArray *)deserializeSubclasificationsFromJSON:(NSArray *)typeWorkProgramJSON
+{
+    NSError *error;
+    NSArray *programasObras = [MTLJSONAdapter modelsOfClass:[Subclasificacion class] fromJSONArray:typeWorkProgramJSON error:&error];
+    if (error) {
+        NSLog(@"Couldn't convert Programas Obras JSON to Programas Obras models: %@", error);
+        return nil;
+    }
+    
+    return programasObras;
+}
 
 @end

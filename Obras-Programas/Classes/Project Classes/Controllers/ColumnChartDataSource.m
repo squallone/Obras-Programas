@@ -21,9 +21,7 @@
 
 - (NSInteger)numberOfSeriesInSChart:(ShinobiChart *)chart {
         return 1;
-
 }
-
 
 - (NSDictionary*)dataForReport{
     NSDictionary* dataForReport = _diccionario[self.reporte];

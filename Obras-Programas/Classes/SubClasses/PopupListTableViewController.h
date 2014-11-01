@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *dataSource;
 @property (nonatomic, strong) NSMutableArray *dataSelected;
 @property (nonatomic, assign) MainSearchFields field;
+@property BOOL hideTitle;
 
 
 @property BOOL isMenu;

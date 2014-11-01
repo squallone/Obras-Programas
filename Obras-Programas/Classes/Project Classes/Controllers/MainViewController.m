@@ -34,6 +34,7 @@
 #import "ConsultasGuardadasTableViewController.h"
 #import "SDWebImageManager.h"
 #import "UIImageView+UIActivityIndicatorForSDWebImage.h"
+#import "Subclasificacion.h"
 
 #define METERS_PER_MILE 1609.344
 
@@ -130,6 +131,7 @@
 @property (nonatomic, strong) NSArray *worksResultData;
 @property (nonatomic, strong) NSArray *programasResultData;
 @property (nonatomic, strong) NSArray *aniosProgramaData;
+@property (nonatomic, strong) NSArray *subclasificationsData;
 
 @property (nonatomic, strong) NSMutableArray *tableViewData;
 
@@ -145,7 +147,6 @@
 @property (nonatomic, strong) NSArray *inauguratorOptionSavedData;
 @property (nonatomic, strong) NSArray *susceptibleOptionSavedData;
 @property (nonatomic, strong) NSArray *aniosProgramaSavedData;
-
 
 @property (nonatomic, strong) NSString *limiteMin;
 @property (nonatomic, strong) NSString *limiteMax;
@@ -220,10 +221,11 @@
     
     _menuData           = @[@"Consultas guardadas", @"Registros guardados", @"Acerca de"];
     _aniosProgramaData  = @[@"2013",@"2014", @"2015", @"2016", @"2017", @"2018"];
+    
     _titleFields        = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
                             @{@"title": @"Obras",      @"sortKey": @"numeroObras"},
                             @{@"title": @"Inversión",  @"sortKey": @"totalInvertido"}];
-    ;
+    
     
     _mapView.delegate = self;
     _mapView.showsUserLocation = YES;
@@ -261,7 +263,7 @@
     
     /* PopUp */
     
-    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Fecha inicial" target:self action:@selector(displayStartCalendar:)];
+    QBPopupMenuItem *item = [QBPopupMenuItem itemWithTitle:@"Fecha inicio" target:self action:@selector(displayStartCalendar:)];
     QBPopupMenuItem *item2 = [QBPopupMenuItem itemWithTitle:@"" image:[UIImage imageNamed:@"trash"] target:self action:@selector(deleteStartDate:)];
     QBPopupMenuItem *item3 = [QBPopupMenuItem itemWithTitle:@"Fecha final" target:self action:@selector(displayEndCalendar:)];
     QBPopupMenuItem *item4 = [QBPopupMenuItem itemWithTitle:@"" image:[UIImage imageNamed:@"trash"] target:self action:@selector(deleteEndDate:)];
@@ -303,6 +305,7 @@
 
 
 -(void)loadSelections{
+    
     _worksProgramsSavedData     = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreTypeWorkOrProgram];
     [self setupTitle:_worksProgramsSavedData rowPressed:NO];
     _dependenciesSavedData      = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreDependencies];
@@ -323,8 +326,13 @@
     _susceptibleOptionSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSusceptibleOption];
     NSNumber *minRange          = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreMinRange];
     NSNumber *maxRange          = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreMaxRange];
-    _txtRangoMinimo.text        = ![[NSDecimalNumber notANumber] isEqualToNumber:minRange] ? [NSString stringWithFormat:@"%@", minRange] : @"";
-    _txtRangoMaximo.text        = ![[NSDecimalNumber notANumber] isEqualToNumber:maxRange] ? [NSString stringWithFormat:@"%@", maxRange] : @"";
+   
+    if (minRange) {
+        _txtRangoMinimo.text        = ![[NSDecimalNumber notANumber] isEqualToNumber:minRange] ? [NSString stringWithFormat:@"%@", minRange] : @"";
+    }
+    if (maxRange) {
+        _txtRangoMaximo.text        = ![[NSDecimalNumber notANumber] isEqualToNumber:maxRange]  ? [NSString stringWithFormat:@"%@", maxRange] : @"";
+    }
 }
 
 -(void)openQueryAndLoadSelections:(Consulta *)consulta{
@@ -341,7 +349,7 @@
     _inauguratorSavedData       = consulta.inauguradoresData;
     _fechaInicio                = consulta.fechaInicio;
     _lblStartIniDate.text       = [_dateFormatterShort stringFromDate:_fechaInicio];
-    _fechaInicioSegunda         = consulta.fechaFinSegunda;
+    _fechaInicioSegunda         = consulta.fechaInicioSegunda;
     _lblStartEndDate.text       = [_dateFormatterShort stringFromDate:_fechaInicioSegunda];
     _fechaFin                   = consulta.fechaFin;
     _lblEndIniDate.text         = [_dateFormatterShort stringFromDate:_fechaFin];
@@ -354,9 +362,7 @@
     
     _txtRangoMinimo.text        = ![[NSDecimalNumber notANumber] isEqualToNumber:consulta.rangoMin] ? [NSString stringWithFormat:@"%@", consulta.rangoMin] : @"";
     _txtRangoMaximo.text        = ![[NSDecimalNumber notANumber] isEqualToNumber:consulta.rangoMax] ? [NSString stringWithFormat:@"%@", consulta.rangoMax] : @"";
-
     
-
     [self setupTitle:_worksProgramsSavedData rowPressed:NO];
     [self changeAllBackgrounds];
     
@@ -391,7 +397,6 @@
     [self changeBackgroundColorForNumberOfSelections:_susceptibleOptionSavedData andTypeOfFieldButton:e_Suscpetible];
 }
 
-
 -(void)viewDidAppear:(BOOL)animated{
     /* Request */
     [super viewDidAppear:NO];
@@ -408,15 +413,16 @@
     _jsonClient = [JSONHTTPClient sharedJSONAPIClient];
     _jsonClient.delegate = self;
     
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletEstados withOptions:nil];
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletInauguradores withOptions:nil];
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletImpactos withOptions:nil];
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarClasificacion withOptions:nil];
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarDependencias withOptions:nil];
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarInversiones withOptions:nil];
-    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarTipoObraPrograma withOptions:nil];
-    
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletEstados                     withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletInauguradores               withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletImpactos                    withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarClasificacion      withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarDependencias       withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarInversiones        withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:nil toServlet:kServletConsultarTipoObraPrograma   withOptions:nil];
+    [_jsonClient performPOSTRequestWithParameters:@{@"clasificacion": @"1"} toServlet:kServletConsultarSubclasificacion   withOptions:nil];
 }
+
 #pragma mark - User Interface Customization (View)
 
 /*  Setting the User Interface */
@@ -552,6 +558,12 @@
     _invesmentsData = response;
 }
 
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToSubclasifications:(id)response{
+    
+    _subclasificationsData = response;
+    [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_subclasificationsData forKey:kKeyStoreSublasificationsData];
+}
+
 /* JSON Error */
 
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didFailResponseWithError:(NSError *)error{
@@ -684,18 +696,6 @@
 
 }
 
-- (IBAction)displayReportByDependency:(id)sender {
-    
-    _reportOption = r_dependency;
-    [_spreadView reloadData];
-
-}
-
-- (IBAction)displayReportByState:(id)sender {
-    _reportOption = r_state;
-    [_spreadView reloadData];
-}
-
 - (IBAction)displayInauguradaOptions:(id)sender {
     
     [self displayItemsOnButton:_btnInaugurada
@@ -733,6 +733,8 @@
  
 }
 
+#pragma mark - Detalle de la consulta
+
 -(void)displayQueryDetail:(id)sender{
     [self saveTextFieldParameters];
     ConsultasGuardadasTableViewController *consultasGuardasViewController  = [[ConsultasGuardadasTableViewController alloc]initWithStyle:UITableViewStylePlain];
@@ -750,6 +752,27 @@
     formSheet.willPresentCompletionHandler = ^(UIViewController *presentedFSViewController) {};
     formSheet.transitionStyle = MZFormSheetTransitionStyleDropDown;
     [self mz_presentFormSheetController:formSheet animated:YES completionHandler:nil];
+}
+
+#pragma mark - Reporte por Estado y Dependencia
+
+- (IBAction)displayReportByDependency:(id)sender {
+    
+    _titleFields        = @[@{@"title": @"Dependencia", @"sortKey": @"dependencia.nombreDependencia"},
+                            @{@"title": @"Obras",       @"sortKey": @"numeroObras"},
+                            @{@"title": @"Inversión",   @"sortKey": @"totalInvertido"}];
+    _reportOption = r_dependency;
+    [_spreadView reloadData];
+    
+}
+
+- (IBAction)displayReportByState:(id)sender {
+    
+    _titleFields        = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
+                            @{@"title": @"Obras",      @"sortKey": @"numeroObras"},
+                            @{@"title": @"Inversión",  @"sortKey": @"totalInvertido"}];
+    _reportOption = r_state;
+    [_spreadView reloadData];
 }
 
 #pragma mark - Clean Parameters
@@ -770,7 +793,8 @@
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Nombre_Inaugura];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Inaugurada];
     [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_Suscpetible];
-    
+    [self savedDataForSelections:[NSArray array] andTypeOfFieldButton:e_AnioPrograma];
+    [[NSUserDefaults standardUserDefaults]rm_setCustomObject:[NSArray array] forKey:kKeyStoreSublasificationsSavedData];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreStartIniDate];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreStartEndDate];
     [[NSUserDefaults standardUserDefaults] removeObjectForKey:kKeyStoreEndIniDate];
@@ -986,6 +1010,7 @@ const int numResultsPerPage = 200;
     NSArray *generalData    = objectsResponse[kKeyListaReporteGeneral];
     
     [_tableView reloadData];
+
     [_pullToRefreshManager tableViewReloadFinished];
 
     NSLog(@"%lu", (unsigned long)_tableViewData.count);
@@ -1017,8 +1042,10 @@ const int numResultsPerPage = 200;
         _numTotalPages = ceil([numObras floatValue]/numResultsPerPage);
     }
     
-    if (_tableViewData.count>0) {
+    if (_tableViewData.count > 0) {
         if (_isFromMainQuery) {
+            [_tableView setContentOffset:CGPointZero animated:YES];
+
             NSString *mesage = [NSString stringWithFormat:@"%@ resultados\nencontrados", numObras];
             [kAppDelegate notShowActivityIndicator:M13ProgressViewActionSuccess whithMessage:mesage delay:2.0];
         }
@@ -1135,16 +1162,24 @@ const int numResultsPerPage = 200;
     if (_invesmentsSavedData.count>0)
         consulta.tipoDeInversionesData = _invesmentsSavedData;
     
-    if (_lblStartIniDate.text) {
+    //Año del programa
+    
+    if (_aniosProgramaSavedData.count>0) {
+        consulta.anoProgramaData = _aniosProgramaSavedData;
+    }
+    
+    //Fechas
+    
+    if (_lblStartIniDate.text.length>0) {
         consulta.fechaInicio = _fechaInicio;
     }
-    if (_lblStartEndDate.text) {
+    if (_lblStartEndDate.text.length>0) {
         consulta.fechaInicioSegunda = _fechaInicioSegunda;
     }
-    if (_lblEndIniDate.text) {
+    if (_lblEndIniDate.text.length>0) {
         consulta.fechaFin = _fechaFin;
     }
-    if (_lblEndEndDate.text) {
+    if (_lblEndEndDate.text.length>0) {
         consulta.fechaFinSegunda = _fechaFinSegunda;
     }
     
@@ -1157,11 +1192,11 @@ const int numResultsPerPage = 200;
     //Inaugurador
     if (_inauguratorSavedData.count>0)
         consulta.inauguradoresData = _inauguratorSavedData;
-    
+    //Inaugurada
     if (_inauguratorOptionSavedData.count>0) {
         consulta.inauguradaData = _inauguratorOptionSavedData;
     }
-    
+    //Susceptible
     if (_susceptibleOptionSavedData.count>0) {
         consulta.susceptibleData = _susceptibleOptionSavedData;
     }
@@ -1202,7 +1237,10 @@ const int numResultsPerPage = 200;
         }
     }
     
+    //Busqueda Rapida
     if (_searchBar.text.length > 0) {
+        [[NSUserDefaults standardUserDefaults]rm_setCustomObject:@"" forKey:kKeyStoreDenomination];
+        _txtDenominacion.text = @"";
         [parameters setObject:_searchBar.text forKey:kParamBusquedaRapida];
 
     }else{
@@ -1289,6 +1327,20 @@ const int numResultsPerPage = 200;
             [parameters setObject:parameterValue forKey:kParamTipoDeInversion];
         }
         
+        /* Año programa */
+        
+        if (_aniosProgramaSavedData.count > 0) {
+            
+            for (int i=0; i<[_aniosProgramaSavedData count]; i++) {
+                NSString *anio = _aniosProgramaSavedData[i];
+                parameterValue = [parameterValue stringByAppendingString:anio];
+                if (i!=_aniosProgramaSavedData.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamAnoPrograma];
+        }
+        
         /* Impacto */
         
         parameterValue = @"";
@@ -1309,8 +1361,9 @@ const int numResultsPerPage = 200;
         
         parameterValue = @"";
         
-        if (_clasificationsSavedData.count > 0) {
-            
+        NSArray *subclasificacionesCG = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
+        
+        if (_clasificationsSavedData.count > 0 || subclasificacionesCG.count > 0) {
             for (int i=0; i<[_clasificationsSavedData count]; i++) {
                 Clasificacion *clasificacion = _clasificationsSavedData[i];
                 parameterValue = [parameterValue stringByAppendingString:clasificacion.idTipoClasificacion];
@@ -1318,15 +1371,40 @@ const int numResultsPerPage = 200;
                     parameterValue = [parameterValue stringByAppendingString:@","];
                 }
             }
+            
+            if (subclasificacionesCG.count > 0) {
+                if (_clasificationsSavedData.count > 0) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+                for (Clasificacion *clasificacion in _clasificationsData) {
+                    if ([clasificacion.nombreTipoClasificacion isEqualToString:@"Compromiso de Gobierno"]) {
+                        parameterValue = [parameterValue stringByAppendingString:[NSString stringWithFormat:@"%@", clasificacion.idTipoClasificacion]];
+                    }
+                }
+            }
             [parameters setObject:parameterValue forKey:kParamClasificacion];
         }
         
-        /* Inaguradores */
+        /* Subclasificaciones */
         
         parameterValue = @"";
         
-        if (_inauguratorSavedData.count > 0) {
+        if (subclasificacionesCG.count > 0) {
             
+            for (int i=0; i<[subclasificacionesCG count]; i++) {
+                Subclasificacion *sub = subclasificacionesCG[i];
+                parameterValue = [parameterValue stringByAppendingString:sub.idSubClasificacion];
+                if (i!=subclasificacionesCG.count-1) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+            }
+            [parameters setObject:parameterValue forKey:kParamSubclasificacion];
+        }
+    
+        /* Inaguradores */
+        
+        parameterValue = @"";
+        if (_inauguratorSavedData.count > 0) {
             for (int i=0; i<[_inauguratorSavedData count]; i++) {
                 Inaugurador *inaugurador = _inauguratorSavedData[i];
                 parameterValue = [parameterValue stringByAppendingString:inaugurador.idCargoInaugura];
@@ -1345,7 +1423,6 @@ const int numResultsPerPage = 200;
         }
         if (_lblStartEndDate.text.length>0) {
             NSString *dateStr = [_dateFormatterGeneral stringFromDate:_fechaInicioSegunda];
-            
             [parameters setObject:dateStr forKey:kParamFechaInicioSegunda];
         }
         if (_lblEndIniDate.text.length>0) {
@@ -1378,7 +1455,7 @@ const int numResultsPerPage = 200;
             [parameters setObject:parameterValue forKey:kParamInaugurada];
         }
         
-        /* Inagurada */
+        /* Susceptible */
         
         parameterValue = @"";
         
@@ -1642,6 +1719,9 @@ const int numResultsPerPage = 200;
     }else if (field == e_Suscpetible){
         _btnSusceptible.backgroundColor     = colorForSelection;
         [_btnSusceptible setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
+    }else if (field == e_AnioPrograma){
+        _btnAnioPrograma.backgroundColor     = colorForSelection;
+        [_btnAnioPrograma setTitleColor:colorForTitleSelection forState:UIControlStateNormal];
     }
 }
 
@@ -1916,7 +1996,9 @@ const int numResultsPerPage = 200;
 
 - (void)spreadView:(MDSpreadView *)aSpreadView sortDescriptorsDidChange:(NSArray *)oldDescriptors
 {
-    [_stateReportData sortUsingDescriptors:aSpreadView.sortDescriptors];
+    
+    NSMutableArray *data = _reportOption == r_state ? _stateReportData : _dependenciesReportData;
+    [data sortUsingDescriptors:aSpreadView.sortDescriptors];
     [aSpreadView reloadData];
 }
 
@@ -2073,7 +2155,7 @@ const int numResultsPerPage = 200;
 {
     if (_stateReportData.count ==0) {
         UIAlertView * alert =[[UIAlertView alloc ] initWithTitle:@"No puedes visualizar la gráfica"
-                                                         message:@"Para consultar la gráfica necesitas realizar un consulta que tenga resultados"
+                                                         message:@"Para consultarla necesitas tener resultados en tu búsqueda"
                                                         delegate:nil
                                                cancelButtonTitle:@"Aceptar"
                                                otherButtonTitles: nil];

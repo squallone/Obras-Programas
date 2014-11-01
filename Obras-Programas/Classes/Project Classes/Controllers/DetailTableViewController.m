@@ -196,13 +196,10 @@
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
    
     [self dismissViewControllerAnimated:YES completion:nil];
-
     if (_option == o_Consultas) {
         Consulta *consulta = _dataSource[indexPath.row];
         [[NSNotificationCenter defaultCenter]postNotificationName:@"openQuery" object:consulta];
-
     }else if (_option == o_Favoritos){
-
         NSArray *registros = _dataSource[indexPath.section];
         if (indexPath.section == 0) {
             Obra *obra = registros[indexPath.row];

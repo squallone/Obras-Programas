@@ -99,6 +99,7 @@
 		ABAC4F3A19E25F48002B15B5 /* MDSpreadViewRowHeaderTop@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ABAC4F0F19E25F48002B15B5 /* MDSpreadViewRowHeaderTop@2x.png */; };
 		ABAC4F3B19E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected.png in Resources */ = {isa = PBXBuildFile; fileRef = ABAC4F1019E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected.png */; };
 		ABAC4F3C19E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = ABAC4F1119E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected@2x.png */; };
+		ABB72A001A00D8C0009EB6DF /* Subclasificacion.m in Sources */ = {isa = PBXBuildFile; fileRef = ABB729FF1A00D8C0009EB6DF /* Subclasificacion.m */; };
 		ABBDAAAB19F72FFA00290B96 /* MWCaptionView.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAA4A19F72FFA00290B96 /* MWCaptionView.m */; };
 		ABBDAAAC19F72FFA00290B96 /* MWGridCell.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAA4D19F72FFA00290B96 /* MWGridCell.m */; };
 		ABBDAAAD19F72FFA00290B96 /* MWGridViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = ABBDAA4F19F72FFA00290B96 /* MWGridViewController.m */; };
@@ -425,6 +426,8 @@
 		ABAC4F0F19E25F48002B15B5 /* MDSpreadViewRowHeaderTop@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MDSpreadViewRowHeaderTop@2x.png"; sourceTree = "<group>"; };
 		ABAC4F1019E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = MDSpreadViewRowHeaderTopSelected.png; sourceTree = "<group>"; };
 		ABAC4F1119E25F48002B15B5 /* MDSpreadViewRowHeaderTopSelected@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "MDSpreadViewRowHeaderTopSelected@2x.png"; sourceTree = "<group>"; };
+		ABB729FE1A00D8C0009EB6DF /* Subclasificacion.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Subclasificacion.h; sourceTree = "<group>"; };
+		ABB729FF1A00D8C0009EB6DF /* Subclasificacion.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Subclasificacion.m; sourceTree = "<group>"; };
 		ABBDAA4919F72FFA00290B96 /* MWCaptionView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCaptionView.h; sourceTree = "<group>"; };
 		ABBDAA4A19F72FFA00290B96 /* MWCaptionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MWCaptionView.m; sourceTree = "<group>"; };
 		ABBDAA4B19F72FFA00290B96 /* MWCommon.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MWCommon.h; sourceTree = "<group>"; };
@@ -1620,6 +1623,8 @@
 				ABBDAADB19F843B900290B96 /* PoblacionObjetivo.m */,
 				ABBDAADD19F844ED00290B96 /* TipoApoyo.h */,
 				ABBDAADE19F844ED00290B96 /* TipoApoyo.m */,
+				ABB729FE1A00D8C0009EB6DF /* Subclasificacion.h */,
+				ABB729FF1A00D8C0009EB6DF /* Subclasificacion.m */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1883,6 +1888,7 @@
 				ABBDAAB119F72FFA00290B96 /* MWTapDetectingView.m in Sources */,
 				ABAC4F1819E25F48002B15B5 /* MDSpreadViewHeaderCell.m in Sources */,
 				ABAC4F1619E25F48002B15B5 /* MDSpreadViewCellCornerHeaderBackground.m in Sources */,
+				ABB72A001A00D8C0009EB6DF /* Subclasificacion.m in Sources */,
 				ABBDAAB419F72FFA00290B96 /* MBProgressHUD.m in Sources */,
 				ABFCC4EB19C2DDA10074CA01 /* AFURLRequestSerialization.m in Sources */,
 				ABBDAABF19F72FFA00290B96 /* PSTGridLayoutInfo.m in Sources */,

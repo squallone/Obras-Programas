@@ -7,6 +7,7 @@
 
 #import "PopupListTableViewController.h"
 #import "DetailTableViewController.h"
+#import "NSUserDefaults+RMSaveCustomObject.h"
 #import "Estado.h"
 #import "Inaugurador.h"
 #import "Impacto.h"
@@ -16,6 +17,7 @@
 #import "Inversion.h"
 #import "Inaugurador.h"
 #import "DBHelper.h"
+#import "Subclasificacion.h"
 
 typedef NS_OPTIONS(NSInteger, TypeSelection)
 {
@@ -33,6 +35,7 @@ const NSInteger rowHeight = 45;
 @property  CGSize size;
 @property TypeSelection typeSelection;
 @property TypeSelection cleanSelection;
+@property (nonatomic, strong) Clasificacion *subclasificacion;
 @property BOOL rowPressed;
 
 @end
@@ -44,7 +47,7 @@ const NSInteger rowHeight = 45;
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
         
         /* Initialize instance variables */
-   
+        self.hideTitle = YES;
         self.dataSource     = datasource;
         self.dataToMark     = [loadData count] > 0 ? loadData : [NSArray new];
         
@@ -81,7 +84,7 @@ const NSInteger rowHeight = 45;
         }
         //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 50;
-        popoverWidth = _isMenu || _field == e_Inaugurada || _field == e_Suscpetible  || _field == e_Tipo  || _field == e_AnioPrograma ? popoverWidth + 50 : popoverWidth;
+        popoverWidth = _isMenu || _field == e_Inaugurada || _field == e_Suscpetible  || _field == e_Tipo  || _field == e_AnioPrograma || _field == e_SubClasifications ? popoverWidth + 50 : popoverWidth;
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
@@ -99,16 +102,13 @@ const NSInteger rowHeight = 45;
     [super viewDidLoad];
 }
 
--(CGSize)preferredContentSize
-{
+-(CGSize)preferredContentSize{
     return _size;
 }
 
 -(void)viewWillAppear:(BOOL)animated{
-
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    [self.navigationController setNavigationBarHidden:_hideTitle animated:YES];
     [super viewWillAppear:animated];
-
 }
 
 -(void)viewDidDisappear:(BOOL)animated{
@@ -120,6 +120,19 @@ const NSInteger rowHeight = 45;
     if(!_isMenu && _field != e_Sort_Result){
         if ([_delegate respondsToSelector:@selector(popupListView:dataForMultipleSelectedRows:rowPressed:)]) {
             [_delegate popupListView:self dataForMultipleSelectedRows:_dataSelected rowPressed:_rowPressed];
+        }
+        
+        if (_field == e_SubClasifications) {
+            [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_dataSelected forKey:kKeyStoreSublasificationsSavedData];
+            
+            if (_subclasificacion) {
+                if (_dataSelected.count >0) {
+                    [_dataSelected addObject:_subclasificacion];
+                }else{
+                    [_dataSelected removeObject:_subclasificacion];
+
+                }
+            }
         }
     }
 }
@@ -182,6 +195,10 @@ const NSInteger rowHeight = 45;
                 }
             }
             
+            if ([value isEqualToString:@"Compromiso de Gobierno"] || [value isEqualToString:@"Plan Michoacán"]) {
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            }
+            
         }else if(_field != e_Tipo){
             cell.textLabel.text = @"TODO";
             if (_typeSelection == t_Enable_Todo) {
@@ -213,6 +230,30 @@ const NSInteger rowHeight = 45;
             id dataForSelectedRow = _field == e_Tipo ? [self.dataSource objectAtIndex:indexPath.row] : [self.dataSource objectAtIndex:indexPath.row-1];
             NSString *value = [self textToDisplay:dataForSelectedRow];
             
+            BOOL pushView = NO;
+            NSArray *data = [NSArray array];
+            NSArray *savedData = [NSArray array];
+            if ([value isEqualToString:@"Compromiso de Gobierno"]) {
+                _subclasificacion = dataForSelectedRow;
+                data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
+                savedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
+                pushView = YES;
+            }else if ([value isEqualToString:@"Plan Michoacán"]){
+                
+                pushView = YES;
+            }
+        
+            if (pushView) {
+                PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
+                                                                                                          isMenu:NO
+                                                                                                        markData:savedData
+                                                                                                     searchField:e_SubClasifications];
+                popUpTableView.hideTitle = NO;
+                
+                [self.navigationController pushViewController:popUpTableView animated:YES];
+                return;
+            }
+
             if ([value isEqualToString:@"PROGRAMAS"]) {
                 //Cuando la selección es PROGRMAS
                 //Deshabilitamos las OBRAS TOTALES
@@ -251,15 +292,16 @@ const NSInteger rowHeight = 45;
                     [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryNone];
                     TipoObraPrograma *obrasTotalesRow = [self.dataSource objectAtIndex:0];
                     [_dataSelected removeObject:obrasTotalesRow];
-                    
                 }
     
                 [_dataSelected addObject:dataForSelectedRow];
-
             }
 
         }else{
             //Cuando la selección es TODO
+            if (_field == e_Clasificacion) {
+                [[NSUserDefaults standardUserDefaults]rm_setCustomObject:[NSArray array] forKey:kKeyStoreSublasificationsSavedData];
+            }
             [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];
             //Para la selección de tipo de obra o programa, deseleccionamos el ulitmo registro que corresponde a obras
         
@@ -280,7 +322,6 @@ const NSInteger rowHeight = 45;
             }
             [self.tableView reloadData];
         }
-     
     }else if (_isMenu ){
     /* MENU */
         NSString *value  = [self.dataSource objectAtIndex:indexPath.row];
@@ -330,20 +371,43 @@ const NSInteger rowHeight = 45;
     NSLog(@"add %@", _dataSelected);
 }
 
-
-
 -(void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
     
     if (!_isMenu && _field != e_Sort_Result) {
         if (indexPath.row !=0) {
             id dataForSelectedRow = _field == e_Tipo ? [self.dataSource objectAtIndex:indexPath.row] : [self.dataSource objectAtIndex:indexPath.row-1];
-          
+
+            if (_field == e_Clasificacion) {
+                NSString *value = [self textToDisplay:dataForSelectedRow];
+
+                BOOL pushView = NO;
+                NSArray *data = [NSArray array];
+                NSArray *savedData = [NSArray array];
+                if ([value isEqualToString:@"Compromiso de Gobierno"]) {
+                    data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
+                    savedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
+                    pushView = YES;
+                }else if ([value isEqualToString:@"Plan Michoacán"]){
+                    pushView = YES;
+                }
+                
+                if (pushView) {
+                    PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
+                                                                                                              isMenu:NO
+                                                                                                            markData:savedData
+                                                                                                         searchField:e_SubClasifications];
+                    popUpTableView.hideTitle = NO;
+                    
+                    [self.navigationController pushViewController:popUpTableView animated:YES];
+                    return;
+                }
+            }
+            
             [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
             [_dataSelected removeObject:dataForSelectedRow];
         }
     }
     NSLog(@"delete %@", _dataSelected);
-
 }
 
 -(NSString *)textToDisplay:(id)objectModel{
@@ -375,6 +439,9 @@ const NSInteger rowHeight = 45;
         value = tipo.nombreTipoObra;
     }else if (_field == e_Inaugurada || _field == e_Suscpetible){
         value = (NSString *)objectModel;
+    }else if (_field == e_SubClasifications){
+        Subclasificacion *sub = (Subclasificacion *)objectModel;
+        value = sub.nombreSubclasificacion;
     }
     
     return value;
