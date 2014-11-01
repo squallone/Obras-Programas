@@ -12,18 +12,21 @@
 
 typedef NS_OPTIONS(NSInteger, MainSearchFields)
 {
-    e_Tipo            = 0,
-    e_Dependencia     = 1,
-    e_Estado          = 2,
-    e_Municipio       = 3,
-    e_Tipo_Inversion  = 4,
-    e_Impacto         = 5,
-    e_Clasificacion   = 6,
-    e_Nombre_Inaugura = 7,
-    e_Inaugurada      = 8,
-    e_Suscpetible     = 9,
-    e_RangoInversion  = 10,
-    e_Sort_Result     = 11
+    e_Tipo              = 0,
+    e_Dependencia       = 1,
+    e_Estado            = 2,
+    e_Municipio         = 3,
+    e_Tipo_Inversion    = 4,
+    e_Impacto           = 5,
+    e_Clasificacion     = 6,
+    e_Nombre_Inaugura   = 7,
+    e_Inaugurada        = 8,
+    e_Suscpetible       = 9,
+    e_RangoInversion    = 10,
+    e_Sort_Result       = 11,
+    e_AnioPrograma      = 12,
+    e_SubClasifications = 13
+
 };
 
 typedef NS_OPTIONS(NSInteger, MenuOptions)
@@ -61,6 +64,7 @@ extern NSString * const kServletConsultarInversiones;
 extern NSString * const kServletConsultarClasificacion;
 extern NSString * const kServletConsultarTipoObraPrograma;
 extern NSString * const kServletConsultarDependencias;
+extern NSString * const kServletConsultarSubclasificacion;
 
 /////////////       Options
 /******************************************************/
@@ -78,13 +82,15 @@ extern NSString * const kKeyStoreImpact;
 extern NSString * const kKeyStoreClasification;
 extern NSString * const kKeyStoreInvesments;
 extern NSString * const kKeyStoreInaugurators;
-
 extern NSString * const kKeyStoreStartIniDate;
 extern NSString * const kKeyStoreStartEndDate;
 extern NSString * const kKeyStoreEndIniDate;
 extern NSString * const kKeyStoreEndEndDate;
 extern NSString * const kKeyStoreInauguradaOption;
 extern NSString * const kKeyStoreSusceptibleOption;
+extern NSString * const kKeyStoreProgramYear;
+extern NSString * const kKeyStoreSublasificationsData;
+extern NSString * const kKeyStoreSublasificationsSavedData;
 
 /////////////       Keys JSON
 /******************************************************/
@@ -144,6 +150,11 @@ extern NSString * const kKeyDbInaugurada;
 extern NSString * const kKeyDbPoblacionObjetivo;
 extern NSString * const kKeyDbMunicipio;
 
+extern NSString * const kKeyStoreDenomination;
+extern NSString * const kKeyStoreIDWorkOrProgram;
+extern NSString * const kKeyStoreMaxRange;
+extern NSString * const kKeyStoreMinRange;
+
 extern NSString * const kKeyListaObras;
 extern NSString * const kKeyListaReporteEstado;
 extern NSString * const kKeyListaProgramas;
@@ -173,6 +184,8 @@ extern NSString * const kParamSusceptible;
 extern NSString * const kParamInaugurada;
 extern NSString * const kParamLimiteMin;
 extern NSString * const kParamLimiteMax;
+extern NSString * const kParamSubclasificacion;
+extern NSString * const kParamAnoPrograma;
 
 //              Alerts Messages and HUD Messages
 /******************************************************/

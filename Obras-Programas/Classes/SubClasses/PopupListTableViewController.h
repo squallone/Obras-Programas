@@ -16,6 +16,7 @@
 @property (nonatomic, strong) NSArray *dataSource;
 @property (nonatomic, strong) NSMutableArray *dataSelected;
 @property (nonatomic, assign) MainSearchFields field;
+@property BOOL hideTitle;
 
 
 @property BOOL isMenu;
@@ -31,6 +32,6 @@
 @optional
 
 -(void)popupListView:(PopupListTableViewController *)popupListTableView dataForSingleSelectedRow:(NSString *)string;
--(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data;
+-(void)popupListView:(PopupListTableViewController *)popupListTableView dataForMultipleSelectedRows:(NSArray *)data rowPressed:(BOOL)option;
 
 @end

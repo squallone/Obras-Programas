@@ -35,6 +35,8 @@
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToClasifications:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTypesOfWorksAndPrograms:(id)response;
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToTypesOfInvesments:(id)response;
+-(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseToSubclasifications:(id)response;
+
 -(void)JSONHTTPClientDelegate:(JSONHTTPClient *)client didResponseSearchWorks:(id)response;
 
 @end

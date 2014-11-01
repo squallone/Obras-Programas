@@ -40,26 +40,32 @@ NSString * const kServletConsultarInversiones       = @"consultarInversiones";
 NSString * const kServletConsultarClasificacion     = @"consultarClasificaciones";
 NSString * const kServletConsultarTipoObraPrograma  = @"consultarTiposDeObraProgramas";
 NSString * const kServletConsultarDependencias      = @"consultarDependencias";
-
+NSString * const kServletConsultarSubclasificacion  = @"consultarSubclasificacion";
 
 //              KEYS TO PERSIST DATA
 /******************************************************/
 
-NSString * const kKeyStoreDependencies          =  @"kdp";
-NSString * const kKeyStoreTypeWorkOrProgram     =  @"ktp";
-NSString * const kKeyStoreStates                =  @"kedo";
-NSString * const kKeyStoreCity                  =  @"kmun";
-NSString * const kKeyStoreImpact                =  @"kimp";
-NSString * const kKeyStoreClasification         =  @"kcs";
-NSString * const kKeyStoreInvesments            =  @"kinv";
-NSString * const kKeyStoreInaugurators          =  @"kina";
-NSString * const kKeyStoreStartIniDate          =  @"ksid";
-NSString * const kKeyStoreStartEndDate          =  @"ksed";
-NSString * const kKeyStoreEndIniDate            =  @"keid";
-NSString * const kKeyStoreEndEndDate            =  @"keed";
-
-NSString * const kKeyStoreInauguradaOption      =  @"kiopt";
-NSString * const kKeyStoreSusceptibleOption     =  @"ksopt";
+NSString * const kKeyStoreDependencies              =  @"kdp";
+NSString * const kKeyStoreTypeWorkOrProgram         =  @"ktp";
+NSString * const kKeyStoreStates                    =  @"kedo";
+NSString * const kKeyStoreCity                      =  @"kmun";
+NSString * const kKeyStoreImpact                    =  @"kimp";
+NSString * const kKeyStoreClasification             =  @"kcs";
+NSString * const kKeyStoreInvesments                =  @"kinv";
+NSString * const kKeyStoreInaugurators              =  @"kina";
+NSString * const kKeyStoreStartIniDate              =  @"ksid";
+NSString * const kKeyStoreStartEndDate              =  @"ksed";
+NSString * const kKeyStoreEndIniDate                =  @"keid";
+NSString * const kKeyStoreEndEndDate                =  @"keed";
+NSString * const kKeyStoreInauguradaOption          =  @"kiopt";
+NSString * const kKeyStoreSusceptibleOption         =  @"ksopt";
+NSString * const kKeyStoreDenomination              =  @"kdnt";
+NSString * const kKeyStoreIDWorkOrProgram           =  @"kiwp";
+NSString * const kKeyStoreMaxRange                  =  @"krgmx";
+NSString * const kKeyStoreMinRange                  =  @"krgmn";
+NSString * const kKeyStoreProgramYear               =  @"kpgy";
+NSString * const kKeyStoreSublasificationsData      =  @"ksbsd";
+NSString * const kKeyStoreSublasificationsSavedData =  @"ksbssd";
 
 
 //              KEYS JSON
@@ -161,6 +167,8 @@ NSString * const kParamSusceptible          = @"susceptible";
 NSString * const kParamInaugurada           = @"inaugurada";
 NSString * const kParamLimiteMin            = @"limiteMin";
 NSString * const kParamLimiteMax            = @"limiteMax";
+NSString * const kParamSubclasificacion     = @"subclasificacion";
+NSString * const kParamAnoPrograma          = @"anoPrograma";
 
 //              Alerts Messages and HUD Messages
 /******************************************************/

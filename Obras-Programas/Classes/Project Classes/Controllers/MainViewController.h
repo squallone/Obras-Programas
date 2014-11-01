@@ -26,7 +26,6 @@
 
 - (IBAction)sortSearch:(id)sender;
 
-
 /* Esconde la vista donde se muestra el TableView */
 
 - (IBAction)hideSearchList:(id)sender;
@@ -70,5 +69,7 @@
 - (IBAction)displayInauguradaOptions:(id)sender;
 
 - (IBAction)displaySusceptibleOptions:(id)sender;
+
+- (IBAction)displayAnioPrograma:(id)sender;
 
 @end
