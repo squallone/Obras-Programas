@@ -66,6 +66,7 @@ NSString * const kKeyStoreMinRange                  =  @"krgmn";
 NSString * const kKeyStoreProgramYear               =  @"kpgy";
 NSString * const kKeyStoreSublasificationsData      =  @"ksbsd";
 NSString * const kKeyStoreSublasificationsSavedData =  @"ksbssd";
+NSString * const kKeyStoreTodoSublasifications      =  @"kstsb";
 
 
 //              KEYS JSON

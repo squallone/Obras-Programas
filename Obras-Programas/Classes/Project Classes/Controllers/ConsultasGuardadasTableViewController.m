@@ -13,6 +13,8 @@
 #import "Impacto.h"
 #import "Clasificacion.h"
 #import "Inaugurador.h"
+#import "Subclasificacion.h"
+
 
 const NSString *kKeyNombre = @"nombre";
 const NSString *kKeyDatos  = @"datos";
@@ -161,6 +163,13 @@ const NSString *kNombreDependencia;
         [dataDic setObject:@"Clasificación" forKey:kKeyNombre];
         [_datasource addObject:dataDic];
     }
+    
+    dataDic = [NSMutableDictionary new];
+    if (self.consulta.subclasificacionesCG) {
+        [dataDic setObject:self.consulta.subclasificacionesCG forKey:kKeyDatos];
+        [dataDic setObject:@"Compromisos de Gobierno" forKey:kKeyNombre];
+        [_datasource addObject:dataDic];
+    }
     dataDic = [NSMutableDictionary new];
     if (self.consulta.inauguradoresData) {
         [dataDic setObject:self.consulta.inauguradoresData forKey:kKeyDatos];
@@ -251,6 +260,9 @@ const NSString *kNombreDependencia;
     }else if ([nombre isEqualToString:@"Clasificación"]) {
         Clasificacion *clasificacion = dataSelected[indexPath.row];
         cell.textLabel.text = clasificacion.nombreTipoClasificacion;
+    }else if ([nombre isEqualToString:@"Compromisos de Gobierno"]){
+        Subclasificacion *compromiso = dataSelected[indexPath.row];
+        cell.textLabel.text = compromiso.nombreSubclasificacion;
     }else if ([nombre isEqualToString:@"Inauguradores"]) {
         Inaugurador *inaugurador = dataSelected[indexPath.row];
         cell.textLabel.text = inaugurador.nombreCargoInaugura;

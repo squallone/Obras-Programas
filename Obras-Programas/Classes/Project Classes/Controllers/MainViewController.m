@@ -132,6 +132,7 @@
 @property (nonatomic, strong) NSArray *programasResultData;
 @property (nonatomic, strong) NSArray *aniosProgramaData;
 @property (nonatomic, strong) NSArray *subclasificationsData;
+@property (nonatomic, strong) NSArray *subclasificationsSavedData;
 
 @property (nonatomic, strong) NSMutableArray *tableViewData;
 
@@ -180,6 +181,7 @@
 @property BOOL isProgramsSelected;
 @property BOOL isPrograms;
 @property BOOL isProgramsNotification;
+@property BOOL todoSubclasificationsPressed;
 
 @end
 
@@ -1189,6 +1191,11 @@ const int numResultsPerPage = 200;
     //Clasificaciones
     if (_clasificationsSavedData.count>0)
         consulta.clasificacionesData = _clasificationsSavedData;
+    
+    if (_subclasificationsSavedData.count >0) {
+        consulta.subclasificacionesCG = _subclasificationsSavedData;
+    }
+    
     //Inaugurador
     if (_inauguratorSavedData.count>0)
         consulta.inauguradoresData = _inauguratorSavedData;
@@ -1361,9 +1368,9 @@ const int numResultsPerPage = 200;
         
         parameterValue = @"";
         
-        NSArray *subclasificacionesCG = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
+        _subclasificationsSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
         
-        if (_clasificationsSavedData.count > 0 || subclasificacionesCG.count > 0) {
+        if (_clasificationsSavedData.count > 0 || _subclasificationsSavedData.count > 0 || _todoSubclasificationsPressed) {
             for (int i=0; i<[_clasificationsSavedData count]; i++) {
                 Clasificacion *clasificacion = _clasificationsSavedData[i];
                 parameterValue = [parameterValue stringByAppendingString:clasificacion.idTipoClasificacion];
@@ -1372,15 +1379,27 @@ const int numResultsPerPage = 200;
                 }
             }
             
-            if (subclasificacionesCG.count > 0) {
+            if (_subclasificationsSavedData.count > 0) {
                 if (_clasificationsSavedData.count > 0) {
                     parameterValue = [parameterValue stringByAppendingString:@","];
                 }
+                //Agregamos compromiso de gobierno si es que hay alguna subclasificacioines
                 for (Clasificacion *clasificacion in _clasificationsData) {
                     if ([clasificacion.nombreTipoClasificacion isEqualToString:@"Compromiso de Gobierno"]) {
                         parameterValue = [parameterValue stringByAppendingString:[NSString stringWithFormat:@"%@", clasificacion.idTipoClasificacion]];
                     }
                 }
+            }else if (_todoSubclasificationsPressed){
+                if (_clasificationsSavedData.count > 0) {
+                    parameterValue = [parameterValue stringByAppendingString:@","];
+                }
+                //Agregamos compromiso de gobierno si es que hay alguna subclasificacioines
+                for (Clasificacion *clasificacion in _clasificationsData) {
+                    if ([clasificacion.nombreTipoClasificacion isEqualToString:@"Compromiso de Gobierno"]) {
+                        parameterValue = [parameterValue stringByAppendingString:[NSString stringWithFormat:@"%@", clasificacion.idTipoClasificacion]];
+                    }
+                }
+
             }
             [parameters setObject:parameterValue forKey:kParamClasificacion];
         }
@@ -1389,12 +1408,12 @@ const int numResultsPerPage = 200;
         
         parameterValue = @"";
         
-        if (subclasificacionesCG.count > 0) {
+        if (_subclasificationsSavedData.count > 0) {
             
-            for (int i=0; i<[subclasificacionesCG count]; i++) {
-                Subclasificacion *sub = subclasificacionesCG[i];
+            for (int i=0; i<[_subclasificationsSavedData count]; i++) {
+                Subclasificacion *sub = _subclasificationsSavedData[i];
                 parameterValue = [parameterValue stringByAppendingString:sub.idSubClasificacion];
-                if (i!=subclasificacionesCG.count-1) {
+                if (i!=_subclasificationsSavedData.count-1) {
                     parameterValue = [parameterValue stringByAppendingString:@","];
                 }
             }
@@ -1627,7 +1646,6 @@ const int numResultsPerPage = 200;
             NSString *subString = [tipo.nombreTipoObra substringToIndex:indexSub];
             title = [title stringByAppendingString:[NSString stringWithFormat:@"%@ ", subString]];
         }
-
         [self changeTitleNavigationBar:title];
 
         //Limpiamos datos
@@ -1683,7 +1701,23 @@ const int numResultsPerPage = 200;
 -(void)changeBackgroundColorForNumberOfSelections:(NSArray *)dataField andTypeOfFieldButton:(MainSearchFields)field{
     
     //Si hay datos seleccionados, cambiamos el background del boton para mostrar existen selecciones en el boton
+    _subclasificationsSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
+    _todoSubclasificationsPressed = [[NSUserDefaults standardUserDefaults]boolForKey:kKeyStoreTodoSublasifications];
+
     BOOL changeBackground = dataField.count > 0 ? YES : NO;
+    if (!changeBackground) {
+        if (field == e_Clasificacion){
+            if (_subclasificationsSavedData.count > 0) {
+                changeBackground = YES;
+            }else{
+                if (_todoSubclasificationsPressed) {
+                    changeBackground = YES;
+                }else{
+                    changeBackground = NO;
+                }
+            }
+        }
+    }
     
     UIColor *colorForSelection = changeBackground ? [UIColor colorForButtonSelection] : [UIColor clearColor];
     UIColor *colorForTitleSelection = changeBackground ? [UIColor whiteColor] : [UIColor darkGrayColor];
@@ -2025,7 +2059,6 @@ const int numResultsPerPage = 200;
 }
 
 -(void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText{
-    
     if (searchText.length==0) {
         [_searchBar resignFirstResponder];
     }

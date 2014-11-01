@@ -18,6 +18,7 @@
 #import "Inaugurador.h"
 #import "DBHelper.h"
 #import "Subclasificacion.h"
+#import "UIColor+Colores.h"
 
 typedef NS_OPTIONS(NSInteger, TypeSelection)
 {
@@ -31,12 +32,14 @@ const NSInteger rowHeight = 45;
 
 @interface PopupListTableViewController ()
 
+@property (nonatomic, strong) NSArray *subclasificationsSavedData;
 @property (nonatomic, strong) NSArray *dataToMark;
 @property  CGSize size;
 @property TypeSelection typeSelection;
 @property TypeSelection cleanSelection;
 @property (nonatomic, strong) Clasificacion *subclasificacion;
 @property BOOL rowPressed;
+@property BOOL todoPressed;
 
 @end
 
@@ -45,12 +48,12 @@ const NSInteger rowHeight = 45;
 -(id)initWithData:(NSArray *)datasource isMenu:(BOOL)option markData:(NSArray *)loadData searchField:(MainSearchFields)field{
     
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
-        
+        _todoPressed = [[NSUserDefaults standardUserDefaults]boolForKey:kKeyStoreTodoSublasifications];
+
         /* Initialize instance variables */
         self.hideTitle = YES;
         self.dataSource     = datasource;
         self.dataToMark     = [loadData count] > 0 ? loadData : [NSArray new];
-        
         self.dataSelected   = [NSMutableArray arrayWithArray:self.dataToMark];
         
         if (_dataSelected.count == 0 && _field != e_Tipo) {
@@ -60,9 +63,7 @@ const NSInteger rowHeight = 45;
         self.isMenu         = option;
         self.field          = field;
         
-        self.clearsSelectionOnViewWillAppear = NO;
         self.tableView.allowsMultipleSelection = _isMenu || _field == e_Sort_Result ? NO : YES;
-        
         NSInteger rowsCount = [self.dataSource count];
         NSInteger totalRowsHeight = (rowsCount * rowHeight);
         self.tableView.backgroundColor = [UIColor clearColor];
@@ -96,7 +97,6 @@ const NSInteger rowHeight = 45;
 
 #pragma mark - View Lifecycle
 
-
 - (void)viewDidLoad {
     
     [super viewDidLoad];
@@ -104,6 +104,23 @@ const NSInteger rowHeight = 45;
 
 -(CGSize)preferredContentSize{
     return _size;
+}
+
+-(void)viewDidAppear:(BOOL)animated{
+    
+    _subclasificationsSavedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
+    _todoPressed = [[NSUserDefaults standardUserDefaults]boolForKey:kKeyStoreTodoSublasifications];
+    
+    if (_field == e_Clasificacion) {
+        UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+        if (_subclasificationsSavedData.count > 0  || _todoPressed) {
+            [cell setBackgroundColor:[UIColor colorForButtonSelection]];
+            cell.textLabel.textColor = [UIColor whiteColor];
+        }else{
+            [cell setBackgroundColor:[UIColor clearColor]];
+            cell.textLabel.textColor = [UIColor blackColor];
+        }
+    }
 }
 
 -(void)viewWillAppear:(BOOL)animated{
@@ -123,16 +140,16 @@ const NSInteger rowHeight = 45;
         }
         
         if (_field == e_SubClasifications) {
-            [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_dataSelected forKey:kKeyStoreSublasificationsSavedData];
             
             if (_subclasificacion) {
                 if (_dataSelected.count >0) {
                     [_dataSelected addObject:_subclasificacion];
                 }else{
                     [_dataSelected removeObject:_subclasificacion];
-
                 }
             }
+            [[NSUserDefaults standardUserDefaults]rm_setCustomObject:_dataSelected forKey:kKeyStoreSublasificationsSavedData];
+
         }
     }
 }
@@ -194,7 +211,6 @@ const NSInteger rowHeight = 45;
                     }
                 }
             }
-            
             if ([value isEqualToString:@"Compromiso de Gobierno"] || [value isEqualToString:@"Plan Michoacán"]) {
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             }
@@ -205,6 +221,10 @@ const NSInteger rowHeight = 45;
                 cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }else if (_typeSelection == t_Disable_Todo) {
                 cell.accessoryType = UITableViewCellAccessoryNone;
+            }
+            if (_todoPressed && _field == e_SubClasifications){
+                [self.tableView selectRowAtIndexPath:indexPath animated:YES scrollPosition:UITableViewScrollPositionNone];
+                cell.accessoryType = UITableViewCellAccessoryCheckmark;
             }
         }
     }else {
@@ -217,26 +237,28 @@ const NSInteger rowHeight = 45;
 
 #pragma mark - Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
+    
     NSMutableArray *obrasAndProgramsData = [NSMutableArray array];
     _rowPressed = YES;
-    
+   
     //Si la seleccion no es menu, agregamos nuevos elementos de busqueda para almacenarlos
     if (!_isMenu && _field != e_Sort_Result) {
        
         if (indexPath.row !=0) {
-            
+            if (_field == e_SubClasifications) {
+                [[NSUserDefaults standardUserDefaults]setBool:NO forKey:kKeyStoreTodoSublasifications];
+
+            }
+
             id dataForSelectedRow = _field == e_Tipo ? [self.dataSource objectAtIndex:indexPath.row] : [self.dataSource objectAtIndex:indexPath.row-1];
             NSString *value = [self textToDisplay:dataForSelectedRow];
             
             BOOL pushView = NO;
             NSArray *data = [NSArray array];
-            NSArray *savedData = [NSArray array];
             if ([value isEqualToString:@"Compromiso de Gobierno"]) {
                 _subclasificacion = dataForSelectedRow;
                 data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
-                savedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
                 pushView = YES;
             }else if ([value isEqualToString:@"Plan Michoacán"]){
                 
@@ -246,7 +268,7 @@ const NSInteger rowHeight = 45;
             if (pushView) {
                 PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
                                                                                                           isMenu:NO
-                                                                                                        markData:savedData
+                                                                                                        markData:_subclasificationsSavedData
                                                                                                      searchField:e_SubClasifications];
                 popUpTableView.hideTitle = NO;
                 
@@ -293,15 +315,23 @@ const NSInteger rowHeight = 45;
                     TipoObraPrograma *obrasTotalesRow = [self.dataSource objectAtIndex:0];
                     [_dataSelected removeObject:obrasTotalesRow];
                 }
-    
                 [_dataSelected addObject:dataForSelectedRow];
             }
 
         }else{
             //Cuando la selección es TODO
             if (_field == e_Clasificacion) {
+                UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:1 inSection:0]];
+                [cell setBackgroundColor:[UIColor clearColor]];
+                cell.textLabel.textColor = [UIColor blackColor];
+                [[NSUserDefaults standardUserDefaults]setBool:NO forKey:kKeyStoreTodoSublasifications];
+
                 [[NSUserDefaults standardUserDefaults]rm_setCustomObject:[NSArray array] forKey:kKeyStoreSublasificationsSavedData];
+            }else if (_field == e_SubClasifications){
+                [[NSUserDefaults standardUserDefaults]setBool:YES forKey:kKeyStoreTodoSublasifications];
             }
+            
+            
             [[self.tableView cellForRowAtIndexPath:[NSIndexPath indexPathForRow:0 inSection:0]] setAccessoryType:UITableViewCellAccessoryCheckmark];
             //Para la selección de tipo de obra o programa, deseleccionamos el ulitmo registro que corresponde a obras
         
@@ -382,10 +412,8 @@ const NSInteger rowHeight = 45;
 
                 BOOL pushView = NO;
                 NSArray *data = [NSArray array];
-                NSArray *savedData = [NSArray array];
                 if ([value isEqualToString:@"Compromiso de Gobierno"]) {
                     data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
-                    savedData = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsSavedData];
                     pushView = YES;
                 }else if ([value isEqualToString:@"Plan Michoacán"]){
                     pushView = YES;
@@ -394,7 +422,7 @@ const NSInteger rowHeight = 45;
                 if (pushView) {
                     PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
                                                                                                               isMenu:NO
-                                                                                                            markData:savedData
+                                                                                                            markData:_subclasificationsSavedData
                                                                                                          searchField:e_SubClasifications];
                     popUpTableView.hideTitle = NO;
                     
@@ -405,6 +433,11 @@ const NSInteger rowHeight = 45;
             
             [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
             [_dataSelected removeObject:dataForSelectedRow];
+        }else if (_field == e_SubClasifications && indexPath.row == 0){
+            //Habilitamos la deselección para TODO en la subclasificación
+            [[NSUserDefaults standardUserDefaults]setBool:NO forKey:kKeyStoreTodoSublasifications];
+            [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];
+
         }
     }
     NSLog(@"delete %@", _dataSelected);
