@@ -7,6 +7,7 @@
 // Dependencias:
 
 #import "MainViewController.h"
+#import "MPMovieViewController.h"
 #import "NSUserDefaults+RMSaveCustomObject.h"
 #import "UIColor+Colores.h"
 #import "ObraProgramaCell.h"
@@ -211,6 +212,16 @@
     [self loadSelections];
     [self changeAllBackgrounds];
 }
+-(void)viewDidAppear:(BOOL)animated{
+    /* Request */
+    [super viewDidAppear:NO];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showFichaTecnica:) name:@"showFichaTecnica" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openQuery:) name:@"openQuery" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showManual:) name:@"showManual" object:nil];
+    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showVideo:) name:@"showVideo" object:nil];
+
+    [self requestToWebServices];
+}
 
 #pragma mark - Initialize
 
@@ -221,7 +232,7 @@
     
     /*  Menu items */
     
-    _menuData           = @[@"Consultas guardadas", @"Registros guardados", @"Acerca de"];
+    _menuData           = @[@"Consultas guardadas", @"Registros guardados", @"Ayuda"];
     _aniosProgramaData  = @[@"2013",@"2014", @"2015", @"2016", @"2017", @"2018"];
     
     _titleFields        = @[@{@"title": @"Estado",     @"sortKey": @"estado.nombreEstado"},
@@ -399,14 +410,7 @@
     [self changeBackgroundColorForNumberOfSelections:_susceptibleOptionSavedData andTypeOfFieldButton:e_Suscpetible];
 }
 
--(void)viewDidAppear:(BOOL)animated{
-    /* Request */
-    [super viewDidAppear:NO];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(showFichaTecnica:) name:@"showFichaTecnica" object:nil];
-    [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(openQuery:) name:@"openQuery" object:nil];
 
-    [self requestToWebServices];
-}
 
 #pragma mark Server Requests (JSON)
 
@@ -1533,8 +1537,8 @@ const int numResultsPerPage = 200;
         
         CLLocationCoordinate2D annotationCoord;
         
-        annotationCoord.latitude = [reporte.estado.longitud doubleValue];
-        annotationCoord.longitude = [reporte.estado.latitud doubleValue];
+        annotationCoord.latitude = [reporte.estado.latitud doubleValue];
+        annotationCoord.longitude =  [reporte.estado.longitud doubleValue];
         
         MKPointAnnotation *annotationPoint = [[MKPointAnnotation alloc] init];
         annotationPoint.coordinate = annotationCoord;
@@ -1657,6 +1661,7 @@ const int numResultsPerPage = 200;
 
     }
     [[NSUserDefaults standardUserDefaults]rm_setCustomObject:data forKey:kKeyStoreTypeWorkOrProgram];
+    [[NSUserDefaults standardUserDefaults]setBool:_isProgramsSelected forKey:@"isProgramsSelected"];
     [self disableOrEnableButtonsDependOnTypeSearch];
 }
 
@@ -2249,6 +2254,24 @@ const int numResultsPerPage = 200;
     Consulta *consulta = [notification object];
     [self openQueryAndLoadSelections:consulta];
     [self performQuery:nil];
+}
+
+
+-(void)showManual:(NSNotification *)notification{
+    
+    [self performSegueWithIdentifier:@"showWebView" sender:nil];
+    [[NSNotificationCenter defaultCenter]removeObserver:self];
+
+}
+
+-(void)showVideo:(NSNotification *)notification{
+    
+#pragma mark - MPMoviePlayerController
+    
+        MPMovieViewController *viewPlayer = [[MPMovieViewController alloc]init];
+        viewPlayer.modalTransitionStyle = UIModalTransitionStyleCrossDissolve;
+        [self presentViewController:viewPlayer animated:YES completion:Nil];
+        [[NSNotificationCenter defaultCenter]removeObserver:self];
 }
 
 @end

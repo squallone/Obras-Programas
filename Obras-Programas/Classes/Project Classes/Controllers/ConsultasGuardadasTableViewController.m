@@ -178,7 +178,7 @@ const NSString *kNombreDependencia;
     }
     
     dataDic = [NSMutableDictionary new];
-    if (self.consulta.inauguradoresData) {
+    if (self.consulta.inauguradaData) {
         [dataDic setObject:self.consulta.inauguradaData forKey:kKeyDatos];
         [dataDic setObject:@"Inaugurada" forKey:kKeyNombre];
         [_datasource addObject:dataDic];

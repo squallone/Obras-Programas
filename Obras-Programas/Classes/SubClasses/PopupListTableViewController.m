@@ -40,6 +40,7 @@ const NSInteger rowHeight = 45;
 @property (nonatomic, strong) Clasificacion *subclasificacion;
 @property BOOL rowPressed;
 @property BOOL todoPressed;
+@property BOOL isProgramsSelected;
 
 @end
 
@@ -49,6 +50,7 @@ const NSInteger rowHeight = 45;
     
     if ([super initWithStyle:UITableViewStylePlain] !=nil) {
         _todoPressed = [[NSUserDefaults standardUserDefaults]boolForKey:kKeyStoreTodoSublasifications];
+        _isProgramsSelected = [[NSUserDefaults standardUserDefaults]boolForKey:@"isProgramsSelected"];
 
         /* Initialize instance variables */
         self.hideTitle = YES;
@@ -211,9 +213,12 @@ const NSInteger rowHeight = 45;
                     }
                 }
             }
-            if ([value isEqualToString:@"Compromiso de Gobierno"] || [value isEqualToString:@"Plan Michoacán"]) {
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            if (!_isProgramsSelected) {
+                if ([value isEqualToString:@"Compromiso de Gobierno"] || [value isEqualToString:@"Plan Michoacán"]) {
+                    cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                }
             }
+            
             
         }else if(_field != e_Tipo){
             cell.textLabel.text = @"TODO";
@@ -254,28 +259,30 @@ const NSInteger rowHeight = 45;
             id dataForSelectedRow = _field == e_Tipo ? [self.dataSource objectAtIndex:indexPath.row] : [self.dataSource objectAtIndex:indexPath.row-1];
             NSString *value = [self textToDisplay:dataForSelectedRow];
             
-            BOOL pushView = NO;
-            NSArray *data = [NSArray array];
-            if ([value isEqualToString:@"Compromiso de Gobierno"]) {
-                _subclasificacion = dataForSelectedRow;
-                data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
-                pushView = YES;
-            }else if ([value isEqualToString:@"Plan Michoacán"]){
+            if (!_isProgramsSelected) {
+                BOOL pushView = NO;
+                NSArray *data = [NSArray array];
+                if ([value isEqualToString:@"Compromiso de Gobierno"]) {
+                    _subclasificacion = dataForSelectedRow;
+                    data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
+                    pushView = YES;
+                }else if ([value isEqualToString:@"Plan Michoacán"]){
+                    
+                    pushView = YES;
+                }
                 
-                pushView = YES;
-            }
-        
-            if (pushView) {
-                PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
-                                                                                                          isMenu:NO
-                                                                                                        markData:_subclasificationsSavedData
-                                                                                                     searchField:e_SubClasifications];
-                popUpTableView.hideTitle = NO;
-                
-                [self.navigationController pushViewController:popUpTableView animated:YES];
-                return;
-            }
+                if (pushView) {
+                    PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
+                                                                                                              isMenu:NO
+                                                                                                            markData:_subclasificationsSavedData
+                                                                                                         searchField:e_SubClasifications];
+                    popUpTableView.hideTitle = NO;
+                    
+                    [self.navigationController pushViewController:popUpTableView animated:YES];
+                    return;
+                }
 
+            }
             if ([value isEqualToString:@"PROGRAMAS"]) {
                 //Cuando la selección es PROGRMAS
                 //Deshabilitamos las OBRAS TOTALES
@@ -385,8 +392,11 @@ const NSInteger rowHeight = 45;
                 return;
             }
 
-        }else{
-            return;
+        }else if (indexPath.row == 2){
+            [obrasAndProgramsData addObject:@"Manual de usuario (PDF)"];
+            [obrasAndProgramsData addObject:@"Tutorial (Video)"];
+            option = o_Ayuda;
+
         }
         
         DetailTableViewController *detailViewController = [[DetailTableViewController alloc]initWithDataSource:obrasAndProgramsData menuOption:option];
@@ -406,29 +416,31 @@ const NSInteger rowHeight = 45;
     if (!_isMenu && _field != e_Sort_Result) {
         if (indexPath.row !=0) {
             id dataForSelectedRow = _field == e_Tipo ? [self.dataSource objectAtIndex:indexPath.row] : [self.dataSource objectAtIndex:indexPath.row-1];
-
-            if (_field == e_Clasificacion) {
-                NSString *value = [self textToDisplay:dataForSelectedRow];
-
-                BOOL pushView = NO;
-                NSArray *data = [NSArray array];
-                if ([value isEqualToString:@"Compromiso de Gobierno"]) {
-                    data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
-                    pushView = YES;
-                }else if ([value isEqualToString:@"Plan Michoacán"]){
-                    pushView = YES;
-                }
-                
-                if (pushView) {
-                    PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
-                                                                                                              isMenu:NO
-                                                                                                            markData:_subclasificationsSavedData
-                                                                                                         searchField:e_SubClasifications];
-                    popUpTableView.hideTitle = NO;
+            if (!_isProgramsSelected) {
+                if (_field == e_Clasificacion) {
+                    NSString *value = [self textToDisplay:dataForSelectedRow];
                     
-                    [self.navigationController pushViewController:popUpTableView animated:YES];
-                    return;
+                    BOOL pushView = NO;
+                    NSArray *data = [NSArray array];
+                    if ([value isEqualToString:@"Compromiso de Gobierno"]) {
+                        data = [[NSUserDefaults standardUserDefaults]rm_customObjectForKey:kKeyStoreSublasificationsData];
+                        pushView = YES;
+                    }else if ([value isEqualToString:@"Plan Michoacán"]){
+                        pushView = YES;
+                    }
+                    
+                    if (pushView) {
+                        PopupListTableViewController *popUpTableView = [[PopupListTableViewController alloc]initWithData:data
+                                                                                                                  isMenu:NO
+                                                                                                                markData:_subclasificationsSavedData
+                                                                                                             searchField:e_SubClasifications];
+                        popUpTableView.hideTitle = NO;
+                        
+                        [self.navigationController pushViewController:popUpTableView animated:YES];
+                        return;
+                    }
                 }
+
             }
             
             [[self.tableView cellForRowAtIndexPath:indexPath] setAccessoryType:UITableViewCellAccessoryNone];

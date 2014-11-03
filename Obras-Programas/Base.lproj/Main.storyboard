@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6250" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2m6-oD-mLd">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="6245" systemVersion="14A389" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="2m6-oD-mLd">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
+        <deployment defaultVersion="1792" identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6238"/>
     </dependencies>
     <scenes>
         <!--Main View Controller-->
@@ -508,6 +508,7 @@
                         <outlet property="txtRangoMaximo" destination="FCs-Qd-CM7" id="uQW-4v-k5r"/>
                         <outlet property="txtRangoMinimo" destination="EnD-U2-ktS" id="dky-en-Mo5"/>
                         <segue destination="S5j-CH-Qxb" kind="show" identifier="showFichaTecnica" id="VE4-NM-y3j"/>
+                        <segue destination="msg-a6-9aw" kind="presentation" identifier="showWebView" id="qva-xW-amR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -1090,6 +1091,58 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="AHA-Ra-pC4" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="-86" y="-946"/>
+        </scene>
+        <!--Web View Controller-->
+        <scene sceneID="8KM-v5-gN8">
+            <objects>
+                <viewController id="msg-a6-9aw" customClass="WebViewController" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="LaB-g4-cHM"/>
+                        <viewControllerLayoutGuide type="bottom" id="mgL-D9-IQ7"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="sty-oY-FAg">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <webView contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2cF-aL-iDS">
+                                <rect key="frame" x="0.0" y="65" width="1024" height="703"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            </webView>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="qAo-Lc-1Rc" userLabel="No">
+                                <rect key="frame" x="0.0" y="-5" width="1024" height="44"/>
+                                <items>
+                                    <navigationItem id="8hB-t2-1bl"/>
+                                </items>
+                            </navigationBar>
+                            <navigationBar contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="G3C-GG-MSi">
+                                <rect key="frame" x="0.0" y="21" width="1024" height="44"/>
+                                <items>
+                                    <navigationItem title="Manual de usuario" id="fVa-Tx-L0I"/>
+                                </items>
+                            </navigationBar>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="xcQ-OK-vdh">
+                                <rect key="frame" x="954" y="28" width="46" height="30"/>
+                                <state key="normal" title="Salir">
+                                    <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <action selector="dismissViewController:" destination="msg-a6-9aw" eventType="touchUpInside" id="snF-0p-Wdv"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    </view>
+                    <simulatedOrientationMetrics key="simulatedOrientationMetrics" orientation="landscapeRight"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="1024" height="768"/>
+                    <connections>
+                        <outlet property="webView" destination="2cF-aL-iDS" id="unp-J0-wHh"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="deQ-Lc-I8z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1161" y="-1217"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="1qw-hF-KXH">

@@ -41,7 +41,7 @@
         //Calcula el ancho que debe tener la vista buscando que ancho de cada string se espera que sea
         
         CGFloat largestLabelWidth = 0;
-        _labelSize = _option == o_Consultas ? 17.0 : 14.5;
+        _labelSize = _option == o_Consultas ||_option == o_Ayuda ? 17.0 : 14.5;
         
         UIFont *font = [UIFont fontWithName:@"HelveticaNeue-Light" size:_labelSize];
         
@@ -86,9 +86,23 @@
                     largestLabelWidth = largestLabelWidth + labelSize.width;
                 }
             }
+        }else  if (_option == o_Ayuda) {
+            NSInteger rowsCount = [self.dataSource count];
+            totalRowsHeight  = (rowsCount * 45) + 45;
+        
+            for (NSString *title in self.dataSource) {
+                
+                CGSize labelSize = [title sizeWithAttributes:  @{NSFontAttributeName:font}];
+                if (labelSize.width > largestLabelWidth) {
+                    largestLabelWidth = labelSize.width;
+                }
+                
+                largestLabelWidth = largestLabelWidth + 20;
+            }
         }
         //Agrega un pequeño padding al ancho
         CGFloat popoverWidth = largestLabelWidth + 90;
+        
         _size = CGSizeMake(popoverWidth, totalRowsHeight);
         //Establece la propiedad para decirle al contenedor del popover que tan grande sera su vista
         self.preferredContentSize = _size;
@@ -115,19 +129,20 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     // Return the number of sections.
-    if (_option == o_Consultas) {
+    if (_option == o_Consultas || _option == o_Ayuda) {
         return 1;
-    }else{
+    }else if (_option == o_Favoritos){
         return _dataSource.count;
     }
+    return 0;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     // Return the number of rows in the section.
     
-    if (_option == o_Consultas) {
+    if (_option == o_Consultas || _option == o_Ayuda) {
         return _dataSource.count;
-    }else{
+    }else if (_option == o_Favoritos){
         if (section == 0) {
             return [_dataSource[0] count];
             
@@ -135,13 +150,13 @@
             return [_dataSource[1] count];
         }
         return 0;
-
     }
+    return 0;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
     
-    if (_option == o_Consultas) {
+    if (_option == o_Consultas || _option == o_Ayuda) {
         return @"";
     }else{
         if (section==0) {
@@ -151,7 +166,6 @@
         }
     }
 }
-   
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     
@@ -170,9 +184,8 @@
         Consulta *consulta = _dataSource[indexPath.row];
         cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, consulta.nombreConsulta];
         cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", consulta.fechaCreacion];
-        return cell;
 
-    }else{
+    }else if (_option == o_Favoritos) {
         NSArray *registros = _dataSource[indexPath.section];
 
         if (indexPath.section == 0) {
@@ -187,8 +200,14 @@
             cell.textLabel.text         = [NSString stringWithFormat:@"%ld.- %@ ",(long)indexPath.row+1, programa.nombrePrograma];
             cell.detailTextLabel.text   = [NSString stringWithFormat:@"      %@", programa.idPrograma];
         }
-        return cell;
+    }else if (_option == o_Ayuda) {
+        NSString *opcion = _dataSource[indexPath.row];
+        cell.textLabel.text  = opcion;
+        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
+    
+    return cell;
+
 }
 
 #pragma mark - UITableView  Delegate
@@ -207,6 +226,14 @@
         }else if (indexPath.section == 1){
             Programa *programa = registros[indexPath.row];
             [[NSNotificationCenter defaultCenter]postNotificationName:@"showFichaTecnica" object:programa];
+        }
+    }else if (_option == o_Ayuda){
+        if (indexPath.row == 0) {
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"showManual" object:nil];
+
+        }else if (indexPath.row == 1){
+            [[NSNotificationCenter defaultCenter]postNotificationName:@"showVideo" object:nil];
+
         }
     }
 }
