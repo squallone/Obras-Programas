@@ -1849,6 +1849,7 @@ const int numResultsPerPage = 200;
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     
     id registro = _tableViewData[indexPath.row];
+    
     [self performSegueWithIdentifier:@"showFichaTecnica" sender:registro];
 }
 
