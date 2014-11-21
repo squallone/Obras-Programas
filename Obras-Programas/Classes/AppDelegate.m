@@ -50,8 +50,8 @@
     NSArray *versionArray = [[[UIDevice currentDevice] systemVersion] componentsSeparatedByString:@"."];
     if ([[versionArray objectAtIndex:0] intValue] < 8.0) {
         
-//        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
+        [[UIDevice currentDevice] beginGeneratingDeviceOrientationNotifications];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(detectOrientation) name:@"UIDeviceOrientationDidChangeNotification" object:nil];
     }
 }
 
